@@ -19,7 +19,7 @@ class _TabsDemoScreenState extends State<TabsDemoScreen> {
     Screen1(),
     TabScreen(Colors.orange),
     TabScreen(Colors.blue),
-    DashboardMoreMenu(),
+    const DashboardMoreMenu(),
     
   ];
   onTapped(int index) {
