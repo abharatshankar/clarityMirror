@@ -6,5 +6,9 @@ class AppStrings{
   static String beautyNormal = 'assets/images/Beauty Icon Normal.png';
   static String skinCareSelected = 'assets/images/Skincare Icon Selected.png';
   static String skinCareNormal = 'assets/images/Skincare Icon Normal.png';
-
+  static String dashboardSelected = 'assets/images/Dashboard icon Selected.png';
+  static String dashboardNormal = 'assets/images/Dashboard icon Normal.png';
+  static String accountSettings = 'ACCOUNT SETTINGS';
+  static String backNavIcon = 'assets/images/back_arrow.png';
+  static String notifications = "Notifications";
 }
