@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:focusableInTouchMode="false"
+    android:layout_height="match_parent"
+    tools:context=".AutoCaptureActivity">
+
+
+    <fragment
+        android:id="@+id/result_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="com.example.btbp_projects.ResultFragment"
+        />
+
+    <fragment
+        android:id="@+id/auto_capture_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="org.btbp.btbplibrary.AutoCaptureFragment"/>
+
+
+
+
+    <Button
+        android:id="@+id/toggleButton_Sample"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:text="Toggle"
+        android:layout_margin="10dp"
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:background="@drawable/border_btn_start"
+        android:textColor="@color/black"
+        android:visibility="gone"/>
+</RelativeLayout>

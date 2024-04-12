@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:focusableInTouchMode="true"
+    tools:ignore="MissingPrefix">
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/mirror_configuration_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Mirror Configurations"
+                android:textColor="@color/black"
+                android:visibility="gone"/>
+            <TextView
+                android:id="@+id/deepTag_layout_Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Deep Tag List"
+            android:textColor="@color/black"
+            android:layout_margin="10dp"
+            android:visibility="gone"/>
+
+            <Model.FlowLayout
+            android:id="@+id/deepTag_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            </Model.FlowLayout>
+
+            <TextView
+                android:id="@+id/skinTag_layout_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Skin Feature List"
+                android:textColor="@color/black"
+                android:visibility="gone"/>
+
+            <Model.FlowLayout
+                android:id="@+id/skinTag_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp">
+
+            </Model.FlowLayout>
+
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Beauty Feature List"-->
+            <!--android:textColor="@color/black"-->
+            <!--android:layout_margin="10dp"/>-->
+
+            <!--<Model.FlowLayout-->
+            <!--android:id="@+id/beautyFeature_layout"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="10dp">-->
+
+            <!--</Model.FlowLayout>-->
+
+            <TextView
+                android:id="@+id/settings_layout_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Settings"
+                android:textColor="@color/black"
+                android:visibility="gone"/>
+
+            <Model.FlowLayout
+                android:id="@+id/settings_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp">
+
+            </Model.FlowLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:padding="5dp"
+                    android:text="Key:"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/key_edit_box"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border_btn_start"
+                    android:gravity="center_horizontal"
+                    android:hint="Enter Key"
+                    android:minWidth="160dp"
+                    android:padding="5dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/start_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/border_btn_start"
+                    android:text="@string/start"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <LinearLayout
+            android:id="@+id/spinner_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:id="@+id/spinner_bar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="@dimen/loader_width"
+                android:layout_height="@dimen/loader_height"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/loading_spinner_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/loading"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="@dimen/loader_text_size" />
+        </LinearLayout>
+    </RelativeLayout>
+
+
+</RelativeLayout>
