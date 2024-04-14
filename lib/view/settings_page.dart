@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 
 class SearchableList extends StatefulWidget {
-  final List<MyDataClass> items;
+  final List<String> items;
 
   const SearchableList({Key? key, required this.items}) : super(key: key);
 
@@ -14,7 +14,7 @@ class SearchableList extends StatefulWidget {
 
 class _SearchableListState extends State<SearchableList> {
   String _searchText = '';
-  List<MyDataClass> _filteredItems = [];
+  List<String> _filteredItems = [];
 
   @override
   void initState() {
@@ -26,8 +26,7 @@ class _SearchableListState extends State<SearchableList> {
     setState(() {
       _searchText = text;
       _filteredItems = widget.items.where((item) =>
-          item.name.toLowerCase().contains(text.toLowerCase()) ||
-          item.description.toLowerCase().contains(text.toLowerCase())).toList();
+          item.toLowerCase().contains(text.toLowerCase())).toList();
     });
   }
 
@@ -82,17 +81,8 @@ class _SearchableListState extends State<SearchableList> {
                   decoration: const BoxDecoration(
                                       color: Colors.black,
 
-              //       gradient: LinearGradient(
-                      
-              //   begin: Alignment.topCenter,
-              //   end: Alignment.bottomCenter,
-              //   colors: [
-              //     Color.fromARGB(255, 42, 39, 39),
-              //     Colors.black,
-              //   ],
-              // ),
                   ),
-                  margin: EdgeInsets.symmetric(vertical: 20),
+                  margin: const EdgeInsets.symmetric(vertical: 20),
                   child: Row(
                     
                     children: [
@@ -100,7 +90,7 @@ class _SearchableListState extends State<SearchableList> {
                       padding:  EdgeInsets.symmetric(horizontal: 20),
                       child: Icon(Icons.person,color: Colors.white,size: 20,),
                     ),
-                    Text(item.name,style: AppFonts().sego14bold,)
+                    Text(item,style: AppFonts().sego14bold,)
                   ],),
                 );
               },
@@ -112,9 +102,9 @@ class _SearchableListState extends State<SearchableList> {
   }
 }
 
-class MyDataClass {
-  final String name;
-  final String description;
+// class MyDataClass {
+//   final String name;
+//   final String description;
 
-  MyDataClass({required this.name, required this.description});
-}
+//   MyDataClass({required this.name, required this.description});
+// }
