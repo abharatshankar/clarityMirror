@@ -4,6 +4,7 @@ import 'package:clarity_mirror/utils/routes/routes_names.dart';
 import 'package:clarity_mirror/viewModel/auth_viewmodel.dart';
 import 'package:clarity_mirror/viewModel/home_view_model.dart';
 import 'package:clarity_mirror/viewModel/user_view_model.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -16,6 +17,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+    systemNavigationBarColor: Colors.black,
+      statusBarColor: Colors.black, // Black color for the status bar
+      statusBarIconBrightness: Brightness.light, // Light icons for the status bar
+    ));
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthViewModel()),
