@@ -1,11 +1,7 @@
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:clarity_mirror/utils/app_colors.dart';
 import 'package:clarity_mirror/utils/app_fonts.dart';
-import 'package:clarity_mirror/utils/app_strings.dart';
-import 'package:clarity_mirror/view/notification_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-
 import 'custom_appbar.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -29,32 +25,13 @@ class _ProfilePageState extends State<ProfilePage> {
                 height: 56,
                 child: const CustomAppBar(),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Container(
-                  height: 1,
-                  width: MediaQuery.of(context).size.width,
-                  color: Colors.grey.shade700,
-                ),
-              ),
+              seperatorLine(),
               const SizedBox(
                 height: 8,
               ),
               profilePic(),
-              Text(
-                "Lisa Mathray",
-                style: AppFonts().sego29normal.copyWith(
-                    color: AppConstColors.appThemeCayan,
-                    fontWeight: FontWeight.bold,
-                    height: 1.4),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Beauty Vlogger",
-                  style: AppFonts().sego14normal,
-                ),
-              ),
+              profileUserName(userName: "Lisa Mathray"),
+              profileUserOccupation(userOccupation: "Beauty Vlogger"),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 child: Row(
@@ -67,7 +44,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               editProfileButton(),
-              SizedBox(height: 12,),
+              const SizedBox(height: 12,),
 
 
 
@@ -98,19 +75,19 @@ class _ProfilePageState extends State<ProfilePage> {
                         tabs:  [
                           Tab(
                             
-                            child: Container(
+                            child: SizedBox(
                               width: MediaQuery.of(context).size.width/3,
                               child: Center(child: Text("Posts",style: AppFonts().sego14normal.copyWith(height: 1),))),
                           ),
                           Tab(
                             
-                            child: Container(
+                            child: SizedBox(
                               width: MediaQuery.of(context).size.width/4,
                               child: Center(child: Text("Photos",style: AppFonts().sego14normal.copyWith(height: 1),))),
                           ),
                           Tab(
                             
-                            child: Container(
+                            child: SizedBox(
                               width: MediaQuery.of(context).size.width/4,
                               child: Center(child: Text("Videos",style: AppFonts().sego14normal.copyWith(height: 1),))),
                           ),
@@ -158,6 +135,37 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
     );
+  }
+
+  Widget profileUserName({required String userName}){
+    return Text(
+                userName,
+                style: AppFonts().sego29normal.copyWith(
+                    color: AppConstColors.appThemeCayan,
+                    fontWeight: FontWeight.bold,
+                    height: 1.4),
+              );
+  }
+
+  Widget profileUserOccupation({required String userOccupation}){
+    return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  userOccupation,
+                  style: AppFonts().sego14normal,
+                ),
+              );
+  }
+
+  Widget seperatorLine(){
+    return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Container(
+                  height: 1,
+                  width: MediaQuery.of(context).size.width,
+                  color: Colors.grey.shade700,
+                ),
+              );
   }
 
   Widget editProfileButton(){
