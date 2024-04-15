@@ -1,4 +1,5 @@
 import 'package:clarity_mirror/utils/app_strings.dart';
+import 'package:clarity_mirror/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class DashboardMoreMenu extends StatelessWidget {
@@ -24,8 +25,8 @@ class DashboardMoreMenu extends StatelessWidget {
           ),
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
-              onTap: (){
-                
+              onTap: () async {
+               await Utils.callNativeMethod();
               },
               child: GridTile(
                 child: SizedBox(

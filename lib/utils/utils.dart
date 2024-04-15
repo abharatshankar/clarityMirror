@@ -1,6 +1,7 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:another_flushbar/flushbar_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class Utils {
@@ -58,5 +59,15 @@ class Utils {
     avg /= ratings.length;
 
     return avg;
+  }
+
+  static Future<void> callNativeMethod() async {
+    const platform = MethodChannel('camera_ai_channel');
+
+    try {
+      await platform.invokeMethod('openAICamera');
+    } catch (e) {
+      print('Error calling native method: $e');
+    }
   }
 }
