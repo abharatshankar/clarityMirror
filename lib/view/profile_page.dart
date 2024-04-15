@@ -1,7 +1,9 @@
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:clarity_mirror/utils/app_colors.dart';
 import 'package:clarity_mirror/utils/app_fonts.dart';
+import 'package:clarity_mirror/view/edit_profile_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'custom_appbar.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -23,7 +25,7 @@ class _ProfilePageState extends State<ProfilePage> {
               SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: 56,
-                child: const CustomAppBar(),
+                child: const CustomAppBar(titleTxt: "Profile",),
               ),
               seperatorLine(),
               const SizedBox(
@@ -43,7 +45,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   ],
                 ),
               ),
-              editProfileButton(),
+              GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>EditProfilePage()));
+                },
+                child: editProfileButton()),
               const SizedBox(height: 12,),
 
 

@@ -1,12 +1,8 @@
-import 'package:clarity_mirror/res/widgets/coloors.dart';
 import 'package:clarity_mirror/utils/app_fonts.dart';
 import 'package:clarity_mirror/utils/app_strings.dart';
 import 'package:clarity_mirror/view/settings_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
-
 import 'notification_screen.dart';
 import 'profile_page.dart';
 
@@ -28,7 +24,10 @@ class DashboardMoreMenu extends StatelessWidget {
           body: SingleChildScrollView(
             child: Column(
               children: [
-                dashboardAppBar(context),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: dashboardAppBar(context),
+                ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.25,
                 ),
@@ -164,7 +163,7 @@ class GridItem extends StatelessWidget {
   final String itemName;
   final String itemImage;
 
-  GridItem({required this.itemName, required this.itemImage});
+  const GridItem({super.key, required this.itemName, required this.itemImage});
 
   @override
   Widget build(BuildContext context) {

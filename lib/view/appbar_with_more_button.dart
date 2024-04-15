@@ -1,19 +1,20 @@
-import 'package:clarity_mirror/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/app_fonts.dart';
 import '../utils/app_strings.dart';
 import 'notification_screen.dart';
 
-class CustomAppBar extends StatelessWidget {
-  const CustomAppBar({super.key, required this.titleTxt});
-
+class AppBarWithMoreButton extends StatelessWidget {
+  const AppBarWithMoreButton({super.key,required this.titleTxt});
   final String titleTxt;
 
   @override
   Widget build(BuildContext context) {
     return Row(
                   children: [
+                    const SizedBox(
+                      width: 5,
+                    ),
                     GestureDetector(
                         onTap: () {
                           Navigator.pop(context);
@@ -33,17 +34,20 @@ class CustomAppBar extends StatelessWidget {
                     const Spacer(),
                     GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const NotificationScreen()));
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) =>
+                          //             const NotificationScreen()));
                         },
                         child: const Icon(
-                          Icons.notifications,
+                          Icons.more_vert_rounded,
                           size: 40,
                           color: Colors.white,
-                        ))
+                        )),
+                        const SizedBox(
+                      width: 8,
+                    ),
                   ],
                 );
   }

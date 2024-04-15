@@ -11,6 +11,14 @@ class AppFonts{
                 fontWeight: FontWeight.normal,
                 height: 0.1
               );
+
+  TextStyle sego32normal  = const TextStyle(
+                fontFamily: 'segoe',
+                fontSize: 32.0,
+                color: AppConstColors.appBarTitleColor,
+                fontWeight: FontWeight.normal,
+              );
+  
   
   TextStyle sego14normal  = const TextStyle(
                 fontFamily: 'segoe',
@@ -59,6 +67,13 @@ TextStyle sego18medium  =  const TextStyle(
                 fontSize: 18.0,
                 color: AppConstColors.appThemeCayan,
                 fontWeight: FontWeight.w600,
+              );
+
+TextStyle sego18bold  =  const TextStyle(
+                fontFamily: 'segoe',
+                fontSize: 18.0,
+                color: AppConstColors.editProfileTxtColor,
+                fontWeight: FontWeight.bold,
               );
 
 
