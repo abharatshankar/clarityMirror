@@ -1,5 +1,6 @@
 package com.example.clarity_mirror;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
 
@@ -10,13 +11,19 @@ import java.util.Objects;
 
 import io.flutter.embedding.android.FlutterActivity;
 import io.flutter.embedding.engine.FlutterEngine;
+import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodChannel;
-public class MainActivity extends FlutterActivity {
+public class MainActivity extends FlutterActivity/* implements FlutterPlugin */{
 
     String CHANNEL = "camera_ai_channel";
 
     @Override
     public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
+        flutterEngine
+                .getPlatformViewsController()
+                .getRegistry()
+//                .registerViewFactory("camera_module", new NativeViewFactory(new SplashScreenActivity()));
+                .registerViewFactory("camera_module", new NativeViewFactory());
 //        super.configureFlutterEngine(flutterEngine);
         new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CHANNEL).setMethodCallHandler((call, result) -> {
             if (Objects.equals(call.method, "openAICamera")) {
@@ -31,4 +38,14 @@ public class MainActivity extends FlutterActivity {
             }
         });
     }
+
+/*    @Override
+    public void onAttachedToEngine(@NonNull FlutterPluginBinding binding) {
+        binding.getPlatformViewRegistry().registerViewFactory("activity1", new NativeViewFactory());
+    }
+
+    @Override
+    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+
+    }*/
 }

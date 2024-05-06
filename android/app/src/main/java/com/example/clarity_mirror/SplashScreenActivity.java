@@ -22,6 +22,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -41,6 +42,7 @@ import java.util.List;
 import java.util.Map;
 
 import License.LicenseInfo;
+import io.flutter.plugin.platform.PlatformView;
 import io.github.inflationx.calligraphy3.CalligraphyConfig;
 import io.github.inflationx.calligraphy3.CalligraphyInterceptor;
 import io.github.inflationx.viewpump.ViewPump;
@@ -71,7 +73,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             {"UnevenSkinTone", "UNEVEN_SKINTONE_SEVERITY_SCORE_FAST", "UNEVEN_SKINTONE_IMAGE_FAST"},
             {"Dehydration", "DEHYDRATION_SEVERITY_SCORE_FAST", "DEHYDRATION_CONTOURS_COLORIZED_IMAGE_FAST"},
             {"Oiliness", "SHININESS_SEVERITY_SCORE_FAST", "SHININESS_IMAGE_FAST"},
-            {"Pores", "PORES_SEVERITY_SCORE_FAST", "PORES_IMAGE_FAST"}
+            {"Pores", "PORES_SEVERITY_SCORE_FAST", "PORES_IMAGE_FAST", "FACIALHAIRTYPE", "HAIRLOSSLEVEL", "HAIRTYPE"}
     };
 
     private final List<String> selectedTags = new ArrayList<>();
@@ -123,6 +125,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkAndRequestPermissions();
 
@@ -267,13 +270,16 @@ public class SplashScreenActivity extends AppCompatActivity {
         loader = findViewById(R.id.spinner_bar);
         startBtn.setOnClickListener(v -> {
             try {
-                String key = keyEditText.getText().toString();
-                if (!key.equalsIgnoreCase("") && key.length() > 0) {
+//                String key = keyEditText.getText().toString();
+                String key = "PORP-UDGU-KVMG-6TLM";
+                BTBP.checkLicense(context, key, clientId, licenseStatusCallback);
+                showLoader();
+               /* if (!key.equalsIgnoreCase("") && key.length() > 0) {
                     BTBP.checkLicense(context, key, clientId, licenseStatusCallback);
                     showLoader();
                 } else {
                     Utils.showAlert(context, "Please enter a valid key");
-                }
+                }*/
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -651,4 +657,5 @@ public class SplashScreenActivity extends AppCompatActivity {
         BTBP.drawable.outline_orange = R.drawable.outline_orange;
         BTBP.drawable.outline_green = R.drawable.outline_green;
     }
+
 }
