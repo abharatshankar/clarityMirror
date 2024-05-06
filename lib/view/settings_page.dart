@@ -1,8 +1,13 @@
 import 'package:clarity_mirror/utils/app_colors.dart';
 import 'package:clarity_mirror/utils/app_fonts.dart';
+import 'package:clarity_mirror/view/setting_screens/advanced_settings.dart';
+import 'package:clarity_mirror/view/setting_screens/appearance_settings.dart';
+import 'package:clarity_mirror/view/setting_screens/notification_screens.dart';
 import 'package:flutter/material.dart';
 
+import 'setting_screens/about_btbp.dart';
 import 'setting_screens/account_settings.dart';
+import 'setting_screens/help_and_support.dart';
 
 class SearchableList extends StatefulWidget {
   final List<String> items;
@@ -97,6 +102,32 @@ class _SearchableListState extends State<SearchableList> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => const AccountSettings()));
+                    }else if (index == 1){
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const NotificationSettings()));
+                    }else if (index == 2){
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const AppearanceSettings()));
+                    }else if (index == 3){
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const AdvancedSettings()));
+                    }//
+                    else if (index == 4){
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>  HelpAndSupport()));
+                    }else if(index == 5){
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>  const AboutBtbp()));
                     }
                   },
                   child: Column(

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../utils/app_fonts.dart';
 import '../utils/app_strings.dart';
-import 'notification_screen.dart';
 
 class AppBarWithMoreButton extends StatelessWidget {
   const AppBarWithMoreButton({super.key,required this.titleTxt});

@@ -1,9 +1,10 @@
 import 'package:clarity_mirror/utils/app_colors.dart';
 import 'package:clarity_mirror/utils/app_strings.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
+import 'dashboard_mirror.dart';
 import 'dashboard_more_menu.dart';
+import 'dashboard_skin_hair.dart';
  
 class TabsDemoScreen extends StatefulWidget {
   TabsDemoScreen() : super();
@@ -17,9 +18,9 @@ class TabsDemoScreen extends StatefulWidget {
 class _TabsDemoScreenState extends State<TabsDemoScreen> {
   int currentTabIndex = 0;
   List<Widget> tabs = [
+    DashboardMirror(),
     TabScreen(Colors.orange),
-    TabScreen(Colors.orange),
-    TabScreen(Colors.blue),
+    DashboardSkinHair(),
     const DashboardMoreMenu(),
     
   ];
