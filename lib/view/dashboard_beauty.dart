@@ -6,20 +6,23 @@ import '../utils/app_strings.dart';
 import '../utils/custom_circle.dart';
 import '../utils/custom_circular_percent.dart';
 
-class DashboardSkinHair extends StatefulWidget {
-  const DashboardSkinHair({super.key});
+class DashboardBeauty extends StatefulWidget {
+  const DashboardBeauty({super.key});
 
   @override
-  State<DashboardSkinHair> createState() => _DashboardSkinHairState();
+  State<DashboardBeauty> createState() => _DashboardBeautyState();
 }
 
-class _DashboardSkinHairState extends State<DashboardSkinHair> {
-  List<HairData> hairDataArr = [
-    HairData(99, 4, "High", "Wrinkles"),
-    HairData(60, 3, "Moderate", "Pigmentation"),
-    HairData(70, 4, "Moderate-High", "Redness"),
-    HairData(20, 1, "Moderate-High", "Acne"),
-    HairData(30, 4, "Moderate", "Dark-Circles"),
+class _DashboardBeautyState extends State<DashboardBeauty> {
+  List<BeautyData> beautyDataArr = [
+    BeautyData(title: "Looks",picName:"assets/images/Dermatolgist6.png" ),
+    BeautyData(picName: "assets/images/Dermatolgist6.png",title:  "Lipstick"),
+    BeautyData(picName:  "assets/images/Dermatolgist6.png",title:"Foundation"),
+    BeautyData(picName: "assets/images/Dermatolgist6.png",title:  "Maskara"),
+    BeautyData(picName: "assets/images/Dermatolgist6.png",title: "Eye Lashes"),
+    BeautyData(picName:  "assets/images/Dermatolgist6.png",title:"Foundation"),
+    BeautyData(picName: "assets/images/Dermatolgist6.png",title:  "Maskara"),
+    BeautyData(picName: "assets/images/Dermatolgist6.png",title: "Eye Lashes"),
   ];
 
   @override
@@ -43,8 +46,7 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
               ),
               goliveButton(),
               gradientContainer(),
-              skinHairTabs(),
-              skinList(),
+              beautyList(),
               
             ],
           ),
@@ -64,8 +66,6 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
               begin: Alignment(0.0, -1.0),
               end: Alignment(0.0, 0.6),
               colors: <Color>[
-                // const Color(0x00ef5350),
-                // const Color(0xffef5350),
                 Colors.transparent,
                 Colors.black
               ],
@@ -328,39 +328,28 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
     );
   }
 
-  Widget skinList() {
+  Widget beautyList() {
     return Positioned(
             left: 0,
             right: 0,
             bottom: -10, 
-            child: SizedBox(
-              height: 120, 
+            child: Container(
+              height: 100, 
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: hairDataArr.length, 
+                itemCount: beautyDataArr.length, 
                 itemBuilder: (context, index) {
                   return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Text(
-                        hairDataArr[index].status ?? '',
-                        style: AppFonts().sego10bold,
-                      ),
-                    ),
-                    CircularPercentIndicator(
-                      radius: 20.0,
-                      lineWidth: 5.0,
-                      percent: ((hairDataArr[index].percentage) / 100),
-                      center: Text("${hairDataArr[index].rating}",style: const TextStyle(color: AppConstColors.appThemeCayan)),
-                      progressColor: AppConstColors.appThemeCayan,
-                    ),
+                    
+                    Container(decoration: const BoxDecoration(shape: BoxShape.circle),height: 40,width: 
+                    40,child: Image.asset(beautyDataArr[index].picName ?? ''),),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Text(
-                        hairDataArr[index].title ?? '',
+                        beautyDataArr[index].title ?? '',
                         overflow: TextOverflow.ellipsis,
                         style: AppFonts()
                             .sego14normal
@@ -377,11 +366,9 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
   }
 }
 
-class HairData {
+class BeautyData {
   String? title;
-  int percentage;
-  int? rating;
-  String? status;
+  String? picName;
 
-  HairData(this.percentage, this.rating, this.status, this.title);
+  BeautyData({this.picName, this.title});
 }

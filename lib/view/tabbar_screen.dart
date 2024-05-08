@@ -2,6 +2,7 @@ import 'package:clarity_mirror/utils/app_colors.dart';
 import 'package:clarity_mirror/utils/app_strings.dart';
 import 'package:flutter/material.dart';
 
+import 'dashboard_beauty.dart';
 import 'dashboard_mirror.dart';
 import 'dashboard_more_menu.dart';
 import 'dashboard_skin_hair.dart';
@@ -19,7 +20,7 @@ class _TabsDemoScreenState extends State<TabsDemoScreen> {
   int currentTabIndex = 0;
   List<Widget> tabs = [
     DashboardMirror(),
-    TabScreen(Colors.orange),
+    DashboardBeauty(),
     DashboardSkinHair(),
     const DashboardMoreMenu(),
     

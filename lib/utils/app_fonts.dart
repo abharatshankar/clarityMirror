@@ -43,6 +43,13 @@ class AppFonts{
                 fontWeight: FontWeight.w100,
                 height: 1.4
               );
+  
+  TextStyle poppins24semiBold  = const TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 24.0,
+                color: Colors.white,
+                height: 1.4
+              );
 
   
   
