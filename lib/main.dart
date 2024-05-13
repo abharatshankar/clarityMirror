@@ -1,6 +1,6 @@
+import 'package:clarity_mirror/view/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:clarity_mirror/utils/routes/routes.dart';
-import 'package:clarity_mirror/utils/routes/routes_names.dart';
 import 'package:clarity_mirror/viewModel/auth_viewmodel.dart';
 import 'package:clarity_mirror/viewModel/home_view_model.dart';
 import 'package:clarity_mirror/viewModel/user_view_model.dart';
@@ -34,8 +34,9 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: RouteNames.splashScreen,
+        // initialRoute: RouteNames.tabbarScreen,
         onGenerateRoute: Routes.generateRoutes,
+home: const SplashScreen(),
       ),
     );
   }

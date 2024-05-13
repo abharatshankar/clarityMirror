@@ -21,12 +21,11 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    SplashService.checkAuthentication(context);
 
     valueNotifier = ValueNotifier(0.0);
     valueNotifier.value = 100.0;
     keyForRepaint++;
-    setState(() {});
+    SplashService.checkAuthentication(context);
   }
 
   @override
@@ -47,22 +46,8 @@ class _SplashScreenState extends State<SplashScreen> {
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.3,
                       ),
-                      Center(
-                        child: SizedBox(
-                          height: 150,
-                          child: SimpleCircularProgressBar(
-                            progressColors: const [
-                              AppConstColors.appThemeCayan
-                            ],
-                            size: 80,
-                            progressStrokeWidth: 10,
-                            backStrokeWidth: 25,
-                            valueNotifier: valueNotifier,
-                            mergeMode: true,
-                            animationDuration: 3,
-                          ),
-                        ),
-                      ),
+                      //circular progress animated
+                      animatedCircle(),
 
                       SizedBox(
                           height: 60,
@@ -70,24 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
                             "BTBP",
                             style: AppFonts().sego29normal,
                           )),
-                      RichText(
-                          text: TextSpan(
-                        children: [
-                           TextSpan(
-                              text: 'CLARITY',
-                              style: AppFonts().sego29normal.copyWith(fontWeight: FontWeight.w100),),
-                          WidgetSpan(
-                            child: Transform.translate(
-                              offset: const Offset(0.0, -20.0),
-                              child:  Text(
-                                'TM',
-                                style:
-                                    AppFonts().sego14normal,
-                              ),
-                            ),
-                          ),
-                        ],
-                      )),
+                      clarityText()
                       
                     ],
                   ),
@@ -115,6 +83,46 @@ class _SplashScreenState extends State<SplashScreen> {
   void dispose() {
     valueNotifier.dispose();
     super.dispose();
+  }
+
+  Widget animatedCircle(){
+    return Center(
+                        child: SizedBox(
+                          height: 150,
+                          child: SimpleCircularProgressBar(
+                            progressColors: const [
+                              AppConstColors.appThemeCayan
+                            ],
+                            size: 80,
+                            progressStrokeWidth: 10,
+                            backStrokeWidth: 25,
+                            valueNotifier: valueNotifier,
+                            mergeMode: true,
+                            animationDuration: 3,
+                          ),
+                        ),
+                      );
+  }
+
+  Widget clarityText(){
+    return RichText(
+                          text: TextSpan(
+                        children: [
+                           TextSpan(
+                              text: 'CLARITY',
+                              style: AppFonts().sego29normal.copyWith(fontWeight: FontWeight.w100),),
+                          WidgetSpan(
+                            child: Transform.translate(
+                              offset: const Offset(0.0, -20.0),
+                              child:  Text(
+                                'TM',
+                                style:
+                                    AppFonts().sego14normal,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),);
   }
 }
 

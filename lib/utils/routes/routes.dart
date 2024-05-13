@@ -13,7 +13,7 @@ class Routes {
             builder: (BuildContext context) => const HomeScreen());
       case (RouteNames.splashScreen):
         return MaterialPageRoute(
-            builder: (BuildContext context) => const SplashScreen());
+            builder: (BuildContext context) =>  SplashScreen());
       case (RouteNames.tabbarScreen):
         return MaterialPageRoute(
             builder: (BuildContext context) =>  TabsDemoScreen());

@@ -37,7 +37,7 @@ class _DashboardBeautyState extends State<DashboardBeauty> {
               Positioned(
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height - 90,
+                  height: MediaQuery.of(context).size.height - 130,
                   child: Image.asset(
                     "assets/images/Dermatolgist6.png",
                     fit: BoxFit.cover,

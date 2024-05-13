@@ -17,29 +17,39 @@ class _DashboardMirrorState extends State<DashboardMirror> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppConstColors.themeBackgroundColor,
-        body: Stack(
-          alignment: AlignmentDirectional.center,
-          children: [
-            Positioned(
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                child: Image.asset(
-                  "assets/images/Dermatolgist6.png",
-                  fit: BoxFit.cover,
-                ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Stack(
+                alignment: AlignmentDirectional.center,
+                children: [
+                  Positioned(
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height - 200,
+                      // child: Image.asset(
+                      //   "assets/images/Dermatolgist6.png",
+                      //   fit: BoxFit.cover,
+                      // ),
+                      child: UiKitView(
+                         viewType: 'custom_view',
+                         layoutDirection: TextDirection.ltr,
+                       ),
+                    ),
+                  ),
+                  // goliveButton(),
+                  // tempratureText('24'),
+                  // tempIndexTxt(tempIndexStatus: "uv index high"),
+                  // humidityStatus(humidityStr: "Humidity low"),
+                  // gradientContainer(),
+                  // pollutionStatus(pollutionStr: "Cloudy"),
+                  // ideaIconAndTxt(),
+                  // excersiceWidget(),
+                  // percentageCircle(),
+                ],
               ),
-            ),
-            goliveButton(),
-            tempratureText('24'),
-            tempIndexTxt(tempIndexStatus: "uv index high"),
-            humidityStatus(humidityStr: "Humidity low"),
-            gradientContainer(),
-            pollutionStatus(pollutionStr: "Cloudy"),
-            ideaIconAndTxt(),
-            excersiceWidget(),
-            percentageCircle(),
-          ],
+            ],
+          ),
         ),
       ),
     );
