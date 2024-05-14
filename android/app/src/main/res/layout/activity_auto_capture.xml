@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusableInTouchMode="false"
+    tools:context=".AutoCaptureActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/gray"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="68dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:background="@color/black"
+            android:theme="@style/ThemeOverlay.AppCompat.Light"
+            app:contentInsetStartWithNavigation="0dp"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:title="@string/title"
+            app:titleTextAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:titleTextColor="@android:color/white" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <fragment
+                android:id="@+id/result_fragment"
+                android:name="com.example.clarity_mirror.ResultFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <fragment
+                android:id="@+id/auto_capture_fragment"
+                android:name="org.btbp.btbplibrary.AutoCaptureFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <Button
+                android:id="@+id/toggleButton_Sample"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_margin="10dp"
+                android:background="@drawable/border_btn_start"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="5dp"
+                android:text="Toggle"
+                android:textColor="@color/black"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/navigation"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_gravity="bottom"
+            android:background="@android:color/white"
+            app:itemIconTint="@color/color_state_selection"
+            app:itemTextAppearanceActive="@style/TextAppearance.AppCompat.Caption"
+            app:itemTextAppearanceInactive="@style/TextAppearance.AppCompat.Caption"
+            app:itemTextColor="@color/color_state_selection"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/bottom_menu" />
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

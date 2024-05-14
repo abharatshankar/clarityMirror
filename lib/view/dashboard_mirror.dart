@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:clarity_mirror/utils/app_colors.dart';
 import 'package:clarity_mirror/utils/app_fonts.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../utils/app_strings.dart';
 import '../utils/custom_circle.dart';
 
@@ -11,9 +14,28 @@ class DashboardMirror extends StatefulWidget {
   State<DashboardMirror> createState() => _DashboardMirrorState();
 }
 
+
 class _DashboardMirrorState extends State<DashboardMirror> {
+  static const platform = const MethodChannel('camera_ai_channel');
+
+
+  void _getNewActivity() async {
+    try {
+      await platform.invokeMethod('startNewActivity');
+    } on PlatformException catch (e) {
+      print(e.message);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
+
+    Platform.isAndroid ? _getNewActivity() : null;
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppConstColors.themeBackgroundColor,
