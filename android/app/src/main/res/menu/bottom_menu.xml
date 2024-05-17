@@ -8,7 +8,7 @@
         android:title="Mirror" />
 
     <item
-        android:id="@+id/navigation_4"
+        android:id="@+id/navigation_2"
         android:icon="@drawable/ic_microwave"
         android:title="Beauty" />
 
@@ -16,8 +16,9 @@
         android:id="@+id/navigation_3"
         android:icon="@drawable/ic_reorder"
         android:title="Results" />
+
     <item
-        android:id="@+id/navigation_5"
+        android:id="@+id/navigation_4"
         android:icon="@drawable/ic_person"
         android:title="Profile" />
 

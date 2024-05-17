@@ -6,15 +6,20 @@ import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.multidex.MultiDex;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 
 import org.btbp.btbplibrary.AppConfig;
 import org.btbp.btbplibrary.AutoCaptureFragment;
@@ -23,6 +28,8 @@ import org.btbp.btbplibrary.BTBPCaptureResult;
 import org.btbp.btbplibrary.BTBPConfig;
 import org.btbp.btbplibrary.Utilities.StaticVars;
 
+import io.flutter.embedding.android.FlutterActivity;
+import io.flutter.plugin.common.MethodChannel;
 import io.github.inflationx.calligraphy3.CalligraphyConfig;
 import io.github.inflationx.calligraphy3.CalligraphyInterceptor;
 import io.github.inflationx.viewpump.ViewPump;
@@ -32,6 +39,7 @@ public class AutoCaptureActivity extends AppCompatActivity {
     Context context;
     AutoCaptureFragment autoCaptureFragment;
     private ResultFragment resultFragment;
+    private BottomNavigationView bottomNavigation;
     BTBP.MirrorCallback mirrorCallback = new BTBP.MirrorCallback() {
         @Override
         public void onSuccess(BTBPCaptureResult btbpCaptureResult, String iqcStatusMessage) {
@@ -86,7 +94,42 @@ public class AutoCaptureActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
         setContentView(R.layout.activity_auto_capture);
+
+        //Bottom navigation menu click
+       bottomNavigation = findViewById(R.id.navigation);
+        bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(final MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.navigation_1:
+                        Toast.makeText(getApplicationContext(), item.getTitle(), Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.navigation_2:
+                        Toast.makeText(getApplicationContext(), item.getTitle(), Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.navigation_3:
+                        Toast.makeText(getApplicationContext(), item.getTitle(), Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.navigation_4:
+                        navigateToFlutterTab();
+                        break;
+                    default:
+                        Toast.makeText(getApplicationContext(), "Not found", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+                return true;
+            }
+        });
+
         init();
+    }
+
+    void navigateToFlutterTab() {
+        MethodChannel methodChannel =  CmFlutterEngine.createMethodChannel("com.example.clarity_mirror/tab_bar_screen");
+        methodChannel.invokeMethod("receiveData",  "/tab_bar_screen") ;
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     private void init() {

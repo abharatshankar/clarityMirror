@@ -1,3 +1,4 @@
+import 'package:clarity_mirror/utils/routes/routes_names.dart';
 import 'package:clarity_mirror/view/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:clarity_mirror/utils/routes/routes.dart';
@@ -17,10 +18,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
-    systemNavigationBarColor: Colors.black,
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+      systemNavigationBarColor: Colors.black,
       statusBarColor: Colors.black, // Black color for the status bar
-      statusBarIconBrightness: Brightness.light, // Light icons for the status bar
+      statusBarIconBrightness:
+          Brightness.light, // Light icons for the status bar
     ));
     return MultiProvider(
       providers: [
@@ -36,7 +38,7 @@ class MyApp extends StatelessWidget {
         ),
         // initialRoute: RouteNames.tabbarScreen,
         onGenerateRoute: Routes.generateRoutes,
-home: const SplashScreen(),
+        initialRoute: RouteNames.splashScreen,
       ),
     );
   }
