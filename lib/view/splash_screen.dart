@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:ui' as ui;
 
+import 'package:clarity_mirror/repository/home_repository.dart';
 import 'package:clarity_mirror/utils/app_colors.dart';
 import 'package:clarity_mirror/utils/app_fonts.dart';
 import 'package:clarity_mirror/view/tabbar_screen.dart';
@@ -30,14 +32,17 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    Platform.isAndroid
-        ? platform.setMethodCallHandler(_receiveFromAndroidProject)
-        : null;
-
+    receiveDataFromAndroidCamera();
     valueNotifier = ValueNotifier(0.0);
     valueNotifier.value = 100.0;
     keyForRepaint++;
     SplashService.checkAuthentication(context);
+  }
+
+  receiveDataFromAndroidCamera() async {
+    if(Platform.isAndroid) {
+      platform.setMethodCallHandler(_receiveFromAndroidProject);
+    }
   }
 
   @override
@@ -140,9 +145,17 @@ class _SplashScreenState extends State<SplashScreen> {
     try {
       if (call.method == "receiveData") {
         final String data = call.arguments;
+        print('Image Path: ${data.toString()}');
+        String base64Image = await encodeImageToBase64(data);
+        // Create a JSON array and put the base64 image into it
+        var jsonArray = jsonEncode([base64Image]);
+        log('Image Array: ${jsonArray}');
+        // final _homeRepository = HomeRepository();
+        // await _homeRepository.getTagsAsync(jsonArray);
+
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => TabsDemoScreen()),
+          MaterialPageRoute(builder: (context) => TabsDemoScreen(tabPosition: 3,)),
           ModalRoute.withName(RouteNames
               .tabbarScreen), // Remove all routes until the home route
         );
@@ -150,6 +163,16 @@ class _SplashScreenState extends State<SplashScreen> {
     } catch (e) {
       log(e.toString());
     }
+  }
+
+  Future<String> encodeImageToBase64(String filePath) async {
+    // Read image file
+    List<int> imageBytes = await File(filePath).readAsBytes();
+
+    // Convert image bytes to base64
+    String base64Image = base64Encode(imageBytes);
+
+    return base64Image;
   }
 }
 

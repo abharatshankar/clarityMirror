@@ -1,5 +1,10 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
+import 'package:clarity_mirror/utils/navigation_service.dart';
+import 'package:clarity_mirror/utils/routes/routes_names.dart';
+import 'package:clarity_mirror/view/tabbar_screen.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:clarity_mirror/data/app_exceptions.dart';
 import 'package:clarity_mirror/data/network/base_api_services.dart';
@@ -44,5 +49,46 @@ class NetworkApiServices extends BaseApiServices {
       default:
         throw InternetException("${response.statusCode} : ${response.reasonPhrase}");
     }
+  }
+
+  @override
+  Future getTagsAsync(String url, data) async {
+    print('getTagsAsync fn');
+    print('image data inside network class: ${data.toString()}');
+    dynamic responsejson;
+    try {
+      Map<String, dynamic> requestBody = {
+        'APIKey': 'PORP-UDGU-KVMG-6TLM',
+        'UserId': 'clarity_mirror@btbp.org',
+        'Latitude': 0.0,
+        'Longitude': 0.0,
+        'Tags': ["Acne", "ACNE_SEVERITY_SCORE_FAST", "ACNE_IMAGE_FAST"],
+        'IsGrayOrBlue': false,
+        'IsSoftFocusBG': false,
+        'Contrast': 10,
+        'ImageBytes': data
+      };
+      print('Request body: ${requestBody}');
+      var encodedData = json.encode(requestBody);
+      log('Encoded data: ${encodedData}');
+      debugPrint("Encoded large: $encodedData", wrapWidth: 1024);
+      final response = await http
+          .post(Uri.parse(url), body: data)
+          .timeout(const Duration(seconds: 10));
+      responsejson = responseJson(response);
+      print('Response: ${responsejson.toString()}');
+
+      /// Need to handle the navigation
+      /*Navigator.pushAndRemoveUntil(
+        NavigationService.navigatorKey.currentContext!,
+        MaterialPageRoute(builder: (context) => TabsDemoScreen(tabPosition: 3,)),
+        ModalRoute.withName(RouteNames
+            .tabbarScreen), // Remove all routes until the home route
+      );*/
+    } on SocketException {
+      throw InternetException("NO Internet is available right now");
+    }
+
+    return responsejson;
   }
 }

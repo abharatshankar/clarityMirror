@@ -8,7 +8,8 @@ import 'dashboard_more_menu.dart';
 import 'dashboard_skin_hair.dart';
  
 class TabsDemoScreen extends StatefulWidget {
-  TabsDemoScreen() : super();
+  int? tabPosition;
+  TabsDemoScreen({super.key, this.tabPosition});
  
   final String title = "Flutter Bottom Tab demo";
  
@@ -17,7 +18,7 @@ class TabsDemoScreen extends StatefulWidget {
 }
  
 class _TabsDemoScreenState extends State<TabsDemoScreen> {
-  int currentTabIndex = 0;
+  late int currentTabIndex;
   List<Widget> tabs = [
     DashboardMirror(),
     DashboardBeauty(),
@@ -25,12 +26,20 @@ class _TabsDemoScreenState extends State<TabsDemoScreen> {
     const DashboardMoreMenu(),
     
   ];
+
   onTapped(int index) {
     setState(() {
       currentTabIndex = index;
     });
   }
- 
+
+  @override
+  void initState() {
+    setState(() {
+      currentTabIndex = widget.tabPosition ?? 0;
+    });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     

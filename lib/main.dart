@@ -1,3 +1,4 @@
+import 'package:clarity_mirror/utils/navigation_service.dart';
 import 'package:clarity_mirror/utils/routes/routes_names.dart';
 import 'package:clarity_mirror/view/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
+        navigatorKey: NavigationService.navigatorKey,
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.blue,

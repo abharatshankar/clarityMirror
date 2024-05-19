@@ -1,10 +1,12 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:another_flushbar/flushbar_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class Utils {
 // ! It contains all the utilities which help you in your project
+  static const platform = const MethodChannel('camera_ai_channel');
 
   static void changeNodeFocus(BuildContext context,
       {FocusNode? current, FocusNode? next}) {
@@ -59,4 +61,13 @@ class Utils {
 
     return avg;
   }
+
+  static void getNewActivity() async {
+    try {
+      await platform.invokeMethod('startNewActivity');
+    } on PlatformException catch (e) {
+      print(e.message);
+    }
+  }
+
 }

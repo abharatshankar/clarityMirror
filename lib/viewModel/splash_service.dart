@@ -28,4 +28,5 @@ class SplashService {
       print(e.message);
     }
   }
+
 }

@@ -43,7 +43,8 @@ public class AutoCaptureActivity extends AppCompatActivity {
     BTBP.MirrorCallback mirrorCallback = new BTBP.MirrorCallback() {
         @Override
         public void onSuccess(BTBPCaptureResult btbpCaptureResult, String iqcStatusMessage) {
-            if (resultFragment != null) {
+            navigateToFlutterTab(btbpCaptureResult.getImagePath());
+         /*   if (resultFragment != null) {
                 resultFragment.getView().setVisibility(View.VISIBLE);
                 resultFragment.getView().bringToFront();
 
@@ -53,7 +54,7 @@ public class AutoCaptureActivity extends AppCompatActivity {
                 int displayHeight = displaymetrics.heightPixels;
                 autoCaptureFragment.releaseCamera();
                 resultFragment.showImage(btbpCaptureResult.getImagePath(), displayWidth, displayHeight, btbpCaptureResult.getCameraFacing(), iqcStatusMessage, btbpCaptureResult.getIsFromGallery());
-            }
+            }*/
         }
 
         @Override
@@ -111,7 +112,7 @@ public class AutoCaptureActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), item.getTitle(), Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.navigation_4:
-                        navigateToFlutterTab();
+                        navigateToFlutterTab("Image");
                         break;
                     default:
                         Toast.makeText(getApplicationContext(), "Not found", Toast.LENGTH_SHORT).show();
@@ -124,9 +125,10 @@ public class AutoCaptureActivity extends AppCompatActivity {
         init();
     }
 
-    void navigateToFlutterTab() {
+    void navigateToFlutterTab(String imagePath) {
         MethodChannel methodChannel =  CmFlutterEngine.createMethodChannel("com.example.clarity_mirror/tab_bar_screen");
-        methodChannel.invokeMethod("receiveData",  "/tab_bar_screen") ;
+
+        methodChannel.invokeMethod("receiveData",  imagePath) ;
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);

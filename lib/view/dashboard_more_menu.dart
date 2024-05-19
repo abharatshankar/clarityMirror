@@ -1,5 +1,6 @@
 import 'package:clarity_mirror/utils/app_fonts.dart';
 import 'package:clarity_mirror/utils/app_strings.dart';
+import 'package:clarity_mirror/utils/utils.dart';
 import 'package:clarity_mirror/view/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -65,6 +66,9 @@ class DashboardMoreMenu extends StatelessWidget {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => ProfilePage()));
+                          }
+                          if(index == 0) {
+                            Utils.getNewActivity();
                           }
                         },
                         child: GridItem(
@@ -168,39 +172,35 @@ class GridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridTile(
-      child: SizedBox(
-        height: 100,
-        width: 80,
-        child: Column(
-          children: [
-            Container(
-              height: 80,
-              width: 80,
-              decoration: BoxDecoration(
-                color: Colors.grey,
-                borderRadius: BorderRadius.circular(15.0),
-                image: DecorationImage(
-                  image: AssetImage(
-                    itemImage,
-                  ),
-                  fit: BoxFit.fill,
+      child: Column(
+        children: [
+          Container(
+            height: 75,
+            width: 80,
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              borderRadius: BorderRadius.circular(15.0),
+              image: DecorationImage(
+                image: AssetImage(
+                  itemImage,
                 ),
+                fit: BoxFit.fill,
               ),
             ),
-            const SizedBox(height: 5),
-            Text(
-              itemName,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                  fontSize: 12,
-                  height: 1,
-                  color: Colors.white,
-                  letterSpacing: 0,
-                  wordSpacing: 0,
-                  fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            itemName,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+                fontSize: 12,
+                height: 1,
+                color: Colors.white,
+                letterSpacing: 0,
+                wordSpacing: 0,
+                fontWeight: FontWeight.bold),
+          ),
+        ],
       ),
     );
   }
