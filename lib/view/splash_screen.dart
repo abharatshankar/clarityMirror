@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:clarity_mirror/viewModel/splash_service.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:logger/logger.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 
 import '../utils/routes/routes_names.dart';
@@ -144,14 +145,17 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _receiveFromAndroidProject(MethodCall call) async {
     try {
       if (call.method == "receiveData") {
+        var logger = Logger();
         final String data = call.arguments;
-        print('Image Path: ${data.toString()}');
         String base64Image = await encodeImageToBase64(data);
+
         // Create a JSON array and put the base64 image into it
         var jsonArray = jsonEncode([base64Image]);
-        log('Image Array: ${jsonArray}');
-        // final _homeRepository = HomeRepository();
-        // await _homeRepository.getTagsAsync(jsonArray);
+
+        logger.d("Image Path is: $data");
+        logger.d("Image Array is: $jsonArray");
+        final _homeRepository = HomeRepository();
+        await _homeRepository.getTagsAsync(jsonArray);
 
         Navigator.pushAndRemoveUntil(
           context,
@@ -173,6 +177,11 @@ class _SplashScreenState extends State<SplashScreen> {
     String base64Image = base64Encode(imageBytes);
 
     return base64Image;
+  }
+
+  List<int> base64ToImageArray(String base64String) {
+    Uint8List bytes = base64.decode(base64String); // Decode Base64 string to bytes
+    return bytes;
   }
 }
 

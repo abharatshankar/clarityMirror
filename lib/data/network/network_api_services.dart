@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:clarity_mirror/data/app_exceptions.dart';
 import 'package:clarity_mirror/data/network/base_api_services.dart';
+import 'package:logger/logger.dart';
 
 class NetworkApiServices extends BaseApiServices {
   @override
@@ -53,40 +54,34 @@ class NetworkApiServices extends BaseApiServices {
 
   @override
   Future getTagsAsync(String url, data) async {
+    var logger = Logger();
     print('getTagsAsync fn');
     print('image data inside network class: ${data.toString()}');
     dynamic responsejson;
     try {
       Map<String, dynamic> requestBody = {
         'APIKey': 'PORP-UDGU-KVMG-6TLM',
-        'UserId': 'clarity_mirror@btbp.org',
+        'UserId': ' btbpdev@gmail.com',
         'Latitude': 0.0,
         'Longitude': 0.0,
         'Tags': ["Acne", "ACNE_SEVERITY_SCORE_FAST", "ACNE_IMAGE_FAST"],
-        'IsGrayOrBlue': false,
-        'IsSoftFocusBG': false,
-        'Contrast': 10,
+        // 'IsGrayOrBlue': false,
+        // 'IsSoftFocusBG': false,
+        // 'Contrast': 10,
         'ImageBytes': data
       };
-      print('Request body: ${requestBody}');
+      logger.d('Request body: ${requestBody}');
       var encodedData = json.encode(requestBody);
-      log('Encoded data: ${encodedData}');
-      debugPrint("Encoded large: $encodedData", wrapWidth: 1024);
+      logger.d('Encoded data: ${encodedData}');
       final response = await http
           .post(Uri.parse(url), body: data)
           .timeout(const Duration(seconds: 10));
       responsejson = responseJson(response);
-      print('Response: ${responsejson.toString()}');
-
-      /// Need to handle the navigation
-      /*Navigator.pushAndRemoveUntil(
-        NavigationService.navigatorKey.currentContext!,
-        MaterialPageRoute(builder: (context) => TabsDemoScreen(tabPosition: 3,)),
-        ModalRoute.withName(RouteNames
-            .tabbarScreen), // Remove all routes until the home route
-      );*/
+      logger.i('Response: ${responsejson.toString()}');
     } on SocketException {
       throw InternetException("NO Internet is available right now");
+    } catch(e) {
+      logger.e('Api Error: $e');
     }
 
     return responsejson;
