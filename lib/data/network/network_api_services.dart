@@ -61,7 +61,7 @@ class NetworkApiServices extends BaseApiServices {
     try {
       Map<String, dynamic> requestBody = {
         'APIKey': 'PORP-UDGU-KVMG-6TLM',
-        'UserId': ' btbpdev@gmail.com',
+        'UserId': 'clarity_mirror@btbp.org',
         'Latitude': 0.0,
         'Longitude': 0.0,
         'Tags': ["Acne", "ACNE_SEVERITY_SCORE_FAST", "ACNE_IMAGE_FAST"],

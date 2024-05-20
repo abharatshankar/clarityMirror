@@ -24,6 +24,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  bool isPlatformMethodCalled = false;
   static const platform =
       MethodChannel('com.example.clarity_mirror/tab_bar_screen');
   late ValueNotifier<double> valueNotifier;
@@ -49,7 +50,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
+      body: isPlatformMethodCalled ? Center(child: CircularProgressIndicator(),) : SingleChildScrollView(
         child: Column(
           children: [
             RepaintBoundary(
@@ -144,6 +145,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _receiveFromAndroidProject(MethodCall call) async {
     try {
+      setState(() {
+        isPlatformMethodCalled = true;
+      });
       if (call.method == "receiveData") {
         var logger = Logger();
         final String data = call.arguments;
@@ -157,9 +161,10 @@ class _SplashScreenState extends State<SplashScreen> {
         final _homeRepository = HomeRepository();
         await _homeRepository.getTagsAsync(jsonArray);
 
+        /// TODO: Handle the navigation based on the response.
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => TabsDemoScreen(tabPosition: 3,)),
+          MaterialPageRoute(builder: (context) => TabsDemoScreen(tabPosition: 2,)),
           ModalRoute.withName(RouteNames
               .tabbarScreen), // Remove all routes until the home route
         );
