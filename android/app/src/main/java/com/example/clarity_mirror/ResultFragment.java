@@ -624,31 +624,31 @@ public class ResultFragment extends Fragment implements ServiceManager.ServiceCa
     }
 
     private void openCamera() {
-        AutoCaptureActivity autoCaptureActivity = (AutoCaptureActivity) getActivity();
-        if (autoCaptureActivity != null) {
-            autoCaptureActivity.autoCaptureFragment.reOpenCamera();
-        }
+//        AutoCaptureActivity autoCaptureActivity = (AutoCaptureActivity) getActivity();
+//        if (autoCaptureActivity != null) {
+//            autoCaptureActivity.autoCaptureFragment.reOpenCamera();
+//        }
     }
 
     private void resetCamera() {
-        AutoCaptureActivity autoCaptureActivity = (AutoCaptureActivity) getActivity();
-        if (autoCaptureActivity != null) {
-            autoCaptureActivity.autoCaptureFragment.resetCamera();
-        }
+//        AutoCaptureActivity autoCaptureActivity = (AutoCaptureActivity) getActivity();
+//        if (autoCaptureActivity != null) {
+//            autoCaptureActivity.autoCaptureFragment.resetCamera();
+//        }
     }
 
     private void releaseCamera() {
-        AutoCaptureActivity autoCaptureActivity = (AutoCaptureActivity) getActivity();
-        if (autoCaptureActivity != null) {
-            autoCaptureActivity.autoCaptureFragment.releaseCamera();
-        }
+//        AutoCaptureActivity autoCaptureActivity = (AutoCaptureActivity) getActivity();
+//        if (autoCaptureActivity != null) {
+//            autoCaptureActivity.autoCaptureFragment.releaseCamera();
+//        }
     }
 
     private void showAutoCaptureFragment() {
-        AutoCaptureActivity autoCaptureActivity = (AutoCaptureActivity) getActivity();
-        if (autoCaptureActivity != null) {
-            autoCaptureActivity.showAutoCaptureFragment();
-        }
+//        AutoCaptureActivity autoCaptureActivity = (AutoCaptureActivity) getActivity();
+//        if (autoCaptureActivity != null) {
+//            autoCaptureActivity.showAutoCaptureFragment();
+//        }
     }
 
     //service call back methods impelmentation

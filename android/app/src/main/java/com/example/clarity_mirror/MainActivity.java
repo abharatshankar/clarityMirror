@@ -24,6 +24,7 @@ import org.btbp.btbplibrary.Utilities.AppConfigKeys;
 import org.btbp.btbplibrary.Utilities.SharedPreferenceKeys;
 import org.btbp.btbplibrary.Utilities.SharedPreferenceUtils;
 import org.btbp.btbplibrary.Utilities.Utils;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +33,7 @@ import java.util.Map;
 
 import License.LicenseInfo;
 import io.flutter.embedding.android.FlutterActivity;
+import io.flutter.embedding.android.FlutterFragmentActivity;
 import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.plugin.common.MethodChannel;
 import io.github.inflationx.calligraphy3.CalligraphyConfig;
@@ -39,12 +41,10 @@ import io.github.inflationx.calligraphy3.CalligraphyInterceptor;
 import io.github.inflationx.viewpump.ViewPump;
 import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 
-public class MainActivity extends FlutterActivity {
+public class MainActivity extends FlutterFragmentActivity {
     Context context;
-    private static final String CHANNEL = "camera_ai_channel";
     private final String clientId = "BTBP";
     private final String key = "PORP-UDGU-KVMG-6TLM";
-    private final AppConfig appConfig = new AppConfig();
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 7;
     private final HashMap<String, String> hashMap = new HashMap<>();
     private static final int REQUEST_CODE = 120;
@@ -106,23 +106,8 @@ public class MainActivity extends FlutterActivity {
     public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
         super.configureFlutterEngine(flutterEngine);
 
-        CmFlutterEngine.cachedFlutterEngine = flutterEngine;
-        new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CHANNEL)
-                .setMethodCallHandler(
-                        (call, result) -> {
-                            if (call.method.equals("openAICamera") || call.method.equals("startNewActivity")) {
-                                Log.d("Native method", "Native method invoked from flutter code");
-                                try {
-                                    BTBP.checkLicense(context, key, clientId, licenseStatusCallback);
-                                    result.success(null);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            } else {
-                                result.notImplemented();
-                            }
-                        }
-                );
+        flutterEngine.getPlatformViewsController().getRegistry().registerViewFactory(
+                "com.example.myapp/my_native_view", new NativeViewFactory());
     }
 
     @Override
@@ -254,6 +239,12 @@ public class MainActivity extends FlutterActivity {
         setYourOwnMessageStrings();
         setYourOwnDrawables();
         addBTBPFastTags();
+
+        try {
+            BTBP.checkLicense(context, key, clientId, licenseStatusCallback);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void openMainActivity() {
@@ -261,13 +252,6 @@ public class MainActivity extends FlutterActivity {
             BTBP.hashMapString = hashMap;
             BTBP.licenseStatusCallback = licenseStatusCallback;
             SharedPreferenceUtils.setSharedPreferenceValue(context, SharedPreferenceKeys.KEY, key);
-
-            Intent intent = new Intent(this, AutoCaptureActivity.class);
-            intent.putExtra("BTBPTags", (ArrayList<String>) selectedTags);
-            intent.putExtra(AppConfigKeys.LANG_CODE, "en-US");
-            intent.putExtra("AllBTBPTags", btbpTags);
-            intent.putExtra("appConfig", appConfig);
-            startActivity(intent);
         } else {
             String msg = "Please check your internet connection and try again";
             DialogInterface.OnClickListener okListener = (dialogInterface, i) -> {

@@ -2,7 +2,10 @@ import 'dart:io';
 
 import 'package:clarity_mirror/utils/app_colors.dart';
 import 'package:clarity_mirror/utils/app_fonts.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import '../utils/app_strings.dart';
 import '../utils/custom_circle.dart';
@@ -14,51 +17,86 @@ class DashboardMirror extends StatefulWidget {
   State<DashboardMirror> createState() => _DashboardMirrorState();
 }
 
-
 class _DashboardMirrorState extends State<DashboardMirror> {
   @override
   void initState() {
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppConstColors.themeBackgroundColor,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Stack(
-                alignment: AlignmentDirectional.center,
-                children: [
-                  Positioned(
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height - 200,
-                      // child: Image.asset(
-                      //   "assets/images/Dermatolgist6.png",
-                      //   fit: BoxFit.cover,
-                      // ),
-                      child: UiKitView(
-                         viewType: 'custom_view',
-                         layoutDirection: TextDirection.ltr,
-                       ),
+        body: Platform.isAndroid
+            ? Column(
+                children: <Widget>[
+                  Expanded(
+                    child: PlatformViewLink(
+                      viewType: 'com.example.myapp/my_native_view',
+                      surfaceFactory: (BuildContext context,
+                          PlatformViewController controller) {
+                        if (controller is AndroidViewController) {
+                          return AndroidViewSurface(
+                            controller: controller,
+                            gestureRecognizers: const <Factory<
+                                OneSequenceGestureRecognizer>>{},
+                            hitTestBehavior: PlatformViewHitTestBehavior.opaque,
+                          );
+                        }
+                        return Container();
+                      },
+                      onCreatePlatformView:
+                          (PlatformViewCreationParams params) {
+                        return PlatformViewsService.initSurfaceAndroidView(
+                          id: params.id,
+                          viewType: 'com.example.myapp/my_native_view',
+                          layoutDirection: TextDirection.ltr,
+                          creationParams: null,
+                          creationParamsCodec: const StandardMessageCodec(),
+                        )
+                          ..addOnPlatformViewCreatedListener(
+                              params.onPlatformViewCreated)
+                          ..create();
+                      },
                     ),
-                  ),
-                  // goliveButton(),
-                  // tempratureText('24'),
-                  // tempIndexTxt(tempIndexStatus: "uv index high"),
-                  // humidityStatus(humidityStr: "Humidity low"),
-                  // gradientContainer(),
-                  // pollutionStatus(pollutionStr: "Cloudy"),
-                  // ideaIconAndTxt(),
-                  // excersiceWidget(),
-                  // percentageCircle(),
+                  )
                 ],
+              )
+            : SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Stack(
+                      alignment: AlignmentDirectional.center,
+                      children: [
+                        Positioned(
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height - 200,
+                            // child: Image.asset(
+                            //   "assets/images/Dermatolgist6.png",
+                            //   fit: BoxFit.cover,
+                            // ),
+                            child: UiKitView(
+                              viewType: 'custom_view',
+                              layoutDirection: TextDirection.ltr,
+                            ),
+                          ),
+                        ),
+                        // goliveButton(),
+                        // tempratureText('24'),
+                        // tempIndexTxt(tempIndexStatus: "uv index high"),
+                        // humidityStatus(humidityStr: "Humidity low"),
+                        // gradientContainer(),
+                        // pollutionStatus(pollutionStr: "Cloudy"),
+                        // ideaIconAndTxt(),
+                        // excersiceWidget(),
+                        // percentageCircle(),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
-        ),
       ),
     );
   }

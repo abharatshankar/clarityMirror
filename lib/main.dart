@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         navigatorKey: NavigationService.navigatorKey,
-        title: 'Flutter Demo',
+        title: 'Clarity Mirror',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),

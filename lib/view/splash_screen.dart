@@ -50,7 +50,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: isPlatformMethodCalled ? Center(child: CircularProgressIndicator(),) : SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Column(
           children: [
             RepaintBoundary(
