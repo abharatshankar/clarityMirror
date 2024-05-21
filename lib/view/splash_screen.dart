@@ -6,6 +6,7 @@ import 'dart:ui' as ui;
 import 'package:clarity_mirror/repository/home_repository.dart';
 import 'package:clarity_mirror/utils/app_colors.dart';
 import 'package:clarity_mirror/utils/app_fonts.dart';
+import 'package:clarity_mirror/utils/app_strings.dart';
 import 'package:clarity_mirror/view/tabbar_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:clarity_mirror/viewModel/splash_service.dart';
@@ -159,15 +160,17 @@ class _SplashScreenState extends State<SplashScreen> {
         logger.d("Image Path is: $data");
         logger.d("Image Array is: $jsonArray");
         final _homeRepository = HomeRepository();
-        await _homeRepository.getTagsAsync(jsonArray);
+        // await _homeRepository.getTagsAsync(["${AppStrings.base64Test}"]); // working copy with sample imageArray
+        // await _homeRepository.getTagsAsync(jsonArray);
+        await _homeRepository.getTagsAsync(["$base64Image"]);
 
         /// TODO: Handle the navigation based on the response.
-        Navigator.pushAndRemoveUntil(
+        /*Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => TabsDemoScreen(tabPosition: 2,)),
           ModalRoute.withName(RouteNames
               .tabbarScreen), // Remove all routes until the home route
-        );
+        );*/
       }
     } catch (e) {
       log(e.toString());

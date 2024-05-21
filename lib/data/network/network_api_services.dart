@@ -70,17 +70,31 @@ class NetworkApiServices extends BaseApiServices {
         // 'Contrast': 10,
         'ImageBytes': data
       };
-      logger.d('Request body: ${requestBody}');
+      // logger.d('Request body: ${requestBody}');
       var encodedData = json.encode(requestBody);
       logger.d('Encoded data: ${encodedData}');
       final response = await http
-          .post(Uri.parse(url), body: data)
+          .post(Uri.parse(url), body: encodedData,
+          headers: { 'Content-type': 'application/json',
+          'Accept': 'application/json'})
           .timeout(const Duration(seconds: 10));
       responsejson = responseJson(response);
       logger.i('Response: ${responsejson.toString()}');
+      Navigator.pushAndRemoveUntil(
+        NavigationService.navigatorKey.currentContext!,
+        MaterialPageRoute(builder: (context) => TabsDemoScreen(tabPosition: 2,)),
+        ModalRoute.withName(RouteNames
+            .tabbarScreen), // Remove all routes until the home route
+      );
     } on SocketException {
       throw InternetException("NO Internet is available right now");
     } catch(e) {
+      Navigator.pushAndRemoveUntil(
+        NavigationService.navigatorKey.currentContext!,
+        MaterialPageRoute(builder: (context) => TabsDemoScreen(tabPosition: 3,)),
+        ModalRoute.withName(RouteNames
+            .tabbarScreen), // Remove all routes until the home route
+      );
       logger.e('Api Error: $e');
     }
 
