@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:clarity_mirror/utils/app_colors.dart';
 import 'package:clarity_mirror/utils/app_fonts.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -29,38 +30,78 @@ class _DashboardMirrorState extends State<DashboardMirror> {
       child: Scaffold(
         backgroundColor: AppConstColors.themeBackgroundColor,
         body: Platform.isAndroid
-            ? Column(
-                children: <Widget>[
-                  Expanded(
-                    child: PlatformViewLink(
-                      viewType: 'com.example.myapp/my_native_view',
-                      surfaceFactory: (BuildContext context,
-                          PlatformViewController controller) {
-                        if (controller is AndroidViewController) {
-                          return AndroidViewSurface(
-                            controller: controller,
-                            gestureRecognizers: const <Factory<
-                                OneSequenceGestureRecognizer>>{},
-                            hitTestBehavior: PlatformViewHitTestBehavior.opaque,
-                          );
-                        }
-                        return Container();
-                      },
-                      onCreatePlatformView:
-                          (PlatformViewCreationParams params) {
-                        return PlatformViewsService.initSurfaceAndroidView(
-                          id: params.id,
-                          viewType: 'com.example.myapp/my_native_view',
-                          layoutDirection: TextDirection.ltr,
-                          creationParams: null,
-                          creationParamsCodec: const StandardMessageCodec(),
-                        )
-                          ..addOnPlatformViewCreatedListener(
-                              params.onPlatformViewCreated)
-                          ..create();
-                      },
+            ? Stack(
+                fit: StackFit.expand,
+                children: [
+                  Positioned(
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height - 200,
+                      child: PlatformViewLink(
+                        viewType: 'com.example.myapp/my_native_view',
+                        surfaceFactory: (BuildContext context,
+                            PlatformViewController controller) {
+                          if (controller is AndroidViewController) {
+                            return AndroidViewSurface(
+                              controller: controller,
+                              gestureRecognizers: const <Factory<
+                                  OneSequenceGestureRecognizer>>{},
+                              hitTestBehavior:
+                                  PlatformViewHitTestBehavior.opaque,
+                            );
+                          }
+                          return Container();
+                        },
+                        onCreatePlatformView:
+                            (PlatformViewCreationParams params) {
+                          return PlatformViewsService.initSurfaceAndroidView(
+                            id: params.id,
+                            viewType: 'com.example.myapp/my_native_view',
+                            layoutDirection: TextDirection.ltr,
+                            creationParams: null,
+                            creationParamsCodec: const StandardMessageCodec(),
+                          )
+                            ..addOnPlatformViewCreatedListener(
+                                params.onPlatformViewCreated)
+                            ..create();
+                        },
+                      ),
                     ),
-                  )
+                  ),
+                  Positioned(
+                    bottom: 40,
+                    right: 20,
+                    left: 20,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Text('This is a tip: complete exercises daily', style: TextStyle(color: Colors.white),),
+                        Container(
+                          height: 100,
+                          decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: Colors.green, width: 6)),
+                          child: Center(child: Text('UV Index',  style: TextStyle(color: Colors.white))),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    top: 100,
+                    right: 20,
+                    left: 20,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Text('Tip2: customise your view', style: TextStyle(color: Colors.red),),
+                        Container(
+                          height: 100,
+                          decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: Colors.green, width: 6)),
+                          child: Center(child: Text('10%',  style: TextStyle(color: Colors.red))),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               )
             : SingleChildScrollView(
@@ -72,7 +113,7 @@ class _DashboardMirrorState extends State<DashboardMirror> {
                         Positioned(
                           child: SizedBox(
                             width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height - 200,
+                            height: MediaQuery.of(context).size.height,
                             // child: Image.asset(
                             //   "assets/images/Dermatolgist6.png",
                             //   fit: BoxFit.cover,
