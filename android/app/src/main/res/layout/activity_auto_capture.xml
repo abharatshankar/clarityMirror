@@ -11,34 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"  />
 
-    <!-- Fragment container to host the AutoCaptureFragment -->
-    <!--<androidx.fragment.app.FragmentContainerView
-        android:id="@+id/auto_capture_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:name="org.btbp.btbplibrary.AutoCaptureFragment" />-->
-
     <fragment
         android:id="@+id/auto_capture_fragment"
-        android:layout_height="match_parent"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:name="org.btbp.btbplibrary.AutoCaptureFragment" />
-
-    <Button
-        android:background="@drawable/border_btn_start"
-        android:id="@+id/toggleButton_Sample"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:layout_width="wrap_content"
-        android:paddingBottom="5dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:paddingTop="5dp"
-        android:text="Toggle"
-        android:textColor="@color/black"
-        android:visibility="gone" />
 
 </RelativeLayout>
 

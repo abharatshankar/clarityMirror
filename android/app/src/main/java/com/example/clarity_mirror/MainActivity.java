@@ -1,7 +1,9 @@
 package com.example.clarity_mirror;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,11 +21,14 @@ import androidx.core.content.ContextCompat;
 import androidx.multidex.MultiDex;
 
 import org.btbp.btbplibrary.AppConfig;
+import org.btbp.btbplibrary.AutoCaptureFragment;
 import org.btbp.btbplibrary.BTBP;
+import org.btbp.btbplibrary.BTBPCaptureResult;
 import org.btbp.btbplibrary.LicenseError;
 import org.btbp.btbplibrary.Utilities.AppConfigKeys;
 import org.btbp.btbplibrary.Utilities.SharedPreferenceKeys;
 import org.btbp.btbplibrary.Utilities.SharedPreferenceUtils;
+import org.btbp.btbplibrary.Utilities.StaticVars;
 import org.btbp.btbplibrary.Utilities.Utils;
 import org.json.JSONObject;
 
@@ -35,6 +41,7 @@ import License.LicenseInfo;
 import io.flutter.embedding.android.FlutterActivity;
 import io.flutter.embedding.android.FlutterFragmentActivity;
 import io.flutter.embedding.engine.FlutterEngine;
+import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.github.inflationx.calligraphy3.CalligraphyConfig;
 import io.github.inflationx.calligraphy3.CalligraphyInterceptor;
@@ -48,6 +55,9 @@ public class MainActivity extends FlutterFragmentActivity {
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 7;
     private final HashMap<String, String> hashMap = new HashMap<>();
     private static final int REQUEST_CODE = 120;
+    private static final String CHANNEL = "com.example.clarity_mirror/mirror_channel";
+
+    private static AutoCaptureFragment autoCaptureFragment;
 
     private final String[][] btbpTags = {
             //Display Name, Score tag, image tag
@@ -63,7 +73,6 @@ public class MainActivity extends FlutterFragmentActivity {
     };
 
     private final List<String> selectedTags = new ArrayList<>();
-    private final String[] flexibleOptions = {"Show Instructions", "isAutoCapture", "Show Gallery", "Show Toggle Camera", "Show ResultPanel Shift Control", "Show ResetButton", "Show Results", "Show AutoCaptureControl", "Show Camera Button", "Show Image ok Button", "show Retake Button", "Show Analysis Loader", "Enable Async Service Call"};
 
     BTBP.LicenseStatusCallback licenseStatusCallback = new BTBP.LicenseStatusCallback() {
         @Override
@@ -102,12 +111,52 @@ public class MainActivity extends FlutterFragmentActivity {
         }
     };
 
+    BTBP.MirrorCallback mirrorCallback = new BTBP.MirrorCallback() {
+        @Override
+        public void onSuccess(BTBPCaptureResult btbpCaptureResult, String iqcStatusMessage) {
+            try {
+                Log.d("ImageData", btbpCaptureResult.getImagePath());
+                CallMethodChannelHelper.notifySuccess(btbpCaptureResult.getImagePath());
+            } catch (Exception ex) {
+                Log.d(ex.getMessage(), ex.toString());
+            }
+        }
+
+        @Override
+        public void onError(int errorCode) {
+            // Handle error
+        }
+
+        @Override
+        public void onIQCRejected(String IQCMessage) {
+            // Handle rejection
+        }
+    };
+
     @Override
     public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
         super.configureFlutterEngine(flutterEngine);
 
         flutterEngine.getPlatformViewsController().getRegistry().registerViewFactory(
-                "com.example.myapp/my_native_view", new NativeViewFactory());
+                "com.example.clarity_mirror/my_native_view", new NativeViewFactory());
+
+        MethodChannel methodChannel = new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CHANNEL);
+        CallMethodChannelHelper.setMethodChannel(methodChannel);
+
+        methodChannel.setMethodCallHandler((call, result) -> {
+                    if (call.method.equals("startLoadCamera")) {
+                        //AutoCaptureActivity autoCaptureActivity = findViewById(R.id.auto_capture_fragment);
+                        //autoCaptureActivity.loadAutoCapture();
+                        result.success(true);
+                    } else if (call.method.equals("releaseCamera")) {
+                        //AutoCaptureActivity autoCaptureActivity = findViewById(R.id.auto_capture_fragment);
+                        autoCaptureFragment.releaseCamera();
+                        result.success(true);
+                    } {
+                        result.notImplemented();
+                    }
+                }
+        );
     }
 
     @Override
@@ -233,6 +282,15 @@ public class MainActivity extends FlutterFragmentActivity {
         MultiDex.install(this);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        if (mirrorCallback != null) {
+            mirrorCallback.onError(BTBP.ERROR_BACK_BUTTON_PRESSED);
+        }
+    }
+
     private void init() {
         context = this;
 
@@ -252,6 +310,9 @@ public class MainActivity extends FlutterFragmentActivity {
             BTBP.hashMapString = hashMap;
             BTBP.licenseStatusCallback = licenseStatusCallback;
             SharedPreferenceUtils.setSharedPreferenceValue(context, SharedPreferenceKeys.KEY, key);
+
+            StaticVars.appConfig = new AppConfig();
+            BTBP.mirrorCallbacks = mirrorCallback;
         } else {
             String msg = "Please check your internet connection and try again";
             DialogInterface.OnClickListener okListener = (dialogInterface, i) -> {

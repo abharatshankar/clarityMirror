@@ -1,6 +1,7 @@
 import 'package:clarity_mirror/utils/app_colors.dart';
 import 'package:clarity_mirror/utils/app_strings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'dashboard_beauty.dart';
 import 'dashboard_mirror.dart';
@@ -19,7 +20,10 @@ class TabsDemoScreen extends StatefulWidget {
 }
 
 class _TabsDemoScreenState extends State<TabsDemoScreen> {
+  static const platform =
+      MethodChannel('com.example.clarity_mirror/mirror_channel');
   late int currentTabIndex;
+
   List<Widget> tabs = [
     DashboardMirror(),
     DashboardBeauty(),
@@ -30,6 +34,11 @@ class _TabsDemoScreenState extends State<TabsDemoScreen> {
   onTapped(int index) {
     setState(() {
       currentTabIndex = index;
+      if (index == 0) {
+        _startLoadCamera();
+      } else {
+        _releaseCamera();
+      }
     });
   }
 
@@ -39,6 +48,22 @@ class _TabsDemoScreenState extends State<TabsDemoScreen> {
       currentTabIndex = widget.tabPosition ?? 0;
     });
     super.initState();
+  }
+
+  Future<void> _startLoadCamera() async {
+    try {
+      await platform.invokeMethod('startLoadCamera');
+    } on PlatformException catch (e) {
+      print("Failed to load camera activity: '${e.message}'.");
+    }
+  }
+
+  Future<void> _releaseCamera() async {
+    try {
+      await platform.invokeMethod('releaseCamera');
+    } on PlatformException catch (e) {
+      print("Failed to load camera activity: '${e.message}'.");
+    }
   }
 
   @override
