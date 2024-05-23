@@ -1,0 +1,37 @@
+diff a/lib/view/dashboard_mirror.dart b/lib/view/dashboard_mirror.dart	(rejected hunks)
+@@ -18,35 +18,9 @@
+ }
+ 
+ class _DashboardMirrorState extends State<DashboardMirror> {
+-  static const MethodChannel _channel = MethodChannel('com.example.clarity_mirror/mirror_channel');
+-  String? _capturedImagePath;
+-
+   @override
+   void initState() {
+     super.initState();
+-    _channel.setMethodCallHandler(_handleMethod);
+-  }
+-
+-  Future<void> _handleMethod(MethodCall call) async {
+-    switch (call.method) {
+-      case 'onCaptureSuccess':
+-        String imagePath = call.arguments as String;
+-        Fluttertoast.showToast(
+-          msg: imagePath,
+-          toastLength: Toast.LENGTH_LONG,
+-          gravity: ToastGravity.BOTTOM,
+-          timeInSecForIosWeb: 1,
+-          backgroundColor: Colors.black,
+-          textColor: Colors.white,
+-          fontSize: 16.0,
+-        );
+-        setState(() {
+-          _capturedImagePath = imagePath;
+-        });
+-        break;
+-      default:
+-        throw MissingPluginException('Plugin Exception: ${call.method}');
+-    }
+   }
+ 
+   @override
