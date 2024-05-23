@@ -7,7 +7,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import '../utils/app_strings.dart';
 import '../utils/custom_circle.dart';
 
@@ -19,35 +18,9 @@ class DashboardMirror extends StatefulWidget {
 }
 
 class _DashboardMirrorState extends State<DashboardMirror> {
-  static const MethodChannel _channel = MethodChannel('com.example.clarity_mirror/mirror_channel');
-  String? _capturedImagePath;
-
   @override
   void initState() {
     super.initState();
-    _channel.setMethodCallHandler(_handleMethod);
-  }
-
-  Future<void> _handleMethod(MethodCall call) async {
-    switch (call.method) {
-      case 'onCaptureSuccess':
-        String imagePath = call.arguments as String;
-        Fluttertoast.showToast(
-          msg: imagePath,
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.black,
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
-        setState(() {
-          _capturedImagePath = imagePath;
-        });
-        break;
-      default:
-        throw MissingPluginException('Plugin Exception: ${call.method}');
-    }
   }
 
   @override
@@ -60,7 +33,7 @@ class _DashboardMirrorState extends State<DashboardMirror> {
                 children: <Widget>[
                   Expanded(
                     child: PlatformViewLink(
-                      viewType: 'com.example.clarity_mirror/my_native_view',
+                      viewType: 'com.example.myapp/my_native_view',
                       surfaceFactory: (BuildContext context,
                           PlatformViewController controller) {
                         if (controller is AndroidViewController) {
@@ -77,9 +50,9 @@ class _DashboardMirrorState extends State<DashboardMirror> {
                           (PlatformViewCreationParams params) {
                         return PlatformViewsService.initSurfaceAndroidView(
                           id: params.id,
-                          viewType: 'com.example.clarity_mirror/my_native_view',
+                          viewType: 'com.example.myapp/my_native_view',
                           layoutDirection: TextDirection.ltr,
-                          creationParams: <String, dynamic>{},
+                          creationParams: null,
                           creationParamsCodec: const StandardMessageCodec(),
                         )
                           ..addOnPlatformViewCreatedListener(
