@@ -35,9 +35,9 @@ class _TabsDemoScreenState extends State<TabsDemoScreen> {
     setState(() {
       currentTabIndex = index;
       if (index == 0) {
-        _startLoadCamera();
+        // _startLoadCamera();
       } else {
-        _releaseCamera();
+        // _releaseCamera();
       }
     });
   }

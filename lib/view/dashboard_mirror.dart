@@ -1,13 +1,19 @@
+import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
+import 'package:clarity_mirror/repository/home_repository.dart';
 import 'package:clarity_mirror/utils/app_colors.dart';
 import 'package:clarity_mirror/utils/app_fonts.dart';
+import 'package:clarity_mirror/viewModel/dashboard_viewmodel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
 import '../utils/app_strings.dart';
 import '../utils/custom_circle.dart';
 
@@ -26,108 +32,91 @@ class _DashboardMirrorState extends State<DashboardMirror> {
   @override
   void initState() {
     super.initState();
-    _channel.setMethodCallHandler(_handleMethod);
-  }
-
-  Future<void> _handleMethod(MethodCall call) async {
-    switch (call.method) {
-      case 'onCaptureSuccess':
-        String imagePath = call.arguments as String;
-        Fluttertoast.showToast(
-          msg: imagePath,
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.black,
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
-        setState(() {
-          _capturedImagePath = imagePath;
-        });
-        break;
-      default:
-        throw MissingPluginException('Plugin Exception: ${call.method}');
-    }
+    DashboardViewModel().invokeMethodCallHandler();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: AppConstColors.themeBackgroundColor,
-        body: Platform.isAndroid
-            ? Column(
-                children: <Widget>[
-                  Expanded(
-                    child: PlatformViewLink(
-                      viewType: 'com.example.clarity_mirror/my_native_view',
-                      surfaceFactory: (BuildContext context,
-                          PlatformViewController controller) {
-                        if (controller is AndroidViewController) {
-                          return AndroidViewSurface(
-                            controller: controller,
-                            gestureRecognizers: const <Factory<
-                                OneSequenceGestureRecognizer>>{},
-                            hitTestBehavior: PlatformViewHitTestBehavior.opaque,
-                          );
-                        }
-                        return Container();
-                      },
-                      onCreatePlatformView:
-                          (PlatformViewCreationParams params) {
-                        return PlatformViewsService.initSurfaceAndroidView(
-                          id: params.id,
-                          viewType: 'com.example.clarity_mirror/my_native_view',
-                          layoutDirection: TextDirection.ltr,
-                          creationParams: null,
-                          creationParamsCodec: const StandardMessageCodec(),
-                        )
-                          ..addOnPlatformViewCreatedListener(
-                              params.onPlatformViewCreated)
-                          ..create();
-                      },
-                    ),
-                  )
-                ],
-              )
-            : SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Stack(
-                      alignment: AlignmentDirectional.center,
-                      children: [
-                        Positioned(
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height - 200,
-                            // child: Image.asset(
-                            //   "assets/images/Dermatolgist6.png",
-                            //   fit: BoxFit.cover,
-                            // ),
-                            child: UiKitView(
-                              viewType: 'custom_view',
-                              layoutDirection: TextDirection.ltr,
-                            ),
+    return Consumer<DashboardViewModel>(
+      builder: (context, dashboardViewModel, _){
+        return SafeArea(
+          child: Scaffold(
+            backgroundColor: AppConstColors.themeBackgroundColor,
+            body: Platform.isAndroid
+                ? Column(
+              children: <Widget>[
+                Expanded(
+                  child: PlatformViewLink(
+                    viewType: 'com.example.clarity_mirror/my_native_view',
+                    surfaceFactory: (BuildContext context,
+                        PlatformViewController controller) {
+                      if (controller is AndroidViewController) {
+                        return AndroidViewSurface(
+                          controller: controller,
+                          gestureRecognizers: const <Factory<
+                              OneSequenceGestureRecognizer>>{},
+                          hitTestBehavior: PlatformViewHitTestBehavior.opaque,
+                        );
+                      }
+                      return Container();
+                    },
+                    onCreatePlatformView:
+                        (PlatformViewCreationParams params) {
+                      return PlatformViewsService.initSurfaceAndroidView(
+                        id: params.id,
+                        viewType: 'com.example.clarity_mirror/my_native_view',
+                        layoutDirection: TextDirection.ltr,
+                        creationParams: null,
+                        creationParamsCodec: const StandardMessageCodec(),
+                      )
+                        ..addOnPlatformViewCreatedListener(
+                            params.onPlatformViewCreated)
+                        ..create();
+                    },
+                  ),
+                )
+              ],
+            )
+                : SingleChildScrollView(
+              child: Column(
+                children: [
+                  Stack(
+                    alignment: AlignmentDirectional.center,
+                    children: [
+                      Positioned(
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height - 200,
+                          // child: Image.asset(
+                          //   "assets/images/Dermatolgist6.png",
+                          //   fit: BoxFit.cover,
+                          // ),
+                          child: UiKitView(
+                            viewType: 'custom_view',
+                            layoutDirection: TextDirection.ltr,
                           ),
                         ),
-                        // goliveButton(),
-                        // tempratureText('24'),
-                        // tempIndexTxt(tempIndexStatus: "uv index high"),
-                        // humidityStatus(humidityStr: "Humidity low"),
-                        // gradientContainer(),
-                        // pollutionStatus(pollutionStr: "Cloudy"),
-                        // ideaIconAndTxt(),
-                        // excersiceWidget(),
-                        // percentageCircle(),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                      // goliveButton(),
+                      // tempratureText('24'),
+                      // tempIndexTxt(tempIndexStatus: "uv index high"),
+                      // humidityStatus(humidityStr: "Humidity low"),
+                      // gradientContainer(),
+                      // pollutionStatus(pollutionStr: "Cloudy"),
+                      // ideaIconAndTxt(),
+                      // excersiceWidget(),
+                      // percentageCircle(),
+                    ],
+                  ),
+                ],
               ),
-      ),
+            ),
+          ),
+        );
+      },
     );
   }
+
 
   Widget gradientContainer() {
     return Positioned(

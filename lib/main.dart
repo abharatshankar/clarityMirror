@@ -1,6 +1,7 @@
 import 'package:clarity_mirror/utils/navigation_service.dart';
 import 'package:clarity_mirror/utils/routes/routes_names.dart';
 import 'package:clarity_mirror/view/splash_screen.dart';
+import 'package:clarity_mirror/viewModel/dashboard_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:clarity_mirror/utils/routes/routes.dart';
 import 'package:clarity_mirror/viewModel/auth_viewmodel.dart';
@@ -29,7 +30,8 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthViewModel()),
         ChangeNotifierProvider(create: (_) => UserViewModel()),
-        ChangeNotifierProvider(create: (_) => HomeViewModel())
+        ChangeNotifierProvider(create: (_) => HomeViewModel()),
+        ChangeNotifierProvider(create: (_) => DashboardViewModel()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

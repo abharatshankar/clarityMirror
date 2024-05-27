@@ -1,5 +1,8 @@
 import 'package:buttons_tabbar/buttons_tabbar.dart';
+import 'package:clarity_mirror/models/tag_results_model.dart';
+import 'package:clarity_mirror/viewModel/dashboard_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_fonts.dart';
 import '../utils/app_strings.dart';
@@ -24,32 +27,39 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: AppConstColors.themeBackgroundColor,
-        body: SingleChildScrollView(
-          child: Stack(
-            alignment: AlignmentDirectional.center,
-            children: [
-              Positioned(
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height - 90,
-                  child: Image.asset(
-                    "assets/images/Dermatolgist6.png",
-                    fit: BoxFit.cover,
+    return Consumer<DashboardViewModel>(
+      builder: (context, dashboardViewModel, _) {
+        print('skin & hair tab - tags length: ${dashboardViewModel.tagResults?.tags?.length}');
+        print('skin & hair tab - Message: ${dashboardViewModel.tagResults?.message} ImageID: ${dashboardViewModel.tagResults?.imageId}');
+        print('Processed Tag count & Pending count: ${dashboardViewModel.tagResults?.processedTagCount} & ${dashboardViewModel.tagResults?.pendingTagCount}');
+        print('Captured Image - Controller: ${dashboardViewModel.capturedImagePath}');
+        return SafeArea(
+          child: Scaffold(
+            backgroundColor: AppConstColors.themeBackgroundColor,
+            body: SingleChildScrollView(
+              child: Stack(
+                alignment: AlignmentDirectional.center,
+                children: [
+                  Positioned(
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height - 90,
+                      child: Image.asset(
+                        "assets/images/Dermatolgist6.png",
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
-                ),
+                  goliveButton(),
+                  gradientContainer(),
+                  skinHairTabs(),
+                  skinList(dashboardViewModel.tagResults?.tags),
+                ],
               ),
-              goliveButton(),
-              gradientContainer(),
-              skinHairTabs(),
-              skinList(),
-              
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -328,52 +338,59 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
     );
   }
 
-  Widget skinList() {
+  Widget skinList(List<Tag>? tagResults) {
+    print('Tags length is: ${tagResults?.length}');
     return Positioned(
-            left: 0,
-            right: 0,
-            bottom: -10, 
-            child: SizedBox(
-              height: 120, 
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: hairDataArr.length, 
-                itemBuilder: (context, index) {
-                  return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Text(
-                        hairDataArr[index].status ?? '',
-                        style: AppFonts().sego10bold,
-                      ),
+      left: 0,
+      right: 0,
+      bottom: -10,
+      child: SizedBox(
+        height: 120,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          // itemCount: hairDataArr.length,
+          itemCount: tagResults?.length ?? 0,
+          reverse: true,
+          itemBuilder: (context, index) {
+            Tag? tagData = tagResults?.elementAt(index);
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Text(
+                      // hairDataArr[index].status ?? '',
+                      tagData?.tagName ?? 'N/A',
+                      style: AppFonts().sego10bold,
                     ),
-                    CircularPercentIndicator(
-                      radius: 20.0,
-                      lineWidth: 5.0,
-                      percent: ((hairDataArr[index].percentage) / 100),
-                      center: Text("${hairDataArr[index].rating}",style: const TextStyle(color: AppConstColors.appThemeCayan)),
-                      progressColor: AppConstColors.appThemeCayan,
+                  ),
+                  CircularPercentIndicator(
+                    radius: 20.0,
+                    lineWidth: 5.0,
+                    percent: 0.6/*((hairDataArr[index].percentage) / 100)*/,
+                    center: Text("10",
+                        style: const TextStyle(
+                            color: AppConstColors.appThemeCayan)),
+                    progressColor: AppConstColors.appThemeCayan,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Text(
+                      // hairDataArr[index].title ?? '',
+                      tagData?.tagName ?? '',
+                      overflow: TextOverflow.ellipsis,
+                      style:
+                          AppFonts().sego14normal.copyWith(color: Colors.white),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Text(
-                        hairDataArr[index].title ?? '',
-                        overflow: TextOverflow.ellipsis,
-                        style: AppFonts()
-                            .sego14normal
-                            .copyWith(color: Colors.white),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-                },
+                  ),
+                ],
               ),
-            ),
-          );
+            );
+          },
+        ),
+      ),
+    );
   }
 }
 
