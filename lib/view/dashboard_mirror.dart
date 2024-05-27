@@ -21,7 +21,7 @@ class DashboardMirror extends StatefulWidget {
 
 class _DashboardMirrorState extends State<DashboardMirror> {
   static const MethodChannel _channel =
-      MethodChannel('com.example.clarity_mirror/mirror_channel');
+  MethodChannel('com.example.clarity_mirror/mirror_channel');
   String? _capturedImagePath;
 
   @override
@@ -114,6 +114,7 @@ class _DashboardMirrorState extends State<DashboardMirror> {
   }
 
 
+
   Widget gradientContainer() {
     return Positioned(
         bottom: 0,
@@ -169,7 +170,7 @@ class _DashboardMirrorState extends State<DashboardMirror> {
                     border: Border.all(color: Colors.white, width: 3)),
                 child: Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
+                  const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
                   child: Row(
                     children: [
                       Text(
@@ -204,9 +205,9 @@ class _DashboardMirrorState extends State<DashboardMirror> {
         child: Text(
           "$temp\u00B0",
           style: AppFonts().sego29normal.copyWith(
-                fontSize: 40,
-                fontWeight: FontWeight.w600,
-              ),
+            fontSize: 40,
+            fontWeight: FontWeight.w600,
+          ),
         ));
   }
 

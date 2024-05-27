@@ -20,8 +20,6 @@ class TabsDemoScreen extends StatefulWidget {
 }
 
 class _TabsDemoScreenState extends State<TabsDemoScreen> {
-  static const platform =
-      MethodChannel('com.example.clarity_mirror/mirror_channel');
   late int currentTabIndex;
 
   List<Widget> tabs = [
@@ -48,22 +46,6 @@ class _TabsDemoScreenState extends State<TabsDemoScreen> {
       currentTabIndex = widget.tabPosition ?? 0;
     });
     super.initState();
-  }
-
-  Future<void> _startLoadCamera() async {
-    try {
-      await platform.invokeMethod('startLoadCamera');
-    } on PlatformException catch (e) {
-      print("Failed to load camera activity: '${e.message}'.");
-    }
-  }
-
-  Future<void> _releaseCamera() async {
-    try {
-      await platform.invokeMethod('releaseCamera');
-    } on PlatformException catch (e) {
-      print("Failed to load camera activity: '${e.message}'.");
-    }
   }
 
   @override

@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
@@ -41,8 +42,10 @@ import License.LicenseInfo;
 import io.flutter.embedding.android.FlutterActivity;
 import io.flutter.embedding.android.FlutterFragmentActivity;
 import io.flutter.embedding.engine.FlutterEngine;
+import io.flutter.embedding.engine.FlutterEngineCache;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
+import io.flutter.plugins.GeneratedPluginRegistrant;
 import io.github.inflationx.calligraphy3.CalligraphyConfig;
 import io.github.inflationx.calligraphy3.CalligraphyInterceptor;
 import io.github.inflationx.viewpump.ViewPump;
@@ -56,8 +59,7 @@ public class MainActivity extends FlutterFragmentActivity {
     private final HashMap<String, String> hashMap = new HashMap<>();
     private static final int REQUEST_CODE = 120;
     private static final String CHANNEL = "com.example.clarity_mirror/mirror_channel";
-
-    private static AutoCaptureFragment autoCaptureFragment;
+    private static final String ENGINE_ID = "mirror_channel_engine";
 
     private final String[][] btbpTags = {
             //Display Name, Score tag, image tag
@@ -136,23 +138,21 @@ public class MainActivity extends FlutterFragmentActivity {
     @Override
     public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
         super.configureFlutterEngine(flutterEngine);
+        GeneratedPluginRegistrant.registerWith(flutterEngine);
 
         flutterEngine.getPlatformViewsController().getRegistry().registerViewFactory(
-                "com.example.clarity_mirror/my_native_view", new NativeViewFactory());
+                "com.example.clarity_mirror/my_native_view", new NativeViewFactory(this));
 
         MethodChannel methodChannel = new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CHANNEL);
+        FlutterEngineCache.getInstance().put(ENGINE_ID, flutterEngine);
         CallMethodChannelHelper.setMethodChannel(methodChannel);
 
         methodChannel.setMethodCallHandler((call, result) -> {
                     if (call.method.equals("startLoadCamera")) {
-                        //AutoCaptureActivity autoCaptureActivity = findViewById(R.id.auto_capture_fragment);
-                        //autoCaptureActivity.loadAutoCapture();
-                        result.success(true);
+                        result.success(null);
                     } else if (call.method.equals("releaseCamera")) {
-                        //AutoCaptureActivity autoCaptureActivity = findViewById(R.id.auto_capture_fragment);
-                        autoCaptureFragment.releaseCamera();
-                        result.success(true);
-                    } {
+                        result.success(null);
+                    } else {
                         result.notImplemented();
                     }
                 }
@@ -162,6 +162,7 @@ public class MainActivity extends FlutterFragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // setContentView(R.layout.activty_main);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkAndRequestPermissions();
