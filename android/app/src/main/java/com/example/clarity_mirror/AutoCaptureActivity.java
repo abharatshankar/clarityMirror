@@ -1,48 +1,41 @@
 package com.example.clarity_mirror;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+
 import org.btbp.btbplibrary.AutoCaptureFragment;
 
-public class AutoCaptureActivity extends RelativeLayout implements SurfaceHolder.Callback {
+public class AutoCaptureActivity extends Fragment implements SurfaceHolder.Callback {
+    View root;
     private SurfaceHolder holder;
     private SurfaceView surfaceView;
-    private static AutoCaptureFragment autoCaptureFragment;
+    AutoCaptureFragment autoCaptureFragment;
 
-    public AutoCaptureActivity(Context context) {
-        super(context);
-        init(context);
-    }
-
-    public AutoCaptureActivity(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init(context);
-    }
-
-    private void init(Context context) {
-        // Inflate the XML layout
-        LayoutInflater.from(context).inflate(R.layout.activity_auto_capture, this, true);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        root = inflater.inflate(R.layout.activity_auto_capture, container, false);
 
         // Find the SurfaceView and other UI elements
-        surfaceView = findViewById(R.id.surface_view);
+        surfaceView = root.findViewById(R.id.surface_view);
         holder = surfaceView.getHolder();
         holder.addCallback(this);
 
         // Initialize the AutoCaptureFragment and other components
-        if (context instanceof android.app.Activity) {
-            FragmentManager autoCapFragmentManager = ((Activity) context).getFragmentManager();
-            autoCaptureFragment = new AutoCaptureFragment();
-            autoCapFragmentManager.beginTransaction()
-                    .replace(R.id.auto_capture_fragment, autoCaptureFragment)
-                    .commit();
-        }
+        FragmentManager fragmentManager = getActivity().getFragmentManager();
+        autoCaptureFragment = (AutoCaptureFragment) fragmentManager.findFragmentById(R.id.auto_capture_fragment);
+
+        return root;
     }
 
     @Override
@@ -64,14 +57,14 @@ public class AutoCaptureActivity extends RelativeLayout implements SurfaceHolder
         }
     }
 
-    public static void loadAutoCapture() {
-        if(autoCaptureFragment != null){
-            autoCaptureFragment.onAutoCaptureClicked(null);
+    public void loadAutoCapture() {
+        if (autoCaptureFragment != null) {
+            autoCaptureFragment.onAutoCaptureClicked(root);
         }
     }
 
-    public static void releaseCamera() {
-        if(autoCaptureFragment != null){
+    public void releaseCamera() {
+        if (autoCaptureFragment != null) {
             autoCaptureFragment.releaseCamera();
         }
     }

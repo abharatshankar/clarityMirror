@@ -19,7 +19,7 @@ class DashboardMirror extends StatefulWidget {
 }
 
 class _DashboardMirrorState extends State<DashboardMirror> {
-  static const MethodChannel _channel =
+  static late MethodChannel _channel =
       MethodChannel('com.example.clarity_mirror/mirror_channel');
   String? _capturedImagePath;
 
@@ -27,6 +27,12 @@ class _DashboardMirrorState extends State<DashboardMirror> {
   void initState() {
     super.initState();
     _channel.setMethodCallHandler(_handleMethod);
+  }
+
+  @override
+  void dispose() {
+    _channel.invokeMethod('dispose');
+    super.dispose();
   }
 
   Future<void> _handleMethod(MethodCall call) async {
@@ -60,68 +66,45 @@ class _DashboardMirrorState extends State<DashboardMirror> {
             ? Column(
                 children: <Widget>[
                   Expanded(
-                    child: PlatformViewLink(
-                      viewType: 'com.example.clarity_mirror/my_native_view',
-                      surfaceFactory: (BuildContext context,
-                          PlatformViewController controller) {
-                        if (controller is AndroidViewController) {
-                          return AndroidViewSurface(
-                            controller: controller,
-                            gestureRecognizers: const <Factory<
-                                OneSequenceGestureRecognizer>>{},
-                            hitTestBehavior: PlatformViewHitTestBehavior.opaque,
-                          );
-                        }
-                        return Container();
-                      },
-                      onCreatePlatformView:
-                          (PlatformViewCreationParams params) {
-                        return PlatformViewsService.initSurfaceAndroidView(
-                          id: params.id,
-                          viewType: 'com.example.clarity_mirror/my_native_view',
-                          layoutDirection: TextDirection.ltr,
-                          creationParams: null,
-                          creationParamsCodec: const StandardMessageCodec(),
-                        )
-                          ..addOnPlatformViewCreatedListener(
-                              params.onPlatformViewCreated)
-                          ..create();
-                      },
+                    child: AndroidView(
+                      viewType: 'com.example.clarity_mirror/my_native_view'
                     ),
                   )
                 ],
               )
             : SingleChildScrollView(
                 child: Column(
-                  children: [
-                    Stack(
-                      alignment: AlignmentDirectional.center,
-                      children: [
-                        Positioned(
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height - 200,
-                            // child: Image.asset(
-                            //   "assets/images/Dermatolgist6.png",
-                            //   fit: BoxFit.cover,
-                            // ),
-                            child: UiKitView(
-                              viewType: 'custom_view',
-                              layoutDirection: TextDirection.ltr,
-                            ),
-                          ),
-                        ),
-                        // goliveButton(),
-                        // tempratureText('24'),
-                        // tempIndexTxt(tempIndexStatus: "uv index high"),
-                        // humidityStatus(humidityStr: "Humidity low"),
-                        // gradientContainer(),
-                        // pollutionStatus(pollutionStr: "Cloudy"),
-                        // ideaIconAndTxt(),
-                        // excersiceWidget(),
-                        // percentageCircle(),
-                      ],
-                    ),
+                  children: <Widget>[
+                    Expanded(
+                      child: PlatformViewLink(
+                        viewType: 'com.example.clarity_mirror/my_native_view',
+                        surfaceFactory: (BuildContext context,
+                            PlatformViewController controller) {
+                          if (controller is AndroidViewController) {
+                            return AndroidViewSurface(
+                              controller: controller,
+                              gestureRecognizers: const <Factory<
+                                  OneSequenceGestureRecognizer>>{},
+                              hitTestBehavior: PlatformViewHitTestBehavior.opaque,
+                            );
+                          }
+                          return Container();
+                        },
+                        onCreatePlatformView:
+                            (PlatformViewCreationParams params) {
+                          return PlatformViewsService.initSurfaceAndroidView(
+                            id: params.id,
+                            viewType: 'com.example.clarity_mirror/my_native_view',
+                            layoutDirection: TextDirection.ltr,
+                            creationParams: null,
+                            creationParamsCodec: const StandardMessageCodec(),
+                          )
+                            ..addOnPlatformViewCreatedListener(
+                                params.onPlatformViewCreated)
+                            ..create();
+                        },
+                      ),
+                    )
                   ],
                 ),
               ),
