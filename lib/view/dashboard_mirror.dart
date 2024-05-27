@@ -1,8 +1,5 @@
-import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
-import 'package:clarity_mirror/repository/home_repository.dart';
 import 'package:clarity_mirror/utils/app_colors.dart';
 import 'package:clarity_mirror/utils/app_fonts.dart';
 import 'package:clarity_mirror/viewModel/dashboard_viewmodel.dart';
@@ -11,8 +8,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import '../utils/app_strings.dart';
 import '../utils/custom_circle.dart';
@@ -32,13 +27,14 @@ class _DashboardMirrorState extends State<DashboardMirror> {
   @override
   void initState() {
     super.initState();
-    DashboardViewModel().invokeMethodCallHandler();
+    // DashboardViewModel().invokeMethodCallHandler();
   }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<DashboardViewModel>(
       builder: (context, dashboardViewModel, _){
+        dashboardViewModel.invokeMethodCallHandler();
         return SafeArea(
           child: Scaffold(
             backgroundColor: AppConstColors.themeBackgroundColor,

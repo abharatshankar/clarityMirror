@@ -2,6 +2,7 @@ import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:clarity_mirror/models/tag_results_model.dart';
 import 'package:clarity_mirror/viewModel/dashboard_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_fonts.dart';
@@ -32,7 +33,13 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
         print('skin & hair tab - tags length: ${dashboardViewModel.tagResults?.tags?.length}');
         print('skin & hair tab - Message: ${dashboardViewModel.tagResults?.message} ImageID: ${dashboardViewModel.tagResults?.imageId}');
         print('Processed Tag count & Pending count: ${dashboardViewModel.tagResults?.processedTagCount} & ${dashboardViewModel.tagResults?.pendingTagCount}');
-        print('Captured Image - Controller: ${dashboardViewModel.capturedImagePath}');
+        dashboardViewModel.tagResults?.tags?.forEach((tag) {
+          print('Tag data: Message -> ${tag.message} TagName -> ${tag.tagName} Status -> ${tag.status} StatusCode -> ${tag.statusCode} TagValues -> ${tag.tagValues} ');
+          print('Tag Values => ${tag.tagValues?.length}');
+          tag.tagValues?.forEach((tagValue) {
+            Logger().i('Value: ${tagValue.value} Units: ${tagValue.units} ValueName: ${tagValue.valueName}');
+          });
+        });
         return SafeArea(
           child: Scaffold(
             backgroundColor: AppConstColors.themeBackgroundColor,
@@ -339,7 +346,6 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
   }
 
   Widget skinList(List<Tag>? tagResults) {
-    print('Tags length is: ${tagResults?.length}');
     return Positioned(
       left: 0,
       right: 0,
