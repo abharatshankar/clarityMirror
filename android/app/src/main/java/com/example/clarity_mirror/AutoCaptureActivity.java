@@ -23,17 +23,37 @@ public class AutoCaptureActivity extends Fragment implements SurfaceHolder.Callb
     AutoCaptureFragment autoCaptureFragment;
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        setRetainInstance(true);
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.activity_auto_capture, container, false);
 
-        // Find the SurfaceView and other UI elements
-        surfaceView = root.findViewById(R.id.surface_view);
-        holder = surfaceView.getHolder();
-        holder.addCallback(this);
+        if (root != null) {
+            ViewGroup parent = (ViewGroup) root.getParent();
+            if (parent != null)
+                parent.removeView(root);
+        }
 
-        // Initialize the AutoCaptureFragment and other components
-        FragmentManager fragmentManager = getActivity().getFragmentManager();
-        autoCaptureFragment = (AutoCaptureFragment) fragmentManager.findFragmentById(R.id.auto_capture_fragment);
+        try{
+            if(root == null)
+            {
+                // Find the SurfaceView and other UI elements
+                surfaceView = root.findViewById(R.id.surface_view);
+                holder = surfaceView.getHolder();
+                holder.addCallback(this);
+
+                root = inflater.inflate(R.layout.activity_auto_capture, container, false);
+            }
+
+            autoCaptureFragment = (AutoCaptureFragment) getFragmentManager().findFragmentById(R.id.auto_capture_fragment);
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
 
         return root;
     }
@@ -57,15 +77,16 @@ public class AutoCaptureActivity extends Fragment implements SurfaceHolder.Callb
         }
     }
 
-    public void loadAutoCapture() {
-        if (autoCaptureFragment != null) {
-            autoCaptureFragment.onAutoCaptureClicked(root);
-        }
-    }
-
-    public void releaseCamera() {
-        if (autoCaptureFragment != null) {
-            autoCaptureFragment.releaseCamera();
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        try {
+            autoCaptureFragment = (AutoCaptureFragment) getActivity().getFragmentManager().findFragmentById(
+                    R.id.auto_capture_fragment);
+            if (autoCaptureFragment != null)
+                getFragmentManager().beginTransaction().remove(autoCaptureFragment).commit();
+        } catch (IllegalStateException e) {
+            Log.d("Fragment destroy-", e.getMessage());
         }
     }
 }

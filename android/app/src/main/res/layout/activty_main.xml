@@ -6,13 +6,9 @@
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
-    <!--<fragment
-        android:id="@+id/auto_capture_fragment1"
-        android:name="org.btbp.btbplibrary.AutoCaptureFragment"
+    <fragment
+        android:id="@+id/auto_capture_activity_fragment"
+        android:name="com.example.clarity_mirror.AutoCaptureActivity"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />-->
-    <FrameLayout
-        android:id="@+id/fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 </RelativeLayout>
