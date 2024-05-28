@@ -21,8 +21,7 @@ import io.flutter.plugin.platform.PlatformView;
 public class NativePlatformView implements PlatformView, MethodChannel.MethodCallHandler {
     private final View root;
     private final MethodChannel methodChannel;
-    private AutoCaptureFragment autoCaptureFragment;
-    private static final String TAG_FLUTTER_FRAGMENT = "auto_capture_activity_fragment";
+    private AutoCaptureActivity autoCaptureFragment;
 
     public NativePlatformView(@NonNull Activity context) {
         if (!(context instanceof FragmentActivity)) {
@@ -36,21 +35,7 @@ public class NativePlatformView implements PlatformView, MethodChannel.MethodCal
         root = LayoutInflater.from(context).inflate(R.layout.activty_main, null, false);
 
         // Check if the fragment already exists
-        autoCaptureFragment = (AutoCaptureFragment) fragmentManager.findFragmentByTag(TAG_FLUTTER_FRAGMENT);
-        if (autoCaptureFragment == null) {
-            // Fragment doesn't exist, so create and add it
-            autoCaptureFragment = new AutoCaptureFragment();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.fragment_container, autoCaptureFragment, TAG_FLUTTER_FRAGMENT);
-            fragmentTransaction.commit();
-            Log.d("NativePlatformView", "AutoCaptureFragment added to the container.");
-        } else {
-            // Reattach the existing fragment
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.attach(autoCaptureFragment);
-            fragmentTransaction.commit();
-            Log.d("NativePlatformView", "AutoCaptureFragment already exists, reattached.");
-        }
+        autoCaptureFragment = (AutoCaptureActivity) fragmentManager.findFragmentById(R.id.auto_capture_activity_fragment);
 
         methodChannel = new MethodChannel(FlutterEngineCache.getInstance().get("mirror_channel_engine").getDartExecutor(), "com.example.clarity_mirror/mirror_channel");
         methodChannel.setMethodCallHandler(this);
