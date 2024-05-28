@@ -50,12 +50,6 @@ public class AutoCaptureActivity extends Fragment implements SurfaceHolder.Callb
             }
 
             autoCaptureFragment = (AutoCaptureFragment) getFragmentManager().findFragmentById(R.id.auto_capture_fragment);
-
-            // Initialize the AutoCaptureFragment and other components
-            //FragmentManager fragmentManager = getActivity().getFragmentManager();
-            //autoCaptureFragment = (AutoCaptureFragment) fragmentManager.findFragmentById(R.id.auto_capture_fragment);
-
-
         } catch (Exception e)
         {
             e.printStackTrace();
