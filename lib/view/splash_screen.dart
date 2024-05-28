@@ -158,8 +158,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
         logger.d("Image Path is: $data");
         logger.d("Image Array is: $jsonArray");
-        final _homeRepository = HomeRepository();
-        await _homeRepository.getTagsAsync(jsonArray);
 
         /// TODO: Handle the navigation based on the response.
         Navigator.pushAndRemoveUntil(

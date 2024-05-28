@@ -30,14 +30,19 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
   Widget build(BuildContext context) {
     return Consumer<DashboardViewModel>(
       builder: (context, dashboardViewModel, _) {
-        print('skin & hair tab - tags length: ${dashboardViewModel.tagResults?.tags?.length}');
-        print('skin & hair tab - Message: ${dashboardViewModel.tagResults?.message} ImageID: ${dashboardViewModel.tagResults?.imageId}');
-        print('Processed Tag count & Pending count: ${dashboardViewModel.tagResults?.processedTagCount} & ${dashboardViewModel.tagResults?.pendingTagCount}');
+        print(
+            'skin & hair tab - tags length: ${dashboardViewModel.tagResults?.tags?.length}');
+        print(
+            'skin & hair tab - Message: ${dashboardViewModel.tagResults?.message} ImageID: ${dashboardViewModel.tagResults?.imageId}');
+        print(
+            'Processed Tag count & Pending count: ${dashboardViewModel.tagResults?.processedTagCount} & ${dashboardViewModel.tagResults?.pendingTagCount}');
         dashboardViewModel.tagResults?.tags?.forEach((tag) {
-          print('Tag data: Message -> ${tag.message} TagName -> ${tag.tagName} Status -> ${tag.status} StatusCode -> ${tag.statusCode} TagValues -> ${tag.tagValues} ');
+          print(
+              'Tag data: Message -> ${tag.message} TagName -> ${tag.tagName} Status -> ${tag.status} StatusCode -> ${tag.statusCode} TagValues -> ${tag.tagValues} ');
           print('Tag Values => ${tag.tagValues?.length}');
           tag.tagValues?.forEach((tagValue) {
-            Logger().i('Value: ${tagValue.value} Units: ${tagValue.units} ValueName: ${tagValue.valueName}');
+            Logger().i(
+                'Value: ${tagValue.value} Units: ${tagValue.units} ValueName: ${tagValue.valueName}');
           });
         });
         return SafeArea(
@@ -356,7 +361,7 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
           scrollDirection: Axis.horizontal,
           // itemCount: hairDataArr.length,
           itemCount: tagResults?.length ?? 0,
-          reverse: true,
+          reverse: false,
           itemBuilder: (context, index) {
             Tag? tagData = tagResults?.elementAt(index);
             return Padding(
@@ -374,7 +379,7 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
                   CircularPercentIndicator(
                     radius: 20.0,
                     lineWidth: 5.0,
-                    percent: 0.6/*((hairDataArr[index].percentage) / 100)*/,
+                    percent: 0.6,
                     center: Text("10",
                         style: const TextStyle(
                             color: AppConstColors.appThemeCayan)),
@@ -390,6 +395,24 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
                           AppFonts().sego14normal.copyWith(color: Colors.white),
                     ),
                   ),
+
+                  // Text(tagData?.tagValues?.length?.toString() ?? '0', style: TextStyle(color: Colors.white),),
+
+                  /*Container(
+                    height: 80,
+                    color: Colors.green,
+                    child: Row(
+                      children: tagData!.tagValues!.map((TagValue tagValue) {
+                        return Column(
+                          children: [
+                            Text(tagValue.valueName??'N/A', style: TextStyle(color: Colors.white),),
+                            (tagValue.value != null && tagValue.value!.length >2) ? Text(tagValue.value?.substring(1,2)??'N/A', style: TextStyle(color: Colors.white)) : Text(tagValue.value??'N/A', style: TextStyle(color: Colors.white)),
+                            Text(tagValue.units??'N/A', style: TextStyle(color: Colors.white)),
+                          ],
+                        );
+                      }).toList(),
+                    ),
+                  ),*/
                 ],
               ),
             );

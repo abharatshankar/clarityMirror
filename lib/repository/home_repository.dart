@@ -17,12 +17,12 @@ class HomeRepository {
   }
 
   Future<dynamic> getTagsAsync(dynamic data) async {
-    return await _apiServices.getTagsAsync("https://api.btbp.org/DeepTag/AppService.svc/getTagsAsync", data);
+    return await _apiServices.getTagsAsync("https://gserver1.btbp.org/deeptag/AppService.svc/getTagsAsync", data);
     /// handle the response
   }
 
   Future<dynamic> getTagResults(dynamic imageId) async {
-    return _apiServices.getTagResults(imageId);
+    return await _apiServices.getTagResults(imageId);
     /// handle the response
   }
 }

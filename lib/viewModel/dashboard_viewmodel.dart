@@ -46,13 +46,12 @@ class DashboardViewModel extends ChangeNotifier {
 
     try {
       String base64Image = await encodeImageToBase64(imagePath);
-      logger.d("Image Path is: $imagePath");
-      await homeRepository.getTagsAsync(base64Image).then((imageId) async {
-        /// calling tag results api based on the getTagsAsync api call result and passing the imageId
+      dynamic imageId = await homeRepository.getTagsAsync(base64Image);
+      Future.delayed(const Duration(seconds: 16), () async{
         dynamic tagResultsData = await homeRepository.getTagResults(imageId);
-         tagResults = TagResults.fromJson(tagResultsData);
+        tagResults = TagResults.fromJson(tagResultsData);
         logger.d('Tags data: ${tagResults?.tags?.length} & Message: ${tagResults?.message}');
-        // logger.d('Tags data: ${tagResults.tags.length} & Message: ${tagResults.message} & Tag Status: ${tagResults.tags.first.status}');
+        logger.d('Tags info: Pending count is -> ${tagResults?.pendingTagCount} & Processed count is: ${tagResults?.processedTagCount}');
       });
       notifyListeners(); /// updating the data to controller
     } catch (e) {
