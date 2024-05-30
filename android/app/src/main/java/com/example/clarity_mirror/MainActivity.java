@@ -119,6 +119,14 @@ public class MainActivity extends FlutterFragmentActivity {
             try {
                 Log.d("ImageData", btbpCaptureResult.getImagePath());
                 CallMethodChannelHelper.notifySuccess(btbpCaptureResult.getImagePath());
+
+                // Get a reference to the fragment
+                AutoCaptureActivity autoCaptureActivity = (AutoCaptureActivity) getFragmentManager().findFragmentById(R.id.auto_capture_activity_fragment);
+
+                if (autoCaptureActivity != null) {
+                    // Call the method in the fragment
+                    autoCaptureActivity.releaseReopenCamera();
+                }
             } catch (Exception ex) {
                 Log.d(ex.getMessage(), ex.toString());
             }
