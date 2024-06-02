@@ -351,6 +351,8 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
   }
 
   Widget skinList(List<Tag>? tagResults) {
+    Provider.of<DashboardViewModel>(context).getSkinConcernResults();
+
     return Positioned(
       left: 0,
       right: 0,
@@ -359,60 +361,46 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
         height: 120,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          // itemCount: hairDataArr.length,
-          itemCount: tagResults?.length ?? 0,
-          reverse: false,
+          itemCount: Provider.of<DashboardViewModel>(context).skinConcernList.length,
           itemBuilder: (context, index) {
-            Tag? tagData = tagResults?.elementAt(index);
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
+            // Tag? tagData = tagResults?.elementAt(index);
+            SkinConcernModel? skinConcern = Provider.of<DashboardViewModel>(context).skinConcernList.elementAt(index);
+            return Container(
+              margin: const EdgeInsets.symmetric(horizontal: 24.0),
+              padding: const EdgeInsets.only(top: 16),
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Text(
-                      // hairDataArr[index].status ?? '',
-                      tagData?.tagName ?? 'N/A',
-                      style: AppFonts().sego10bold,
+                      '${skinConcern.getTagType}',
+                      // tagData?.tagName ?? '',
+                      overflow: TextOverflow.ellipsis,
+                      style:
+                      AppFonts().sego14normal.copyWith(color: Colors.white),
                     ),
                   ),
                   CircularPercentIndicator(
                     radius: 20.0,
                     lineWidth: 5.0,
-                    percent: 0.6,
-                    center: Text("10",
+                    // percent: (skinConcern.getTagScore! * 20) / 100,
+                    percent: skinConcern.getTagPercentage ?? 0,
+                    center: Text("${skinConcern.getTagScore}",
                         style: const TextStyle(
                             color: AppConstColors.appThemeCayan)),
                     progressColor: AppConstColors.appThemeCayan,
                   ),
+
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    padding: const EdgeInsets.symmetric(vertical: 8),
                     child: Text(
-                      // hairDataArr[index].title ?? '',
-                      tagData?.tagName ?? '',
-                      overflow: TextOverflow.ellipsis,
-                      style:
-                          AppFonts().sego14normal.copyWith(color: Colors.white),
+                      // tagData?.tagName ?? 'N/A',
+                      skinConcern.getTagName ?? 'N/A',
+                      style: AppFonts().sego10bold,
                     ),
                   ),
-
                   // Text(tagData?.tagValues?.length?.toString() ?? '0', style: TextStyle(color: Colors.white),),
 
-                  /*Container(
-                    height: 80,
-                    color: Colors.green,
-                    child: Row(
-                      children: tagData!.tagValues!.map((TagValue tagValue) {
-                        return Column(
-                          children: [
-                            Text(tagValue.valueName??'N/A', style: TextStyle(color: Colors.white),),
-                            (tagValue.value != null && tagValue.value!.length >2) ? Text(tagValue.value?.substring(1,2)??'N/A', style: TextStyle(color: Colors.white)) : Text(tagValue.value??'N/A', style: TextStyle(color: Colors.white)),
-                            Text(tagValue.units??'N/A', style: TextStyle(color: Colors.white)),
-                          ],
-                        );
-                      }).toList(),
-                    ),
-                  ),*/
                 ],
               ),
             );

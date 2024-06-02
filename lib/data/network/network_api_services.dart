@@ -21,6 +21,11 @@ class NetworkApiServices extends BaseApiServices {
     "DARK_CIRCLES_SEVERITY_SCORE_FAST",
     "DARK_CIRCLES_IMAGE_FAST",
   ];
+  List scoreTagsOnly = [
+    "ACNE_SEVERITY_SCORE_FAST", "SPOTS_SEVERITY_SCORE_FAST", "REDNESS_SEVERITY_SCORE_FAST", "WRINKLES_SEVERITY_SCORE_FAST", "DEHYDRATION_SEVERITY_SCORE_FAST",
+    "DARK_CIRCLES_SEVERITY_SCORE_FAST", "UNEVEN_SKINTONE_SEVERITY_SCORE_FAST", "PORES_SEVERITY_SCORE_FAST", "SHININESS_SEVERITY_SCORE_FAST", "LIP_ROUGHNESS_SEVERITY_SCORE_FAST",
+    "ELASTICITY", "FIRMNESS", "TEXTURE_SEVERITY_SCORE_FAST"
+  ];
   List tags = [
     "ACNE_SEVERITY_SCORE_FAST",
     "ACNE_IMAGE_FAST",
@@ -105,9 +110,8 @@ class NetworkApiServices extends BaseApiServices {
         "ClientId": "",
         "Latitude": 17.4065, //TODO: Add dynamic lat lang values
         "Longitude": 78.4772,
-        // 'Tags': ["ACNE_IMAGE_FAST"],
-        // 'Tags': minimalTags,
-        'Tags': tags,
+        'Tags': scoreTagsOnly,
+        // 'Tags': tags,
         'ImageBytes': [data]
       };
       logger.d('Request body: $requestBody');

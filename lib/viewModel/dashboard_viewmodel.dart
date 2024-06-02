@@ -14,6 +14,8 @@ class DashboardViewModel extends ChangeNotifier {
   var logger = Logger();
   final homeRepository = HomeRepository();
   TagResults? tagResults;
+  List<SkinConcernModel> skinConcernList = [];
+
 
   void invokeMethodCallHandler() {
     channel.setMethodCallHandler(handleMethod);
@@ -50,7 +52,7 @@ class DashboardViewModel extends ChangeNotifier {
       Future.delayed(const Duration(seconds: 16), () async{
         dynamic tagResultsData = await homeRepository.getTagResults(imageId);
         tagResults = TagResults.fromJson(tagResultsData);
-        logger.d('Tags data: ${tagResults?.tags?.length} & Message: ${tagResults?.message}');
+        // logger.d('Tags data: ${tagResults?.tags?.length} & Message: ${tagResults?.message}');
         logger.d('Tags info: Pending count is -> ${tagResults?.pendingTagCount} & Processed count is: ${tagResults?.processedTagCount}');
       });
       notifyListeners(); /// updating the data to controller
@@ -59,6 +61,48 @@ class DashboardViewModel extends ChangeNotifier {
     }
   }
 
+  getSkinConcernResults() {
+    /// clearing the exiting skinConcernList data
+    skinConcernList.clear();
+    List scoreTags = [
+      "ACNE_SEVERITY_SCORE_FAST", "SPOTS_SEVERITY_SCORE_FAST", "REDNESS_SEVERITY_SCORE_FAST", "WRINKLES_SEVERITY_SCORE_FAST", "DEHYDRATION_SEVERITY_SCORE_FAST",
+      "DARK_CIRCLES_SEVERITY_SCORE_FAST", "UNEVEN_SKINTONE_SEVERITY_SCORE_FAST", "PORES_SEVERITY_SCORE_FAST", "SHININESS_SEVERITY_SCORE_FAST", "LIP_ROUGHNESS_SEVERITY_SCORE_FAST",
+      "ELASTICITY", "FIRMNESS", "TEXTURE_SEVERITY_SCORE_FAST"
+    ];
+    tagResults?.tags?.forEach((Tag tag) {
+      SkinConcernModel skinConcernModel =  SkinConcernModel();
+      if(scoreTags.contains(tag.tagName)) {
+         String? tagName = tag.tagName;
+         skinConcernModel.setTagName = tagName?.split('_').first ?? 'N/A';
+        skinConcernModel.setTagImage = tag.tagImage;
+        tag.tagValues?.forEach((TagValue tagValue) {
+          if(tagValue.valueName!.contains('Combined')) {
+            skinConcernModel.setTagScore = int.parse(tagValue.value??'0');
+            double percentage = (int.parse(tagValue.value??'0') * 20 / 100);
+            skinConcernModel.setTagPercentage = percentage;
+            logger.d('Percent: $percentage');
+
+            if(percentage >= 0 && percentage <= 0.2) {
+              skinConcernModel.setTagType = 'Low';
+            } else if(percentage > 0.2 && percentage <= 0.4) {
+              skinConcernModel.setTagType = 'Moderate-Low';
+            }  else if(percentage > 0.4 && percentage <= 0.6) {
+              skinConcernModel.setTagType = 'Moderate';
+            }
+            else if(percentage > 0.6 && percentage <= 0.8) {
+              skinConcernModel.setTagType = 'Moderate-High';
+            }
+            else if(percentage > 0.8 && percentage <= 1) {
+              skinConcernModel.setTagType = 'High';
+            }
+            /// Add the skin concern data to [skinConcernList] list
+            skinConcernList.add(skinConcernModel);
+          }
+        });
+      }
+    });
+    logger.d('Final Tag REsults: ${skinConcernList.length}');
+  }
   Future<String> encodeImageToBase64(String filePath) async {
     // Read image file
     List<int> imageBytes = await File(filePath).readAsBytes();
@@ -67,6 +111,55 @@ class DashboardViewModel extends ChangeNotifier {
     String base64Image = base64Encode(imageBytes);
 
     return base64Image;
+  }
+
+}
+
+class SkinConcernModel {
+  String? tagName;
+  int? tagScore;
+  double? tagPercentage;
+  String? tagImage;
+  String? tagType;
+
+  String? get getTagName {
+    return tagName;
+  }
+
+  set setTagName(String? name) {
+    tagName = name;
+  }
+
+  int? get getTagScore {
+    return tagScore;
+  }
+
+  set setTagScore(int? score) {
+    tagScore = score;
+  }
+
+  double? get getTagPercentage {
+    return tagPercentage;
+  }
+
+  set setTagPercentage(double? value) {
+    tagPercentage = value;
+  }
+
+  String? get getTagImage {
+    return tagName;
+  }
+
+  set setTagImage(String? image) {
+    tagImage = image;
+  }
+
+  String? get getTagType {
+    return tagType;
+  }
+
+  set setTagType(String? type) {
+    tagType = type;
   }
 
 }
