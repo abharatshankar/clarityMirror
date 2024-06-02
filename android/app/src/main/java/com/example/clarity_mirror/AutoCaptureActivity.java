@@ -14,7 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import org.btbp.btbplibrary.AppConfig;
 import org.btbp.btbplibrary.AutoCaptureFragment;
+import org.btbp.btbplibrary.Utilities.StaticVars;
 
 public class AutoCaptureActivity extends Fragment implements SurfaceHolder.Callback {
     View root;
@@ -38,9 +40,8 @@ public class AutoCaptureActivity extends Fragment implements SurfaceHolder.Callb
                 parent.removeView(root);
         }
 
-        try{
-            if(root == null)
-            {
+        try {
+            if (root == null) {
                 // Find the SurfaceView and other UI elements
                 surfaceView = root.findViewById(R.id.surface_view);
                 holder = surfaceView.getHolder();
@@ -50,8 +51,7 @@ public class AutoCaptureActivity extends Fragment implements SurfaceHolder.Callb
             }
 
             autoCaptureFragment = (AutoCaptureFragment) getFragmentManager().findFragmentById(R.id.auto_capture_fragment);
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -85,6 +85,21 @@ public class AutoCaptureActivity extends Fragment implements SurfaceHolder.Callb
                     R.id.auto_capture_fragment);
             if (autoCaptureFragment != null)
                 getFragmentManager().beginTransaction().remove(autoCaptureFragment).commit();
+        } catch (IllegalStateException e) {
+            Log.d("Fragment destroy-", e.getMessage());
+        }
+    }
+
+    public void releaseReopenCamera() {
+        try {
+            if (autoCaptureFragment != null) {
+                AppConfig appConfig = new AppConfig();
+                appConfig.setAutoCapture(false);
+                StaticVars.appConfig = appConfig;
+                
+                autoCaptureFragment.releaseCamera();
+                autoCaptureFragment.reOpenCamera();
+            }
         } catch (IllegalStateException e) {
             Log.d("Fragment destroy-", e.getMessage());
         }
