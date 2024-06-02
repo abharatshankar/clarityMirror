@@ -1,0 +1,11 @@
+framework module SkinCareWidget {
+  umbrella header "SkinCareWidget.h"
+  export *
+
+  module * { export * }
+}
+
+module SkinCareWidget.Swift {
+  header "SkinCareWidget-Swift.h"
+  requires objc
+}

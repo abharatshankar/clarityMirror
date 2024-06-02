@@ -1,0 +1,729 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.9.2 effective-4.1.50 (swiftlang-5.9.2.2.56 clang-1500.1.0.2.5)
+// swift-module-flags: -target arm64-apple-ios12.0 -enable-objc-interop -enable-library-evolution -swift-version 4 -enforce-exclusivity=checked -Onone -module-name SkinCareWidget
+// swift-module-flags-ignorable: -enable-bare-slash-regex
+import AVFoundation
+import Darwin
+import Foundation
+import Photos
+import Security
+@_exported import SkinCareWidget
+import Swift
+import UIKit
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+@_hasMissingDesignatedInitializers public class GetTag : Swift.Codable {
+  @objc deinit
+  public func encode(to encoder: any Swift.Encoder) throws
+  required public init(from decoder: any Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers public class Tag : Swift.Codable {
+  @objc deinit
+  public func encode(to encoder: any Swift.Encoder) throws
+  required public init(from decoder: any Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers public class TagValue : Swift.Codable {
+  @objc deinit
+  public func encode(to encoder: any Swift.Encoder) throws
+  required public init(from decoder: any Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers public class TagResult {
+  public var tagName: Swift.String?
+  public var tagDisplayName: Swift.String?
+  public var tagSeverity: Swift.String?
+  public var tagImage: Swift.String?
+  public var statusCode: Swift.Int?
+  public var Status: Swift.Bool?
+  public var Message: Swift.String?
+  public var statusArray: [Swift.Int]
+  @objc deinit
+}
+public protocol Authenticator {
+  func authenticate(_ bytes: Swift.Array<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8>
+}
+final public class AES {
+  public enum Error : Swift.Error {
+    case dataPaddingRequired
+    case invalidData
+    public static func == (a: SkinCareWidget.AES.Error, b: SkinCareWidget.AES.Error) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public enum Variant : Swift.Int {
+    case aes128, aes192, aes256
+    public init?(rawValue: Swift.Int)
+    public typealias RawValue = Swift.Int
+    public var rawValue: Swift.Int {
+      get
+    }
+  }
+  public static let blockSize: Swift.Int
+  final public var variant: SkinCareWidget.AES.Variant {
+    get
+  }
+  public init(key: Swift.Array<Swift.UInt8>, blockMode: SkinCareWidget.BlockMode, padding: SkinCareWidget.Padding = .pkcs7) throws
+  @objc deinit
+}
+extension SkinCareWidget.AES : SkinCareWidget.Cipher {
+  final public func encrypt(_ bytes: Swift.ArraySlice<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8>
+  final public func decrypt(_ bytes: Swift.ArraySlice<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8>
+}
+public protocol PaddingProtocol {
+  func add(to: Swift.Array<Swift.UInt8>, blockSize: Swift.Int) -> Swift.Array<Swift.UInt8>
+  func remove(from: Swift.Array<Swift.UInt8>, blockSize: Swift.Int?) -> Swift.Array<Swift.UInt8>
+}
+public enum Padding : SkinCareWidget.PaddingProtocol {
+  case noPadding, zeroPadding, pkcs7, pkcs5
+  public func add(to: Swift.Array<Swift.UInt8>, blockSize: Swift.Int) -> Swift.Array<Swift.UInt8>
+  public func remove(from: Swift.Array<Swift.UInt8>, blockSize: Swift.Int?) -> Swift.Array<Swift.UInt8>
+  public static func == (a: SkinCareWidget.Padding, b: SkinCareWidget.Padding) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension Swift.FixedWidthInteger {
+  @inlinable internal func bytes(totalBytes: Swift.Int = MemoryLayout<Self>.size) -> Swift.Array<Swift.UInt8> {
+    arrayOfBytes(value: self.littleEndian, length: totalBytes)
+    // TODO: adjust bytes order
+    // var value = self.littleEndian
+    // return withUnsafeBytes(of: &value, Array.init).reversed()
+  }
+}
+public protocol Cryptors : AnyObject {
+  associatedtype EncryptorType : SkinCareWidget.Updatable
+  associatedtype DecryptorType : SkinCareWidget.Updatable
+  func makeEncryptor() throws -> Self.EncryptorType
+  func makeDecryptor() throws -> Self.DecryptorType
+  static func randomIV(_ blockSize: Swift.Int) -> Swift.Array<Swift.UInt8>
+}
+extension SkinCareWidget.Cryptors {
+  public static func randomIV(_ blockSize: Swift.Int) -> Swift.Array<Swift.UInt8>
+}
+extension SkinCareWidget.AES {
+  convenience public init(key: Swift.String, iv: Swift.String, padding: SkinCareWidget.Padding = .pkcs7) throws
+}
+final public class ChaCha20 {
+  public enum Error : Swift.Error {
+    case invalidKeyOrInitializationVector
+    public static func == (a: SkinCareWidget.ChaCha20.Error, b: SkinCareWidget.ChaCha20.Error) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public static let blockSize: Swift.Int
+  public init(key: Swift.Array<Swift.UInt8>, iv nonce: Swift.Array<Swift.UInt8>) throws
+  @objc deinit
+}
+extension SkinCareWidget.ChaCha20 : SkinCareWidget.Cipher {
+  final public func encrypt(_ bytes: Swift.ArraySlice<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8>
+  final public func decrypt(_ bytes: Swift.ArraySlice<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8>
+}
+extension SkinCareWidget.ChaCha20 {
+  public struct Encryptor : SkinCareWidget.Updatable {
+    public mutating func update(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, isLast: Swift.Bool = false) throws -> Swift.Array<Swift.UInt8>
+  }
+}
+extension SkinCareWidget.ChaCha20 {
+  public struct Decryptor : SkinCareWidget.Updatable {
+    public mutating func update(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, isLast: Swift.Bool = true) throws -> Swift.Array<Swift.UInt8>
+  }
+}
+extension SkinCareWidget.ChaCha20 : SkinCareWidget.Cryptors {
+  final public func makeEncryptor() -> SkinCareWidget.ChaCha20.Encryptor
+  final public func makeDecryptor() -> SkinCareWidget.ChaCha20.Decryptor
+  public typealias DecryptorType = SkinCareWidget.ChaCha20.Decryptor
+  public typealias EncryptorType = SkinCareWidget.ChaCha20.Encryptor
+}
+extension SkinCareWidget.SkinCareWidget : UIKit.UIImagePickerControllerDelegate, UIKit.UINavigationControllerDelegate {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func imagePickerController(_ picker: UIKit.UIImagePickerController, didFinishPickingMediaWithInfo info: [Swift.String : Any])
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func imagePickerControllerDidCancel(_ picker: UIKit.UIImagePickerController)
+}
+public enum CipherError : Swift.Error {
+  case encrypt
+  case decrypt
+  public static func == (a: SkinCareWidget.CipherError, b: SkinCareWidget.CipherError) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public protocol Cipher : AnyObject {
+  func encrypt(_ bytes: Swift.ArraySlice<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8>
+  func encrypt(_ bytes: Swift.Array<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8>
+  func decrypt(_ bytes: Swift.ArraySlice<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8>
+  func decrypt(_ bytes: Swift.Array<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8>
+}
+extension SkinCareWidget.Cipher {
+  public func encrypt(_ bytes: Swift.Array<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8>
+  public func decrypt(_ bytes: Swift.Array<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8>
+}
+extension SkinCareWidget.Blowfish {
+  convenience public init(key: Swift.String, iv: Swift.String, padding: SkinCareWidget.Padding = .pkcs7) throws
+}
+public protocol _UInt8Type {
+}
+extension Swift.UInt8 : SkinCareWidget._UInt8Type {
+}
+extension Swift.UInt8 {
+  public func bits() -> [SkinCareWidget.Bit]
+  public func bits() -> Swift.String
+}
+final public class SHA2 {
+  public enum Variant : Swift.RawRepresentable {
+    case sha224, sha256, sha384, sha512
+    public var digestLength: Swift.Int {
+      get
+    }
+    public var blockSize: Swift.Int {
+      get
+    }
+    public typealias RawValue = Swift.Int
+    public var rawValue: SkinCareWidget.SHA2.Variant.RawValue {
+      get
+    }
+    public init?(rawValue: SkinCareWidget.SHA2.Variant.RawValue)
+  }
+  public init(variant: SkinCareWidget.SHA2.Variant)
+  final public func calculate(for bytes: Swift.Array<Swift.UInt8>) -> Swift.Array<Swift.UInt8>
+  @objc deinit
+}
+extension SkinCareWidget.SHA2 : SkinCareWidget.Updatable {
+  final public func update(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, isLast: Swift.Bool = false) throws -> Swift.Array<Swift.UInt8>
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class ResultsView : UIKit.UIView {
+  @objc deinit
+}
+public protocol RandomAccessCryptor : SkinCareWidget.Updatable {
+  @discardableResult
+  mutating func seek(to: Swift.Int) -> Swift.Bool
+}
+extension Swift.Array where Element == Swift.UInt8 {
+  public func toBase64() -> Swift.String?
+  public init(base64: Swift.String)
+}
+public typealias Hash = SkinCareWidget.Digest
+public struct Digest {
+  public static func md5(_ bytes: Swift.Array<Swift.UInt8>) -> Swift.Array<Swift.UInt8>
+  public static func sha1(_ bytes: Swift.Array<Swift.UInt8>) -> Swift.Array<Swift.UInt8>
+  public static func sha224(_ bytes: Swift.Array<Swift.UInt8>) -> Swift.Array<Swift.UInt8>
+  public static func sha256(_ bytes: Swift.Array<Swift.UInt8>) -> Swift.Array<Swift.UInt8>
+  public static func sha384(_ bytes: Swift.Array<Swift.UInt8>) -> Swift.Array<Swift.UInt8>
+  public static func sha512(_ bytes: Swift.Array<Swift.UInt8>) -> Swift.Array<Swift.UInt8>
+  public static func sha2(_ bytes: Swift.Array<Swift.UInt8>, variant: SkinCareWidget.SHA2.Variant) -> Swift.Array<Swift.UInt8>
+  public static func sha3(_ bytes: Swift.Array<Swift.UInt8>, variant: SkinCareWidget.SHA3.Variant) -> Swift.Array<Swift.UInt8>
+}
+final public class Blowfish {
+  public enum Error : Swift.Error {
+    case dataPaddingRequired
+    case invalidKeyOrInitializationVector
+    case invalidInitializationVector
+    public static func == (a: SkinCareWidget.Blowfish.Error, b: SkinCareWidget.Blowfish.Error) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public static let blockSize: Swift.Int
+  public init(key: Swift.Array<Swift.UInt8>, blockMode: SkinCareWidget.BlockMode = .CBC(iv: Array<UInt8>(repeating: 0, count: Blowfish.blockSize)), padding: SkinCareWidget.Padding) throws
+  @objc deinit
+}
+extension SkinCareWidget.Blowfish : SkinCareWidget.Cipher {
+  final public func encrypt<C>(_ bytes: C) throws -> Swift.Array<Swift.UInt8> where C : Swift.Collection, C.Element == Swift.UInt8, C.Index == Swift.Int
+  final public func decrypt<C>(_ bytes: C) throws -> Swift.Array<Swift.UInt8> where C : Swift.Collection, C.Element == Swift.UInt8, C.Index == Swift.Int
+}
+extension Foundation.Data {
+  public func checksum() -> Swift.UInt16
+  public func md5() -> Foundation.Data
+  public func sha1() -> Foundation.Data
+  public func sha224() -> Foundation.Data
+  public func sha256() -> Foundation.Data
+  public func sha384() -> Foundation.Data
+  public func sha512() -> Foundation.Data
+  public func sha3(_ variant: SkinCareWidget.SHA3.Variant) -> Foundation.Data
+  public func crc32(seed: Swift.UInt32? = nil, reflect: Swift.Bool = true) -> Foundation.Data
+  public func crc16(seed: Swift.UInt16? = nil) -> Foundation.Data
+  public func encrypt(cipher: any SkinCareWidget.Cipher) throws -> Foundation.Data
+  public func decrypt(cipher: any SkinCareWidget.Cipher) throws -> Foundation.Data
+  public func authenticate(with authenticator: any SkinCareWidget.Authenticator) throws -> Foundation.Data
+}
+extension Foundation.Data {
+  public var bytes: Swift.Array<Swift.UInt8> {
+    get
+  }
+  public func toHexString() -> Swift.String
+}
+public protocol ErrorCallBacks {
+  func onError(errorCode: Swift.Int)
+}
+final public class Rabbit {
+  public enum Error : Swift.Error {
+    case invalidKeyOrInitializationVector
+    public static func == (a: SkinCareWidget.Rabbit.Error, b: SkinCareWidget.Rabbit.Error) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public static let ivSize: Swift.Int
+  public static let keySize: Swift.Int
+  public static let blockSize: Swift.Int
+  convenience public init(key: Swift.Array<Swift.UInt8>) throws
+  public init(key: Swift.Array<Swift.UInt8>, iv: Swift.Array<Swift.UInt8>?) throws
+  @objc deinit
+}
+extension SkinCareWidget.Rabbit : SkinCareWidget.Cipher {
+  final public func encrypt(_ bytes: Swift.ArraySlice<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8>
+  final public func decrypt(_ bytes: Swift.ArraySlice<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8>
+}
+extension SkinCareWidget.ChaCha20 {
+  convenience public init(key: Swift.String, iv: Swift.String) throws
+}
+extension Swift.String {
+  public func decryptBase64ToString(cipher: any SkinCareWidget.Cipher) throws -> Swift.String
+  public func decryptBase64(cipher: any SkinCareWidget.Cipher) throws -> Swift.Array<Swift.UInt8>
+}
+extension SkinCareWidget.HMAC {
+  convenience public init(key: Swift.String, variant: SkinCareWidget.HMAC.Variant = .md5) throws
+}
+extension Swift.UInt64 {
+  @_specialize(exported: false, kind: full, where T == Swift.ArraySlice<Swift.UInt8>)
+  @inlinable internal init<T>(bytes: T, fromIndex index: T.Index) where T : Swift.Collection, T.Element == Swift.UInt8, T.Index == Swift.Int {
+    if bytes.isEmpty {
+      self = 0
+      return
+    }
+
+    let count = bytes.count
+
+    let val0 = count > 0 ? UInt64(bytes[index.advanced(by: 0)]) << 56 : 0
+    let val1 = count > 1 ? UInt64(bytes[index.advanced(by: 1)]) << 48 : 0
+    let val2 = count > 2 ? UInt64(bytes[index.advanced(by: 2)]) << 40 : 0
+    let val3 = count > 3 ? UInt64(bytes[index.advanced(by: 3)]) << 32 : 0
+    let val4 = count > 4 ? UInt64(bytes[index.advanced(by: 4)]) << 24 : 0
+    let val5 = count > 5 ? UInt64(bytes[index.advanced(by: 5)]) << 16 : 0
+    let val6 = count > 6 ? UInt64(bytes[index.advanced(by: 6)]) << 8 : 0
+    let val7 = count > 7 ? UInt64(bytes[index.advanced(by: 7)]) : 0
+
+    self = val0 | val1 | val2 | val3 | val4 | val5 | val6 | val7
+  }
+}
+@_specialize(exported: false, kind: full, where T == Swift.Int)
+@_specialize(exported: false, kind: full, where T == Swift.UInt)
+@_specialize(exported: false, kind: full, where T == Swift.UInt8)
+@_specialize(exported: false, kind: full, where T == Swift.UInt16)
+@_specialize(exported: false, kind: full, where T == Swift.UInt32)
+@_specialize(exported: false, kind: full, where T == Swift.UInt64)
+@inlinable internal func arrayOfBytes<T>(value: T, length totalBytes: Swift.Int = MemoryLayout<T>.size) -> Swift.Array<Swift.UInt8> where T : Swift.FixedWidthInteger {
+  let valuePointer = UnsafeMutablePointer<T>.allocate(capacity: 1)
+  valuePointer.pointee = value
+
+  let bytesPointer = UnsafeMutablePointer<UInt8>(OpaquePointer(valuePointer))
+  var bytes = Array<UInt8>(repeating: 0, count: totalBytes)
+  for j in 0..<min(MemoryLayout<T>.size, totalBytes) {
+    bytes[totalBytes - 1 - j] = (bytesPointer + j).pointee
+  }
+
+  valuePointer.deinitialize(count: 1)
+  valuePointer.deallocate()
+
+  return bytes
+}
+extension Swift.UInt32 {
+  @_specialize(exported: false, kind: full, where T == Swift.ArraySlice<Swift.UInt8>)
+  @inlinable internal init<T>(bytes: T, fromIndex index: T.Index) where T : Swift.Collection, T.Element == Swift.UInt8, T.Index == Swift.Int {
+    if bytes.isEmpty {
+      self = 0
+      return
+    }
+
+    let count = bytes.count
+
+    let val0 = count > 0 ? UInt32(bytes[index.advanced(by: 0)]) << 24 : 0
+    let val1 = count > 1 ? UInt32(bytes[index.advanced(by: 1)]) << 16 : 0
+    let val2 = count > 2 ? UInt32(bytes[index.advanced(by: 2)]) << 8 : 0
+    let val3 = count > 3 ? UInt32(bytes[index.advanced(by: 3)]) : 0
+
+    self = val0 | val1 | val2 | val3
+  }
+}
+public enum PKCS7 {
+}
+extension SkinCareWidget.PKCS5 {
+  public struct PBKDF2 {
+    public enum Error : Swift.Error {
+      case invalidInput
+      case derivedKeyTooLong
+      public static func == (a: SkinCareWidget.PKCS5.PBKDF2.Error, b: SkinCareWidget.PKCS5.PBKDF2.Error) -> Swift.Bool
+      public func hash(into hasher: inout Swift.Hasher)
+      public var hashValue: Swift.Int {
+        get
+      }
+    }
+    public init(password: Swift.Array<Swift.UInt8>, salt: Swift.Array<Swift.UInt8>, iterations: Swift.Int = 4096, keyLength: Swift.Int? = nil, variant: SkinCareWidget.HMAC.Variant = .sha256) throws
+    public func calculate() throws -> Swift.Array<Swift.UInt8>
+  }
+}
+extension Swift.Array where Element == Swift.UInt8 {
+  public func toHexString() -> Swift.String
+}
+extension Swift.Array where Element == Swift.UInt8 {
+  public func md5() -> [Element]
+  public func sha1() -> [Element]
+  public func sha224() -> [Element]
+  public func sha256() -> [Element]
+  public func sha384() -> [Element]
+  public func sha512() -> [Element]
+  public func sha2(_ variant: SkinCareWidget.SHA2.Variant) -> [Element]
+  public func sha3(_ variant: SkinCareWidget.SHA3.Variant) -> [Element]
+  public func crc32(seed: Swift.UInt32? = nil, reflect: Swift.Bool = true) -> Swift.UInt32
+  public func crc16(seed: Swift.UInt16? = nil) -> Swift.UInt16
+  public func encrypt(cipher: any SkinCareWidget.Cipher) throws -> [Element]
+  public func decrypt(cipher: any SkinCareWidget.Cipher) throws -> [Element]
+  public func authenticate<A>(with authenticator: A) throws -> [Element] where A : SkinCareWidget.Authenticator
+}
+public enum PKCS5 {
+}
+extension SkinCareWidget.PKCS5 {
+  public struct PBKDF1 {
+    public enum Error : Swift.Error {
+      case invalidInput
+      case derivedKeyTooLong
+      public static func == (a: SkinCareWidget.PKCS5.PBKDF1.Error, b: SkinCareWidget.PKCS5.PBKDF1.Error) -> Swift.Bool
+      public func hash(into hasher: inout Swift.Hasher)
+      public var hashValue: Swift.Int {
+        get
+      }
+    }
+    public enum Variant {
+      case md5, sha1
+      public static func == (a: SkinCareWidget.PKCS5.PBKDF1.Variant, b: SkinCareWidget.PKCS5.PBKDF1.Variant) -> Swift.Bool
+      public func hash(into hasher: inout Swift.Hasher)
+      public var hashValue: Swift.Int {
+        get
+      }
+    }
+    public init(password: Swift.Array<Swift.UInt8>, salt: Swift.Array<Swift.UInt8>, variant: SkinCareWidget.PKCS5.PBKDF1.Variant = .sha1, iterations: Swift.Int = 4096, keyLength: Swift.Int? = nil) throws
+    public func calculate() -> Swift.Array<Swift.UInt8>
+  }
+}
+@_hasMissingDesignatedInitializers final public class Checksum {
+  @objc deinit
+}
+extension SkinCareWidget.Checksum {
+  public static func crc32(_ message: Swift.Array<Swift.UInt8>, seed: Swift.UInt32? = nil, reflect: Swift.Bool = true) -> Swift.UInt32
+  public static func crc16(_ message: Swift.Array<Swift.UInt8>, seed: Swift.UInt16? = nil) -> Swift.UInt16
+}
+extension Swift.Array {
+  public func chunks(size chunksize: Swift.Int) -> Swift.Array<Swift.Array<Element>>
+}
+extension Swift.Array where Element == Swift.UInt8 {
+  public init(hex: Swift.String)
+}
+final public class HMAC : SkinCareWidget.Authenticator {
+  public enum Error : Swift.Error {
+    case authenticateError
+    case invalidInput
+    public static func == (a: SkinCareWidget.HMAC.Error, b: SkinCareWidget.HMAC.Error) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public enum Variant {
+    case sha1, sha256, sha384, sha512, md5
+    public static func == (a: SkinCareWidget.HMAC.Variant, b: SkinCareWidget.HMAC.Variant) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public init(key: Swift.Array<Swift.UInt8>, variant: SkinCareWidget.HMAC.Variant = .md5)
+  final public func authenticate(_ bytes: Swift.Array<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8>
+  @objc deinit
+}
+final public class MD5 {
+  public init()
+  final public func calculate(for bytes: Swift.Array<Swift.UInt8>) -> Swift.Array<Swift.UInt8>
+  @objc deinit
+}
+extension SkinCareWidget.MD5 : SkinCareWidget.Updatable {
+  final public func update(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, isLast: Swift.Bool = false) throws -> Swift.Array<Swift.UInt8>
+}
+public protocol Updatable {
+  mutating func update(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, isLast: Swift.Bool) throws -> Swift.Array<Swift.UInt8>
+  mutating func update(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, isLast: Swift.Bool, output: (_ bytes: Swift.Array<Swift.UInt8>) -> Swift.Void) throws
+  mutating func finish(withBytes bytes: Swift.ArraySlice<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8>
+  mutating func finish(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, output: (_ bytes: Swift.Array<Swift.UInt8>) -> Swift.Void) throws
+}
+extension SkinCareWidget.Updatable {
+  public mutating func update(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, isLast: Swift.Bool = false, output: (_ bytes: Swift.Array<Swift.UInt8>) -> Swift.Void) throws
+  public mutating func finish(withBytes bytes: Swift.ArraySlice<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8>
+  public mutating func finish() throws -> Swift.Array<Swift.UInt8>
+  public mutating func finish(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, output: (_ bytes: Swift.Array<Swift.UInt8>) -> Swift.Void) throws
+  public mutating func finish(output: (Swift.Array<Swift.UInt8>) -> Swift.Void) throws
+}
+extension SkinCareWidget.Updatable {
+  public mutating func update(withBytes bytes: Swift.Array<Swift.UInt8>, isLast: Swift.Bool = false) throws -> Swift.Array<Swift.UInt8>
+  public mutating func update(withBytes bytes: Swift.Array<Swift.UInt8>, isLast: Swift.Bool = false, output: (_ bytes: Swift.Array<Swift.UInt8>) -> Swift.Void) throws
+  public mutating func finish(withBytes bytes: Swift.Array<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8>
+  public mutating func finish(withBytes bytes: Swift.Array<Swift.UInt8>, output: (_ bytes: Swift.Array<Swift.UInt8>) -> Swift.Void) throws
+}
+public enum ErrorCodes : Swift.Int {
+  case LICENSE_ERROR
+  case BUNDLE_ID_MISMATCH
+  case INTERNAL_ERROR
+  case ERROR_CAMERA_ACCESS_DENIED
+  case ERROR_IMAGE_UPLOAD_FAILED
+  case ERROR_EMPTY_LICENSE_KEY
+  case ERROR_WIDGET_VIEW_NIL
+  case ERROR_CAMERA_NOT_AVAILABLE
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+extension SkinCareWidget.Rabbit {
+  convenience public init(key: Swift.String) throws
+  convenience public init(key: Swift.String, iv: Swift.String) throws
+}
+final public class Poly1305 : SkinCareWidget.Authenticator {
+  public enum Error : Swift.Error {
+    case authenticateError
+    public static func == (a: SkinCareWidget.Poly1305.Error, b: SkinCareWidget.Poly1305.Error) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public static let blockSize: Swift.Int
+  public init(key: Swift.Array<Swift.UInt8>)
+  final public func authenticate(_ bytes: Swift.Array<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8>
+  @objc deinit
+}
+final public class SHA1 {
+  public init()
+  final public func calculate(for bytes: Swift.Array<Swift.UInt8>) -> Swift.Array<Swift.UInt8>
+  @objc deinit
+}
+extension SkinCareWidget.SHA1 : SkinCareWidget.Updatable {
+  final public func update(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, isLast: Swift.Bool = false) throws -> Swift.Array<Swift.UInt8>
+}
+public enum Bit : Swift.Int {
+  case zero
+  case one
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public enum Features : Swift.Int {
+  case acne, wrinkles, redness, darkCircles, spots, unEvenSkinTone, lipHealth, dehydration, oiliness, lipRoughness, pores
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc @_inheritsConvenienceInitializers public class Configurations : ObjectiveC.NSObject {
+  public var widgetView: UIKit.UIView?
+  public var features: [(SkinCareWidget.Features, Swift.String)]?
+  public var tags: [Swift.String]?
+  public var btbpTags: [[Swift.String]]?
+  public var displayResults: Swift.Bool?
+  public var licenseKey: Swift.String?
+  public var userEmailId: Swift.String?
+  public var latitude: Swift.String?
+  public var longitude: Swift.String?
+  public var backGroundColor: UIKit.UIColor?
+  public var isInstructionScreenDisplay: Swift.Bool?
+  public var instrScreenImages: [UIKit.UIImage]?
+  public var instrScreenText: [Swift.String]?
+  public var captureButtonImage: UIKit.UIImage?
+  public var flipCamButtonImage: UIKit.UIImage?
+  public var uploadButtonImage: UIKit.UIImage?
+  public var isAutoCapture: Swift.Bool?
+  public var isGalleryOption: Swift.Bool?
+  public var isFlipCamera: Swift.Bool?
+  public var isCaptureButtonDisplayed: Swift.Bool?
+  public var analyzeTickMark: UIKit.UIImage?
+  public var retakeCrossMark: UIKit.UIImage?
+  public var resultsRightPane: Swift.Bool?
+  public var IqcMessages: [Swift.Int32 : Swift.String]
+  @objc override dynamic public init()
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class LicenseSuccess {
+  @objc deinit
+}
+public class LicenseError {
+  public var errorCode: Swift.String
+  public var errorMessage: Swift.String
+  public init(errorCode: Swift.String, errorMessage: Swift.String)
+  @objc deinit
+}
+public protocol WidgetCallBacks {
+  func notificationCallback(message: Swift.String)
+  func widgetErrorCallBack(errorCode: SkinCareWidget.ErrorCodes)
+  func widgetCaptureSucess(isSucess: Swift.Bool, image: UIKit.UIImage)
+  func widgetAnalysisResult(widgetResult: [SkinCareWidget.TagResult]?)
+  func getCurrentViewName(screenName: SkinCareWidget.ScreenName)
+}
+public protocol WidgetScreenCallBacks {
+  func getCurrentViewName(screenName: SkinCareWidget.ScreenName)
+  func widgetCaptureSucess(isSucess: Swift.Bool, image: UIKit.UIImage)
+  func widgetErrorCallBack(errorCode: SkinCareWidget.ErrorCodes)
+}
+public protocol AppLicenseCallbacks {
+  func onLicenseSuccess(code: SkinCareWidget.LicenseError, licenseSuccess: SkinCareWidget.LicenseSuccess)
+  func onLicenseError(licenseError: SkinCareWidget.LicenseError)
+}
+public protocol CaptureScreenCallbacks {
+  func onCapturedImage(imageData: UIKit.UIImage)
+}
+public enum ScreenName : Swift.Int {
+  case instruction, live, preview, results, rejection
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class SkinCareWidget : UIKit.UIViewController {
+  @_Concurrency.MainActor(unsafe) public var widgetCallback: (any SkinCareWidget.WidgetCallBacks)?
+  @_Concurrency.MainActor(unsafe) public var widgetScreenCallBacks: (any SkinCareWidget.WidgetScreenCallBacks)?
+  @_Concurrency.MainActor(unsafe) public var appLicenseCallback: (any SkinCareWidget.AppLicenseCallbacks)?
+  @_Concurrency.MainActor(unsafe) public var captureScreenCallback: (any SkinCareWidget.CaptureScreenCallbacks)?
+  @_Concurrency.MainActor(unsafe) public func start(configurations: SkinCareWidget.Configurations)
+  @_Concurrency.MainActor(unsafe) public func checkLicense(config: SkinCareWidget.Configurations)
+  @_Concurrency.MainActor(unsafe) public static var skinCareWidget: SkinCareWidget.SkinCareWidget
+  @_Concurrency.MainActor(unsafe) public func widgetRetryAnalysis() -> Swift.Bool
+  @_Concurrency.MainActor(unsafe) public func updateConfig(newConfig: SkinCareWidget.Configurations)
+  @objc @_Concurrency.MainActor(unsafe) public func hideInstr(_ sender: UIKit.UIButton)
+  @objc @_Concurrency.MainActor(unsafe) public func resetWidget()
+  @objc @_Concurrency.MainActor(unsafe) public func stopCamera()
+  @_Concurrency.MainActor(unsafe) public func flipCamera() -> Swift.Bool
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+extension SkinCareWidget.AES : SkinCareWidget.Cryptors {
+  final public func makeEncryptor() throws -> SkinCareWidget.AES.Encryptor
+  final public func makeDecryptor() throws -> SkinCareWidget.AES.Decryptor
+  public typealias DecryptorType = SkinCareWidget.AES.Decryptor
+  public typealias EncryptorType = SkinCareWidget.AES.Encryptor
+}
+extension SkinCareWidget.AES {
+  public struct Encryptor : SkinCareWidget.Updatable {
+    public mutating func update(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, isLast: Swift.Bool = false) throws -> Swift.Array<Swift.UInt8>
+  }
+}
+extension SkinCareWidget.AES {
+  public struct Decryptor : SkinCareWidget.RandomAccessCryptor {
+    public mutating func update(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, isLast: Swift.Bool = false) throws -> Swift.Array<Swift.UInt8>
+    @discardableResult
+    public mutating func seek(to position: Swift.Int) -> Swift.Bool
+  }
+}
+extension Swift.String {
+  public var bytes: Swift.Array<Swift.UInt8> {
+    get
+  }
+  public func md5() -> Swift.String
+  public func sha1() -> Swift.String
+  public func sha224() -> Swift.String
+  public func sha256() -> Swift.String
+  public func sha384() -> Swift.String
+  public func sha512() -> Swift.String
+  public func sha3(_ variant: SkinCareWidget.SHA3.Variant) -> Swift.String
+  public func crc32(seed: Swift.UInt32? = nil, reflect: Swift.Bool = true) -> Swift.String
+  public func crc16(seed: Swift.UInt16? = nil) -> Swift.String
+  public func encrypt(cipher: any SkinCareWidget.Cipher) throws -> Swift.String
+  public func encryptToBase64(cipher: any SkinCareWidget.Cipher) throws -> Swift.String?
+  public func authenticate<A>(with authenticator: A) throws -> Swift.String where A : SkinCareWidget.Authenticator
+}
+final public class SHA3 {
+  final public let blockSize: Swift.Int
+  final public let digestLength: Swift.Int
+  final public let markByte: Swift.UInt8
+  public enum Variant {
+    case sha224, sha256, sha384, sha512, keccak224, keccak256, keccak384, keccak512
+    public var outputLength: Swift.Int {
+      get
+    }
+    public static func == (a: SkinCareWidget.SHA3.Variant, b: SkinCareWidget.SHA3.Variant) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public init(variant: SkinCareWidget.SHA3.Variant)
+  final public func calculate(for bytes: Swift.Array<Swift.UInt8>) -> Swift.Array<Swift.UInt8>
+  @objc deinit
+}
+extension SkinCareWidget.SHA3 : SkinCareWidget.Updatable {
+  final public func update(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, isLast: Swift.Bool = false) throws -> Swift.Array<Swift.UInt8>
+}
+public enum BlockMode {
+  case ECB, CBC(iv: Swift.Array<Swift.UInt8>), PCBC(iv: Swift.Array<Swift.UInt8>), CFB(iv: Swift.Array<Swift.UInt8>), OFB(iv: Swift.Array<Swift.UInt8>), CTR(iv: Swift.Array<Swift.UInt8>)
+  public enum Error : Swift.Error {
+    case invalidKeyOrInitializationVector
+    case invalidInitializationVector
+    public static func == (a: SkinCareWidget.BlockMode.Error, b: SkinCareWidget.BlockMode.Error) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+extension SkinCareWidget.AES.Error : Swift.Equatable {}
+extension SkinCareWidget.AES.Error : Swift.Hashable {}
+extension SkinCareWidget.AES.Variant : Swift.Equatable {}
+extension SkinCareWidget.AES.Variant : Swift.Hashable {}
+extension SkinCareWidget.AES.Variant : Swift.RawRepresentable {}
+extension SkinCareWidget.Padding : Swift.Equatable {}
+extension SkinCareWidget.Padding : Swift.Hashable {}
+extension SkinCareWidget.ChaCha20.Error : Swift.Equatable {}
+extension SkinCareWidget.ChaCha20.Error : Swift.Hashable {}
+extension SkinCareWidget.CipherError : Swift.Equatable {}
+extension SkinCareWidget.CipherError : Swift.Hashable {}
+extension SkinCareWidget.SHA2.Variant : Swift.Equatable {}
+extension SkinCareWidget.SHA2.Variant : Swift.Hashable {}
+extension SkinCareWidget.Blowfish.Error : Swift.Equatable {}
+extension SkinCareWidget.Blowfish.Error : Swift.Hashable {}
+extension SkinCareWidget.Rabbit.Error : Swift.Equatable {}
+extension SkinCareWidget.Rabbit.Error : Swift.Hashable {}
+extension SkinCareWidget.PKCS5.PBKDF2.Error : Swift.Equatable {}
+extension SkinCareWidget.PKCS5.PBKDF2.Error : Swift.Hashable {}
+extension SkinCareWidget.PKCS5.PBKDF1.Error : Swift.Equatable {}
+extension SkinCareWidget.PKCS5.PBKDF1.Error : Swift.Hashable {}
+extension SkinCareWidget.PKCS5.PBKDF1.Variant : Swift.Equatable {}
+extension SkinCareWidget.PKCS5.PBKDF1.Variant : Swift.Hashable {}
+extension SkinCareWidget.HMAC.Error : Swift.Equatable {}
+extension SkinCareWidget.HMAC.Error : Swift.Hashable {}
+extension SkinCareWidget.HMAC.Variant : Swift.Equatable {}
+extension SkinCareWidget.HMAC.Variant : Swift.Hashable {}
+extension SkinCareWidget.ErrorCodes : Swift.Equatable {}
+extension SkinCareWidget.ErrorCodes : Swift.Hashable {}
+extension SkinCareWidget.ErrorCodes : Swift.RawRepresentable {}
+extension SkinCareWidget.Poly1305.Error : Swift.Equatable {}
+extension SkinCareWidget.Poly1305.Error : Swift.Hashable {}
+extension SkinCareWidget.Bit : Swift.Equatable {}
+extension SkinCareWidget.Bit : Swift.Hashable {}
+extension SkinCareWidget.Bit : Swift.RawRepresentable {}
+extension SkinCareWidget.Features : Swift.Equatable {}
+extension SkinCareWidget.Features : Swift.Hashable {}
+extension SkinCareWidget.Features : Swift.RawRepresentable {}
+extension SkinCareWidget.ScreenName : Swift.Equatable {}
+extension SkinCareWidget.ScreenName : Swift.Hashable {}
+extension SkinCareWidget.ScreenName : Swift.RawRepresentable {}
+extension SkinCareWidget.SHA3.Variant : Swift.Equatable {}
+extension SkinCareWidget.SHA3.Variant : Swift.Hashable {}
+extension SkinCareWidget.BlockMode.Error : Swift.Equatable {}
+extension SkinCareWidget.BlockMode.Error : Swift.Hashable {}
