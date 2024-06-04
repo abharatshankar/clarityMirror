@@ -5,11 +5,15 @@ import SkinCareWidget
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
+    var flutterMethodChannel: FlutterMethodChannel?
     override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         
          if let registrar = registrar(forPlugin: "ControlView") {
              let controller = window.rootViewController as! FlutterViewController
+             flutterMethodChannel = FlutterMethodChannel(name: "com.example.clarity_mirror/mirror_channel",
+                                                             binaryMessenger: controller.binaryMessenger)
+                 
              let customViewFactory = CustomViewFactory(messenger: controller.binaryMessenger)
             
             registrar.register(customViewFactory, withId: "custom_view")
@@ -24,7 +28,18 @@ import SkinCareWidget
     }
     
 
+    public func callFlutterFunction(message: String) {
+        flutterMethodChannel?.invokeMethod("onCaptureSuccess", arguments: message, result: { (result: Any?) in
+          if let result = result as? String {
+            print("Received result from Flutter: \(result)")
+          } else {
+            print("No result from Flutter")
+          }
+        })
+      }
+    
 }
+
 
 
 public class CustomViewFactory: NSObject, FlutterPlatformViewFactory {
