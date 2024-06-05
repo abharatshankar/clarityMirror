@@ -22,6 +22,10 @@ String? uvIndexTxt;
 Tag? _pollutionTag;
 String? pollutionLevelStr;
 String? tipsStr;
+String? hairColor;
+String? hairType;
+String? hairLossLevel;
+String? facialHairType;
 
 
 List<String> _tagsForSkinHealth = ['ACNE_SEVERITY_SCORE_FAST','SPOTS_SEVERITY_SCORE_FAST','REDNESS_SEVERITY_SCORE_FAST','UNEVEN_SKINTONE_SEVERITY_SCORE_FAST','PORES_SEVERITY_SCORE_FAST','TEXTURE_SEVERITY_SCORE_FAST'];
@@ -183,6 +187,41 @@ print("avg of tags hhhhhhhh $avgOfTags");
     });
     logger.d('Final Tag REsults: ${skinConcernList.length}');
   }
+
+  getHairData() {
+    List hairTags = [
+      "FACIALHAIRTYPE", "HAIRLOSSLEVEL", "HAIRTYPE", "HAIRCOLOR",
+    ];
+
+    Tag? hairColourTag =  tagResults?.tags?.firstWhere(
+          (tag) {
+        return tag.tagName == "HAIRCOLOR";
+      },
+    );
+    hairColor = hairColourTag?.tagValues?.first.value;
+
+    Tag? hairTypeTag =  tagResults?.tags?.firstWhere(
+          (tag) {
+        return tag.tagName == "HAIRTYPE";
+      },
+    );
+    hairType = hairTypeTag?.tagValues?.first.value;
+
+    Tag? hairLossLevelTag =  tagResults?.tags?.firstWhere(
+          (tag) {
+        return tag.tagName == "HAIRLOSSLEVEL";
+      },
+    );
+    hairLossLevel = hairLossLevelTag?.tagValues?.first.value;
+
+    Tag? facialHairTypeTag =  tagResults?.tags?.firstWhere(
+          (tag) {
+        return tag.tagName == "FACIALHAIRTYPE";
+      },
+    );
+    facialHairType = facialHairTypeTag?.tagValues?.first.value;
+  }
+
   Future<String> encodeImageToBase64(String filePath) async {
     // Read image file
     List<int> imageBytes = await File(filePath).readAsBytes();

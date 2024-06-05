@@ -1,10 +1,5 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
-import 'package:clarity_mirror/utils/navigation_service.dart';
-import 'package:clarity_mirror/utils/routes/routes_names.dart';
-import 'package:clarity_mirror/view/tabbar_screen.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:clarity_mirror/data/app_exceptions.dart';
 import 'package:clarity_mirror/data/network/base_api_services.dart';
@@ -55,7 +50,8 @@ class NetworkApiServices extends BaseApiServices {
     "PORES_IMAGE_FAST",
     "FACIALHAIRTYPE",
     "HAIRLOSSLEVEL",
-    "HAIRTYPE"
+    "HAIRTYPE",
+    "HAIRCOLOR",
   ];
 
   @override
@@ -152,7 +148,7 @@ class NetworkApiServices extends BaseApiServices {
             "https://gserver1.btbp.org/deeptag/AppService.svc/getTagResults"),
         body: encodedData,
         headers: {"Content-type": "application/json", "Accept": "*/*"},
-      ).timeout(const Duration(seconds: 30));
+      ).timeout(const Duration(seconds: 40));
       responseData = responseJson(response);
       logger.i('Tag Results Response================>: ${responseData.toString()}');
     } on SocketException {

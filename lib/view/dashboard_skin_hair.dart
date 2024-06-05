@@ -4,7 +4,6 @@ import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:clarity_mirror/models/tag_results_model.dart';
 import 'package:clarity_mirror/viewModel/dashboard_viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_fonts.dart';
@@ -20,19 +19,15 @@ class DashboardSkinHair extends StatefulWidget {
 }
 
 class _DashboardSkinHairState extends State<DashboardSkinHair> {
-  List<HairData> hairDataArr = [
-    HairData(99, 4, "High", "Wrinkles"),
-    HairData(60, 3, "Moderate", "Pigmentation"),
-    HairData(70, 4, "Moderate-High", "Redness"),
-    HairData(20, 1, "Moderate-High", "Acne"),
-    HairData(30, 4, "Moderate", "Dark-Circles"),
-  ];
+
+  int tabPosition = 0;
 
   @override
   Widget build(BuildContext context) {
     return Consumer<DashboardViewModel>(
       builder: (context, dashboardViewModel, _) {
-        print(
+
+      /*  print(
             'skin & hair tab - tags length: ${dashboardViewModel.tagResults?.tags?.length}');
         print(
             'skin & hair tab - Message: ${dashboardViewModel.tagResults?.message} ImageID: ${dashboardViewModel.tagResults?.imageId}');
@@ -46,7 +41,8 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
             Logger().i(
                 'Value: ${tagValue.value} Units: ${tagValue.units} ValueName: ${tagValue.valueName}');
           });
-        });
+        });*/
+
         return SafeArea(
           child: Scaffold(
             backgroundColor: AppConstColors.themeBackgroundColor,
@@ -67,7 +63,7 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
                   goliveButton(),
                   gradientContainer(),
                   skinHairTabs(),
-                  skinList(dashboardViewModel.tagResults?.tags),
+                  tabPosition == 0 ? skinList(dashboardViewModel.tagResults?.tags) : hairResultWidget(),
                 ],
               ),
             ),
@@ -218,7 +214,12 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
                     color: Colors.red,
                     fontWeight: FontWeight.bold,
                   ),
-                  onTap: (tabindex) {},
+                  onTap: (index) {
+                    print('tab position: $index');
+                    setState(() {
+                      tabPosition = index;
+                    });
+                  },
                   radius: 100,
                   tabs: [
                     Tab(
@@ -242,30 +243,18 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
                   ],
                 ),
 
-                // const Expanded(
-                //   child: TabBarView(
-                //     children: <Widget>[
-                //       Center(
-                //         child: Icon(Icons.directions_car),
-                //       ),
-                //       Center(
-                //         child: Icon(Icons.directions_transit),
-                //       ),
-                //       Center(
-                //         child: Icon(Icons.directions_bike),
-                //       ),
-                //       Center(
-                //         child: Icon(Icons.directions_car),
-                //       ),
-                //       Center(
-                //         child: Icon(Icons.directions_transit),
-                //       ),
-                //       Center(
-                //         child: Icon(Icons.directions_bike),
-                //       ),
-                //     ],
-                //   ),
-                // ),
+               /* const Expanded(
+                  child: TabBarView(
+                    children: <Widget>[
+                      Center(
+                        child: Icon(Icons.directions_car),
+                      ),
+                      Center(
+                        child: Icon(Icons.directions_transit),
+                      ),
+                    ],
+                  ),
+                ),*/
               ],
             ),
           ),
@@ -408,6 +397,71 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
             );
           },
         ),
+      ),
+    );
+  }
+
+  Widget hairResultWidget() {
+    Provider.of<DashboardViewModel>(context).getHairData();
+    DashboardViewModel viewModel = Provider.of<DashboardViewModel>(context);
+    return Positioned(
+      left: 0,
+      right: 0,
+      bottom: -10,
+      child: SizedBox(
+        height: 120,
+        child: ListView(
+          physics: ClampingScrollPhysics(),
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          children: [
+            getHairTagDataWidget(title: viewModel.hairType, type: 'Hair Type'),
+            getHairTagDataWidget(title: viewModel.hairColor, type: 'Hair Color'),
+            getHairTagDataWidget(title: viewModel.facialHairType, type: 'Facial Hair Type'),
+            getHairTagDataWidget(title: viewModel.hairLossLevel, type: 'Hair Loss Level'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget getHairTagDataWidget({String? title, int? value, String? type}) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 24.0),
+      padding: const EdgeInsets.only(top: 16),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Text(
+              '$title',
+              // tagData?.tagName ?? '',
+              overflow: TextOverflow.ellipsis,
+              style:
+              AppFonts().sego14normal.copyWith(color: Colors.white),
+            ),
+          ),
+          CircularPercentIndicator(
+            radius: 20.0,
+            lineWidth: 5.0,
+            // percent: (skinConcern.getTagScore! * 20) / 100,
+            percent: 1.0,
+            center: Text("3",
+                style: const TextStyle(
+                    color: AppConstColors.appThemeCayan)),
+            progressColor: AppConstColors.appThemeCayan,
+          ),
+
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Text(
+              '$type',
+              style: AppFonts().sego10bold,
+            ),
+          ),
+          // Text(tagData?.tagValues?.length?.toString() ?? '0', style: TextStyle(color: Colors.white),),
+
+        ],
       ),
     );
   }
