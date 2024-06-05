@@ -27,13 +27,13 @@ class NetworkApiServices extends BaseApiServices {
     "ELASTICITY", "FIRMNESS", "TEXTURE_SEVERITY_SCORE_FAST"
   ];
   List tags = [
-    "ACNE_SEVERITY_SCORE_FAST",
-    "ACNE_IMAGE_FAST",
     "WEATHER",
     "GEOLOCATION_COUNTRY",
     "ELEVATION",
     "POLLUTION_AQI",
     "UVINDEX",
+    "ACNE_SEVERITY_SCORE_FAST",
+    "ACNE_IMAGE_FAST",
     "FACIAL_LANDMARKS",
     "FACE_BOX_ORIGIN",
     "IDEAL_SKIN_TRANSFORM_IMAGE",
@@ -110,8 +110,8 @@ class NetworkApiServices extends BaseApiServices {
         "ClientId": "",
         "Latitude": 17.4065, //TODO: Add dynamic lat lang values
         "Longitude": 78.4772,
-        'Tags': scoreTagsOnly,
-        // 'Tags': tags,
+        // 'Tags': scoreTagsOnly,
+        'Tags': tags,
         'ImageBytes': [data]
       };
       logger.d('Request body: $requestBody');

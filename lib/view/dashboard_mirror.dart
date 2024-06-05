@@ -20,43 +20,17 @@ class DashboardMirror extends StatefulWidget {
 }
 
 class _DashboardMirrorState extends State<DashboardMirror> {
-  static const MethodChannel _channel =
-  MethodChannel('com.example.clarity_mirror/mirror_channel');
-  String? _capturedImagePath;
 
   @override
   void initState() {
     super.initState();
-    _channel.setMethodCallHandler(_handleMethod);
-  }
-
-  Future<void> _handleMethod(MethodCall call) async {
-    switch (call.method) {
-      case 'onCaptureSuccess':
-        String imagePath = call.arguments as String;
-        print(imagePath);
-        // Fluttertoast.showToast(
-        //   msg: imagePath,
-        //   toastLength: Toast.LENGTH_LONG,
-        //   gravity: ToastGravity.BOTTOM,
-        //   timeInSecForIosWeb: 1,
-        //   backgroundColor: Colors.black,
-        //   textColor: Colors.white,
-        //   fontSize: 16.0,
-        // );
-        setState(() {
-          _capturedImagePath = imagePath;
-        });
-        break;
-      default:
-        throw MissingPluginException('Plugin Exception: ${call.method}');
-    }
   }
   
   @override
   Widget build(BuildContext context) {
     return Consumer<DashboardViewModel>(
       builder: (context, dashboardViewModel, _){
+        /// Handle the method call and return the image path and calling api after getting image
         dashboardViewModel.invokeMethodCallHandler();
         return SafeArea(
           child: Scaffold(
