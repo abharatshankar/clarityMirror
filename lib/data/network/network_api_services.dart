@@ -55,7 +55,8 @@ class NetworkApiServices extends BaseApiServices {
     "PORES_IMAGE_FAST",
     "FACIALHAIRTYPE",
     "HAIRLOSSLEVEL",
-    "HAIRTYPE"
+    "HAIRTYPE",
+    "HAIRCOLOR",
   ];
 
   @override
@@ -152,7 +153,7 @@ class NetworkApiServices extends BaseApiServices {
             "https://gserver1.btbp.org/deeptag/AppService.svc/getTagResults"),
         body: encodedData,
         headers: {"Content-type": "application/json", "Accept": "*/*"},
-      ).timeout(const Duration(seconds: 30));
+      ).timeout(const Duration(seconds: 40));
       responseData = responseJson(response);
       logger.i('Tag Results Response================>: ${responseData.toString()}');
     } on SocketException {
