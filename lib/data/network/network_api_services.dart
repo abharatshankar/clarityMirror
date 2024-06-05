@@ -1,10 +1,5 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
-import 'package:clarity_mirror/utils/navigation_service.dart';
-import 'package:clarity_mirror/utils/routes/routes_names.dart';
-import 'package:clarity_mirror/view/tabbar_screen.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:clarity_mirror/data/app_exceptions.dart';
 import 'package:clarity_mirror/data/network/base_api_services.dart';
