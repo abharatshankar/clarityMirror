@@ -20,16 +20,15 @@ class DashboardMirror extends StatefulWidget {
 }
 
 class _DashboardMirrorState extends State<DashboardMirror> {
-
   @override
   void initState() {
     super.initState();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Consumer<DashboardViewModel>(
-      builder: (context, dashboardViewModel, _){
+      builder: (context, dashboardViewModel, _) {
         /// Handle the method call and return the image path and calling api after getting image
         dashboardViewModel.invokeMethodCallHandler();
         return SafeArea(
@@ -37,112 +36,186 @@ class _DashboardMirrorState extends State<DashboardMirror> {
             backgroundColor: AppConstColors.themeBackgroundColor,
             body: Platform.isAndroid
                 ? SingleChildScrollView(
-                  child: Column(
-                                children: <Widget>[
-                  Stack(children: [
-                    Positioned(
-                  
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.height * 0.85,
-                      child: PlatformViewLink(
-                        viewType: 'com.example.clarity_mirror/my_native_view',
-                        surfaceFactory: (BuildContext context,
-                            PlatformViewController controller) {
-                          if (controller is AndroidViewController) {
-                            return AndroidViewSurface(
-                              controller: controller,
-                              gestureRecognizers: const <Factory<
-                                  OneSequenceGestureRecognizer>>{},
-                              hitTestBehavior: PlatformViewHitTestBehavior.opaque,
-                            );
-                          }
-                          return Container();
-                        },
-                        onCreatePlatformView:
-                            (PlatformViewCreationParams params) {
-                          return PlatformViewsService.initSurfaceAndroidView(
-                            id: params.id,
-                            viewType: 'com.example.clarity_mirror/my_native_view',
-                            layoutDirection: TextDirection.ltr,
-                            creationParams: null,
-                            creationParamsCodec: const StandardMessageCodec(),
-                          )
-                            ..addOnPlatformViewCreatedListener(
-                                params.onPlatformViewCreated)
-                            ..create();
-                        },
-                      ),
+                    child: Column(
+                      children: <Widget>[
+                        Stack(
+                          children: [
+                            Positioned(
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.85,
+                                child: PlatformViewLink(
+                                  viewType:
+                                      'com.example.clarity_mirror/my_native_view',
+                                  surfaceFactory: (BuildContext context,
+                                      PlatformViewController controller) {
+                                    if (controller is AndroidViewController) {
+                                      return AndroidViewSurface(
+                                        controller: controller,
+                                        gestureRecognizers: const <Factory<
+                                            OneSequenceGestureRecognizer>>{},
+                                        hitTestBehavior:
+                                            PlatformViewHitTestBehavior.opaque,
+                                      );
+                                    }
+                                    return Container();
+                                  },
+                                  onCreatePlatformView:
+                                      (PlatformViewCreationParams params) {
+                                    return PlatformViewsService
+                                        .initSurfaceAndroidView(
+                                      id: params.id,
+                                      viewType:
+                                          'com.example.clarity_mirror/my_native_view',
+                                      layoutDirection: TextDirection.ltr,
+                                      creationParams: null,
+                                      creationParamsCodec:
+                                          const StandardMessageCodec(),
+                                    )
+                                      ..addOnPlatformViewCreatedListener(
+                                          params.onPlatformViewCreated)
+                                      ..create();
+                                  },
+                                ),
+                              ),
+                            ),
+                            goliveButton(),
+                            dashboardViewModel.temperatureStr != null
+                                ? tempratureText(
+                                    dashboardViewModel.temperatureStr)
+                                : const SizedBox(),
+                            dashboardViewModel.uvIndexTxt != null
+                                ? tempIndexTxt(
+                                    tempIndexStatus:
+                                        "uv index ${dashboardViewModel.uvIndexTxt}")
+                                : const SizedBox(),
+                            humidityStatus(humidityStr: "Humidity low"),
+                            gradientContainer(),
+                            dashboardViewModel.pollutionLevelStr != null
+                                ? pollutionStatus(
+                                    pollutionStr:
+                                        dashboardViewModel.pollutionLevelStr ??
+                                            '')
+                                : Positioned(
+                                    left: 10,
+                                    bottom: MediaQuery.of(context).size.height *
+                                        0.05,
+                                    child: const SizedBox(),
+                                  ),
+                            dashboardViewModel.tipsStr != null
+                                ? ideaIconAndTxt(dashboardViewModel.tipsStr)
+                                : const Positioned(
+                                    left: 5,
+                                    bottom: 0,
+                                    child: SizedBox(),
+                                  ),
+                            excersiceWidget(),
+                            dashboardViewModel.avgOfTags != null
+                                ? percentageCircle(
+                                    dashboardViewModel.avgOfTags.toString())
+                                : Positioned(
+                                    right: 5,
+                                    bottom: MediaQuery.of(context).size.height *
+                                        0.07,
+                                    child: const SizedBox(),
+                                  ),
+                            dashboardViewModel.isLoading
+                                ? Positioned(
+                                    top: MediaQuery.of(context).size.height / 2,
+                                    left: MediaQuery.of(context).size.width / 2,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.red,
+                                      backgroundColor: Colors.grey,
+                                    ),
+                                  )
+                                : Container(),
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
+                : SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Stack(
+                          alignment: AlignmentDirectional.center,
+                          children: [
+                            Positioned(
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                height:
+                                    MediaQuery.of(context).size.height - 200,
+                                // child: Image.asset(
+                                //   "assets/images/Dermatolgist6.png",
+                                //   fit: BoxFit.cover,
+                                // ),
+                                child: UiKitView(
+                                  viewType: 'custom_view',
+                                  layoutDirection: TextDirection.ltr,
+                                ),
+                              ),
+                            ),
+                            goliveButton(),
+                            dashboardViewModel.temperatureStr != null
+                                ? tempratureText(
+                                    dashboardViewModel.temperatureStr)
+                                : const SizedBox(),
+                            dashboardViewModel.uvIndexTxt != null
+                                ? tempIndexTxt(
+                                    tempIndexStatus:
+                                        "uv index ${dashboardViewModel.uvIndexTxt}")
+                                : const SizedBox(),
+                            humidityStatus(humidityStr: "Humidity low"),
+                            // gradientContainer(),
+                            dashboardViewModel.pollutionLevelStr != null
+                                ? pollutionStatus(
+                                    pollutionStr:
+                                        dashboardViewModel.pollutionLevelStr ??
+                                            '')
+                                : Positioned(
+                                    left: 10,
+                                    bottom: MediaQuery.of(context).size.height *
+                                        0.05,
+                                    child: const SizedBox(),
+                                  ),
+                            dashboardViewModel.tipsStr != null
+                                ? ideaIconAndTxt(dashboardViewModel.tipsStr)
+                                : const Positioned(
+                                    left: 5,
+                                    bottom: 0,
+                                    child: SizedBox(),
+                                  ),
+                            excersiceWidget(),
+                            dashboardViewModel.avgOfTags != null
+                                ? percentageCircle(
+                                    dashboardViewModel.avgOfTags.toString())
+                                : Positioned(
+                                    right: 5,
+                                    bottom: MediaQuery.of(context).size.height *
+                                        0.07,
+                                    child: const SizedBox(),
+                                  ),
+                            dashboardViewModel.isLoading
+                                ? Positioned(
+                                    top: MediaQuery.of(context).size.height / 2,
+                                    left: MediaQuery.of(context).size.width / 2,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.red,
+                                      backgroundColor: Colors.grey,
+                                    ),
+                                  )
+                                : Container(),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                  
-                    goliveButton(),
-                       dashboardViewModel.temperatureStr != null ? tempratureText(dashboardViewModel.temperatureStr) : const SizedBox(),
-                       dashboardViewModel.uvIndexTxt != null ? tempIndexTxt(tempIndexStatus: "uv index ${dashboardViewModel.uvIndexTxt}") : const SizedBox(),
-                        humidityStatus(humidityStr: "Humidity low"),
-                        gradientContainer(),
-                       dashboardViewModel.pollutionLevelStr != null ? pollutionStatus(pollutionStr: dashboardViewModel.pollutionLevelStr ?? '') : Positioned(left: 10,
-                        bottom: MediaQuery.of(context).size.height * 0.05,child: const SizedBox(),),
-                       dashboardViewModel.tipsStr != null ? ideaIconAndTxt(dashboardViewModel.tipsStr) : const Positioned(
-                        left: 5,
-      bottom: 0,
-                        child: SizedBox(),),
-                        excersiceWidget(),
-                        dashboardViewModel.avgOfTags != null ? percentageCircle(dashboardViewModel.avgOfTags.toString()) : Positioned(right: 5,
-      bottom: MediaQuery.of(context).size.height * 0.07,child: const SizedBox(),) ,
-                  ],),
-                  
-                  
-                  
-                                ],
-                              ),
-                )
-                : SingleChildScrollView(
-              child: Column(
-                children: [
-                  Stack(
-                    alignment: AlignmentDirectional.center,
-                    children: [
-                      Positioned(
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height - 200,
-                          // child: Image.asset(
-                          //   "assets/images/Dermatolgist6.png",
-                          //   fit: BoxFit.cover,
-                          // ),
-                          child: UiKitView(
-                            viewType: 'custom_view',
-                            layoutDirection: TextDirection.ltr,
-                          ),
-                        ),
-                      ),
-                      goliveButton(),
-                     dashboardViewModel.temperatureStr != null ? tempratureText(dashboardViewModel.temperatureStr) : const SizedBox(),
-                     dashboardViewModel.uvIndexTxt != null ? tempIndexTxt(tempIndexStatus: "uv index ${dashboardViewModel.uvIndexTxt}") : const SizedBox(),
-                      humidityStatus(humidityStr: "Humidity low"),
-                      // gradientContainer(),
-                     dashboardViewModel.pollutionLevelStr != null ? pollutionStatus(pollutionStr: dashboardViewModel.pollutionLevelStr ?? '') : Positioned(left: 10,
-                      bottom: MediaQuery.of(context).size.height * 0.05,child: const SizedBox(),),
-                      dashboardViewModel.tipsStr != null ? ideaIconAndTxt(dashboardViewModel.tipsStr) : const Positioned(
-                        left: 5,
-      bottom: 0,
-                        child: SizedBox(),),
-                      excersiceWidget(),
-                     dashboardViewModel.avgOfTags != null ? percentageCircle(dashboardViewModel.avgOfTags.toString()) : Positioned(right: 5,
-      bottom: MediaQuery.of(context).size.height * 0.07,child: const SizedBox(),) ,
-                    ],
-                  ),
-                ],
-              ),
-            ),
           ),
         );
       },
     );
   }
-
-
 
   Widget gradientContainer() {
     return Positioned(
@@ -199,7 +272,7 @@ class _DashboardMirrorState extends State<DashboardMirror> {
                     border: Border.all(color: Colors.white, width: 3)),
                 child: Padding(
                   padding:
-                  const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
+                      const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
                   child: Row(
                     children: [
                       Text(
@@ -234,9 +307,9 @@ class _DashboardMirrorState extends State<DashboardMirror> {
         child: Text(
           "$temp\u00B0",
           style: AppFonts().sego29normal.copyWith(
-            fontSize: 40,
-            fontWeight: FontWeight.w600,
-          ),
+                fontSize: 40,
+                fontWeight: FontWeight.w600,
+              ),
         ));
   }
 
@@ -339,7 +412,7 @@ class _DashboardMirrorState extends State<DashboardMirror> {
               size: const Size(5, 5), // no effect while adding child
               painter: CircularPaint(
                 borderThickness: 3,
-                progressValue: int.parse(percentage ?? "0")/100, //[0-1]
+                progressValue: int.parse(percentage ?? "0") / 100, //[0-1]
               ),
               child: Center(
                 child: Text(

@@ -53,7 +53,7 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
                   Positioned(
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height - 90,
+                      height: MediaQuery.of(context).size.height - 110,
                       child: dashboardViewModel.capturedImagePath != null ? Image.file(File(dashboardViewModel.capturedImagePath!),fit: BoxFit.cover,) : Image.asset(
                         "assets/images/Dermatolgist6.png",
                         fit: BoxFit.cover,
@@ -443,10 +443,10 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
           ),
           CircularPercentIndicator(
             radius: 20.0,
-            lineWidth: 5.0,
+            lineWidth: 3.0,
             // percent: (skinConcern.getTagScore! * 20) / 100,
             percent: 1.0,
-            center: Text("3",
+            center: Text("",
                 style: const TextStyle(
                     color: AppConstColors.appThemeCayan)),
             progressColor: AppConstColors.appThemeCayan,
