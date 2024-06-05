@@ -80,7 +80,7 @@ class _DashboardMirrorState extends State<DashboardMirror> {
                        dashboardViewModel.temperatureStr != null ? tempratureText(dashboardViewModel.temperatureStr) : const SizedBox(),
                        dashboardViewModel.uvIndexTxt != null ? tempIndexTxt(tempIndexStatus: "uv index ${dashboardViewModel.uvIndexTxt}") : const SizedBox(),
                         humidityStatus(humidityStr: "Humidity low"),
-                        // gradientContainer(),
+                        gradientContainer(),
                        dashboardViewModel.pollutionLevelStr != null ? pollutionStatus(pollutionStr: dashboardViewModel.pollutionLevelStr ?? '') : Positioned(left: 10,
                         bottom: MediaQuery.of(context).size.height * 0.05,child: const SizedBox(),),
                        dashboardViewModel.tipsStr != null ? ideaIconAndTxt(dashboardViewModel.tipsStr) : const Positioned(
@@ -88,7 +88,8 @@ class _DashboardMirrorState extends State<DashboardMirror> {
       bottom: 0,
                         child: SizedBox(),),
                         excersiceWidget(),
-                        percentageCircle(),
+                        dashboardViewModel.avgOfTags != null ? percentageCircle(dashboardViewModel.avgOfTags.toString()) : Positioned(right: 5,
+      bottom: MediaQuery.of(context).size.height * 0.07,child: const SizedBox(),) ,
                   ],),
                   
                   
@@ -128,7 +129,8 @@ class _DashboardMirrorState extends State<DashboardMirror> {
       bottom: 0,
                         child: SizedBox(),),
                       excersiceWidget(),
-                      percentageCircle(),
+                     dashboardViewModel.avgOfTags != null ? percentageCircle(dashboardViewModel.avgOfTags.toString()) : Positioned(right: 5,
+      bottom: MediaQuery.of(context).size.height * 0.07,child: const SizedBox(),) ,
                     ],
                   ),
                 ],
@@ -317,7 +319,7 @@ class _DashboardMirrorState extends State<DashboardMirror> {
     );
   }
 
-  Widget percentageCircle() {
+  Widget percentageCircle(String? percentage) {
     return Positioned(
       right: 5,
       bottom: MediaQuery.of(context).size.height * 0.07,
@@ -337,11 +339,11 @@ class _DashboardMirrorState extends State<DashboardMirror> {
               size: const Size(5, 5), // no effect while adding child
               painter: CircularPaint(
                 borderThickness: 3,
-                progressValue: 0.9, //[0-1]
+                progressValue: int.parse(percentage ?? "0")/100, //[0-1]
               ),
               child: Center(
                 child: Text(
-                  '95%',
+                  '$percentage%',
                   style: AppFonts().sego14normal,
                 ),
               ),

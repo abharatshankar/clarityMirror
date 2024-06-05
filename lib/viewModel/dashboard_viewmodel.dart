@@ -24,6 +24,11 @@ String? pollutionLevelStr;
 String? tipsStr;
 
 
+List<String> _tagsForSkinHealth = ['ACNE_SEVERITY_SCORE_FAST','SPOTS_SEVERITY_SCORE_FAST','REDNESS_SEVERITY_SCORE_FAST','UNEVEN_SKINTONE_SEVERITY_SCORE_FAST','PORES_SEVERITY_SCORE_FAST','TEXTURE_SEVERITY_SCORE_FAST'];
+List<Tag>? _skinHealthTags = [];
+int? avgOfTags ; 
+
+
   void invokeMethodCallHandler() {
     channel.setMethodCallHandler(handleMethod);
   }
@@ -50,6 +55,24 @@ String? tipsStr;
       Future.delayed(const Duration(seconds: 16), () async {
         dynamic tagResultsData = await homeRepository.getTagResults(imageId);
         tagResults = TagResults.fromJson(tagResultsData);
+
+_skinHealthTags = tagResults?.tags?.where((element) {
+  return _tagsForSkinHealth.contains(element.tagName);
+},).toList();
+
+  // int sumOfAges = filteredPeople.fold(0, (sum, person) => sum + person["age"]);
+int? sumOfTags = _skinHealthTags?.fold(0, (sum,tag)=> (sum ?? 0) + int.parse(tag.tagValues?.firstWhere((combineVal){
+  return combineVal.valueName == 'Combined';
+}).value ?? '0') );
+
+ avgOfTags = (((sumOfTags ?? 0)/6).toInt()/5 * 100).toInt();
+
+print("avg of tags hhhhhhhh $avgOfTags");
+
+// List<Map<String, dynamic>> filteredPeople = people.where((person) {
+//     return allowedAges.contains(person["age"]);
+//   }).toList();
+
         _tempTag = tagResults?.tags?.firstWhere(
           (tag) {
             return tag.tagName == "WEATHER";

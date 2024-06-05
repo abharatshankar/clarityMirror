@@ -197,8 +197,8 @@ class ViewController: UIViewController {
         widgetConfig.isCaptureButtonDisplayed = false
         widgetConfig.analyzeImage = false
         widgetConfig.resultsRightPane = true//self.controlSelectionView?.configarray[2]
-        widgetConfig.isGalleryOption = true//self.controlSelectionView?.configarray[0]
-        widgetConfig.isFlipCamera = true//self.controlSelectionView?.configarray[1]
+        widgetConfig.isGalleryOption = false//self.controlSelectionView?.configarray[0]
+        widgetConfig.isFlipCamera = false//self.controlSelectionView?.configarray[1]
         widgetConfig.isInstructionScreenDisplay = false//self.controlSelectionView?.configarray[3]
         
         //Set resources to widget
