@@ -5,7 +5,6 @@ import 'package:clarity_mirror/models/tag_results_model.dart';
 import 'package:clarity_mirror/repository/home_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:logger/logger.dart';
 
 class DashboardViewModel extends ChangeNotifier {
@@ -15,6 +14,14 @@ class DashboardViewModel extends ChangeNotifier {
   final homeRepository = HomeRepository();
   TagResults? tagResults;
   List<SkinConcernModel> skinConcernList = [];
+Tag? _tempTag;
+String? temperatureStr;
+Tag? _uvTag;
+String? uvIndexTxt;
+
+Tag? _pollutionTag;
+String? pollutionLevelStr;
+String? tipsStr;
 
 
   void invokeMethodCallHandler() {
@@ -26,15 +33,7 @@ class DashboardViewModel extends ChangeNotifier {
       case 'onCaptureSuccess':
         String imagePath = call.arguments as String;
         await convertImageAndMakeApiCall(imagePath);
-        Fluttertoast.showToast(
-          msg: imagePath,
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.black,
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
+        
         capturedImagePath = imagePath;
         print('Captured image in notifier: $capturedImagePath');
         notifyListeners();
@@ -45,21 +44,79 @@ class DashboardViewModel extends ChangeNotifier {
   }
 
   Future<void> convertImageAndMakeApiCall(String imagePath) async {
-
     try {
       String base64Image = await encodeImageToBase64(imagePath);
       dynamic imageId = await homeRepository.getTagsAsync(base64Image);
-      Future.delayed(const Duration(seconds: 16), () async{
+      Future.delayed(const Duration(seconds: 16), () async {
         dynamic tagResultsData = await homeRepository.getTagResults(imageId);
         tagResults = TagResults.fromJson(tagResultsData);
+        _tempTag = tagResults?.tags?.firstWhere(
+          (tag) {
+            return tag.tagName == "WEATHER";
+          },
+        );
+        TagValue? tempTagValue = _tempTag?.tagValues?.firstWhere((tagValue) {
+          return tagValue.valueName == 'TEMPARATURE_C';
+        });
+        temperatureStr = tempTagValue?.value;
+
+
+        _uvTag =  tagResults?.tags?.firstWhere(
+          (tag) {
+            return tag.tagName == "UVINDEX";
+          },
+        );
+        TagValue? uvTagValue = _uvTag?.tagValues?.firstWhere((tagValue) {
+          return tagValue.valueName == 'Category';
+        });
+        uvIndexTxt = uvTagValue?.value;
+
+
+        _pollutionTag =  tagResults?.tags?.firstWhere(
+          (tag) {
+            return tag.tagName == "POLLUTION_AQI";
+          },
+        );
+        TagValue? pollutionTagValue = _pollutionTag?.tagValues?.firstWhere((tagValue) {
+          return tagValue.valueName == 'AirPollutionLevel';
+        });
+        pollutionLevelStr = pollutionTagValue?.value;
+
+        TagValue? tipsTagValue = _pollutionTag?.tagValues?.firstWhere((tagValue) {
+          return tagValue.valueName == 'HealthImplications';
+        });
+        tipsStr = tipsTagValue?.value;
         // logger.d('Tags data: ${tagResults?.tags?.length} & Message: ${tagResults?.message}');
-        logger.d('Tags info: Pending count is -> ${tagResults?.pendingTagCount} & Processed count is: ${tagResults?.processedTagCount}');
+        logger.d(
+            'Tags info: Pending count is -> ${tagResults?.pendingTagCount} & Processed count is: ${tagResults?.processedTagCount}');
+      notifyListeners();
       });
-      notifyListeners(); /// updating the data to controller
+      
+
+      /// updating the data to controller
     } catch (e) {
       logger.e(e.toString());
     }
   }
+
+  String calculateUVindexLevel(String? uvLevel){
+    String uvLevelStr = '';
+    if(uvLevel != null ){
+      if(int.parse(uvLevel) > 0 && int.parse(uvLevel) <3){
+        uvLevelStr = "Low";
+      }else if(int.parse(uvLevel) ==3 || int.parse(uvLevel) ==4 || int.parse(uvLevel) ==5 ){
+        uvLevelStr = "Moderate";
+      }else if(int.parse(uvLevel) ==7 || int.parse(uvLevel) ==6){
+        uvLevelStr = "High";
+      }else if(int.parse(uvLevel) ==8 || int.parse(uvLevel) ==9|| int.parse(uvLevel) ==10){
+        uvLevelStr = "Very High";
+      }else if(int.parse(uvLevel) >= 11 ){
+        uvLevelStr = "Very High";
+      }
+      
+    }
+    return uvLevelStr;
+  } 
 
   getSkinConcernResults() {
     /// clearing the exiting skinConcernList data

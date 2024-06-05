@@ -2,11 +2,10 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:another_flushbar/flushbar_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class Utils {
 // ! It contains all the utilities which help you in your project
-  static const platform = const MethodChannel('camera_ai_channel');
+  static const platform = MethodChannel('camera_ai_channel');
 
   static void changeNodeFocus(BuildContext context,
       {FocusNode? current, FocusNode? next}) {
@@ -14,13 +13,7 @@ class Utils {
     FocusScope.of(context).requestFocus(next);
   }
 
-  static toastMessage(String message) {
-    Fluttertoast.showToast(
-      msg: message,
-      backgroundColor: Colors.black,
-      textColor: Colors.white,
-    );
-  }
+  
 
   static void flushBarErrorMessage(String message, BuildContext context) {
     showFlushbar(

@@ -3,14 +3,12 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:ui' as ui;
 
-import 'package:clarity_mirror/repository/home_repository.dart';
 import 'package:clarity_mirror/utils/app_colors.dart';
 import 'package:clarity_mirror/utils/app_fonts.dart';
 import 'package:clarity_mirror/view/tabbar_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:clarity_mirror/viewModel/splash_service.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:logger/logger.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 

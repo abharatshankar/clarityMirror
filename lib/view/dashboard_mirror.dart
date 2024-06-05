@@ -36,40 +36,66 @@ class _DashboardMirrorState extends State<DashboardMirror> {
           child: Scaffold(
             backgroundColor: AppConstColors.themeBackgroundColor,
             body: Platform.isAndroid
-                ? Column(
-              children: <Widget>[
-                Expanded(
-                  child: PlatformViewLink(
-                    viewType: 'com.example.clarity_mirror/my_native_view',
-                    surfaceFactory: (BuildContext context,
-                        PlatformViewController controller) {
-                      if (controller is AndroidViewController) {
-                        return AndroidViewSurface(
-                          controller: controller,
-                          gestureRecognizers: const <Factory<
-                              OneSequenceGestureRecognizer>>{},
-                          hitTestBehavior: PlatformViewHitTestBehavior.opaque,
-                        );
-                      }
-                      return Container();
-                    },
-                    onCreatePlatformView:
-                        (PlatformViewCreationParams params) {
-                      return PlatformViewsService.initSurfaceAndroidView(
-                        id: params.id,
+                ? SingleChildScrollView(
+                  child: Column(
+                                children: <Widget>[
+                  Stack(children: [
+                    Positioned(
+                  
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height * 0.85,
+                      child: PlatformViewLink(
                         viewType: 'com.example.clarity_mirror/my_native_view',
-                        layoutDirection: TextDirection.ltr,
-                        creationParams: null,
-                        creationParamsCodec: const StandardMessageCodec(),
-                      )
-                        ..addOnPlatformViewCreatedListener(
-                            params.onPlatformViewCreated)
-                        ..create();
-                    },
+                        surfaceFactory: (BuildContext context,
+                            PlatformViewController controller) {
+                          if (controller is AndroidViewController) {
+                            return AndroidViewSurface(
+                              controller: controller,
+                              gestureRecognizers: const <Factory<
+                                  OneSequenceGestureRecognizer>>{},
+                              hitTestBehavior: PlatformViewHitTestBehavior.opaque,
+                            );
+                          }
+                          return Container();
+                        },
+                        onCreatePlatformView:
+                            (PlatformViewCreationParams params) {
+                          return PlatformViewsService.initSurfaceAndroidView(
+                            id: params.id,
+                            viewType: 'com.example.clarity_mirror/my_native_view',
+                            layoutDirection: TextDirection.ltr,
+                            creationParams: null,
+                            creationParamsCodec: const StandardMessageCodec(),
+                          )
+                            ..addOnPlatformViewCreatedListener(
+                                params.onPlatformViewCreated)
+                            ..create();
+                        },
+                      ),
+                    ),
                   ),
+                  
+                    goliveButton(),
+                       dashboardViewModel.temperatureStr != null ? tempratureText(dashboardViewModel.temperatureStr) : const SizedBox(),
+                       dashboardViewModel.uvIndexTxt != null ? tempIndexTxt(tempIndexStatus: "uv index ${dashboardViewModel.uvIndexTxt}") : const SizedBox(),
+                        humidityStatus(humidityStr: "Humidity low"),
+                        // gradientContainer(),
+                       dashboardViewModel.pollutionLevelStr != null ? pollutionStatus(pollutionStr: dashboardViewModel.pollutionLevelStr ?? '') : Positioned(left: 10,
+                        bottom: MediaQuery.of(context).size.height * 0.05,child: const SizedBox(),),
+                       dashboardViewModel.tipsStr != null ? ideaIconAndTxt(dashboardViewModel.tipsStr) : const Positioned(
+                        left: 5,
+      bottom: 0,
+                        child: SizedBox(),),
+                        excersiceWidget(),
+                        percentageCircle(),
+                  ],),
+                  
+                  
+                  
+                                ],
+                              ),
                 )
-              ],
-            )
                 : SingleChildScrollView(
               child: Column(
                 children: [
@@ -90,15 +116,19 @@ class _DashboardMirrorState extends State<DashboardMirror> {
                           ),
                         ),
                       ),
-                      // goliveButton(),
-                      // tempratureText('24'),
-                      // tempIndexTxt(tempIndexStatus: "uv index high"),
-                      // humidityStatus(humidityStr: "Humidity low"),
+                      goliveButton(),
+                     dashboardViewModel.temperatureStr != null ? tempratureText(dashboardViewModel.temperatureStr) : const SizedBox(),
+                     dashboardViewModel.uvIndexTxt != null ? tempIndexTxt(tempIndexStatus: "uv index ${dashboardViewModel.uvIndexTxt}") : const SizedBox(),
+                      humidityStatus(humidityStr: "Humidity low"),
                       // gradientContainer(),
-                      // pollutionStatus(pollutionStr: "Cloudy"),
-                      // ideaIconAndTxt(),
-                      // excersiceWidget(),
-                      // percentageCircle(),
+                     dashboardViewModel.pollutionLevelStr != null ? pollutionStatus(pollutionStr: dashboardViewModel.pollutionLevelStr ?? '') : Positioned(left: 10,
+                      bottom: MediaQuery.of(context).size.height * 0.05,child: const SizedBox(),),
+                      dashboardViewModel.tipsStr != null ? ideaIconAndTxt(dashboardViewModel.tipsStr) : const Positioned(
+                        left: 5,
+      bottom: 0,
+                        child: SizedBox(),),
+                      excersiceWidget(),
+                      percentageCircle(),
                     ],
                   ),
                 ],
@@ -195,7 +225,7 @@ class _DashboardMirrorState extends State<DashboardMirror> {
     );
   }
 
-  Widget tempratureText(String temp) {
+  Widget tempratureText(String? temp) {
     return Positioned(
         right: 15,
         top: MediaQuery.of(context).size.height * 0.05,
@@ -250,7 +280,7 @@ class _DashboardMirrorState extends State<DashboardMirror> {
     );
   }
 
-  Widget ideaIconAndTxt() {
+  Widget ideaIconAndTxt(String? tipsString) {
     return Positioned(
       left: 5,
       bottom: 0,
@@ -264,7 +294,8 @@ class _DashboardMirrorState extends State<DashboardMirror> {
             width: 10,
           ),
           Text(
-            "keep your skin hyderated",
+            tipsString ?? '',
+            overflow: TextOverflow.fade,
             style: AppFonts()
                 .sego18normal
                 .copyWith(color: const Color.fromARGB(255, 255, 147, 7)),
