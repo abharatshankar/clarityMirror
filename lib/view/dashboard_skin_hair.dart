@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:clarity_mirror/models/tag_results_model.dart';
 import 'package:clarity_mirror/viewModel/dashboard_viewmodel.dart';
@@ -56,7 +58,7 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height - 90,
-                      child: Image.asset(
+                      child: dashboardViewModel.capturedImagePath != null ? Image.file(File(dashboardViewModel.capturedImagePath!),fit: BoxFit.cover,) : Image.asset(
                         "assets/images/Dermatolgist6.png",
                         fit: BoxFit.cover,
                       ),
