@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:buttons_tabbar/buttons_tabbar.dart';
+import 'package:clarity_mirror/models/skin_concern_model.dart';
 import 'package:clarity_mirror/models/tag_results_model.dart';
 import 'package:clarity_mirror/viewModel/dashboard_viewmodel.dart';
 import 'package:flutter/material.dart';
