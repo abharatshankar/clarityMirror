@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:clarity_mirror/models/skin_concern_model.dart';
 import 'package:clarity_mirror/models/tag_results_model.dart';
 import 'package:clarity_mirror/repository/home_repository.dart';
+import 'package:clarity_mirror/utils/btbp_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
@@ -184,27 +186,17 @@ class DashboardViewModel extends ChangeNotifier {
   getSkinConcernResults() {
     /// clearing the exiting skinConcernList data
     skinConcernList.clear();
-    List scoreTags = [
-      "ACNE_SEVERITY_SCORE_FAST",
-      "SPOTS_SEVERITY_SCORE_FAST",
-      "REDNESS_SEVERITY_SCORE_FAST",
-      "WRINKLES_SEVERITY_SCORE_FAST",
-      "DEHYDRATION_SEVERITY_SCORE_FAST",
-      "DARK_CIRCLES_SEVERITY_SCORE_FAST",
-      "UNEVEN_SKINTONE_SEVERITY_SCORE_FAST",
-      "PORES_SEVERITY_SCORE_FAST",
-      "SHININESS_SEVERITY_SCORE_FAST",
-      "LIP_ROUGHNESS_SEVERITY_SCORE_FAST",
-      "ELASTICITY",
-      "FIRMNESS",
-      "TEXTURE_SEVERITY_SCORE_FAST"
-    ];
+
+    List scoreTags = BTBPConstants.scoreTags;
+    List imageTags = BTBPConstants.imageTags;
+    logger.d('Actual Score Tags Length: ${scoreTags.length}');
     tagResults?.tags?.forEach((Tag tag) {
       SkinConcernModel skinConcernModel = SkinConcernModel();
+      /// adding the skin concerns to the list based on [scoreTags] list
       if (scoreTags.contains(tag.tagName)) {
         String? tagName = tag.tagName;
-        skinConcernModel.setTagName = tagName?.split('_').first ?? 'N/A';
-        skinConcernModel.setTagImage = tag.tagImage;
+        skinConcernModel.setTagName = getTagName(tagName);
+        skinConcernModel.setActualTagName = tag.tagName;
         tag.tagValues?.forEach((TagValue tagValue) {
           if (tagValue.valueName!.contains('Combined')) {
             skinConcernModel.setTagScore = int.parse(tagValue.value ?? '0');
@@ -229,45 +221,84 @@ class DashboardViewModel extends ChangeNotifier {
           }
         });
       }
+
     });
+
     logger.d('Final Tag REsults: ${skinConcernList.length}');
   }
 
+  String getTagImage(String tagName) {
+
+    return '';
+  }
+  /// Get tag title based on the tag name
+  String getTagName(String? tagName) {
+    logger.d('Tag Title Name: $tagName');
+    switch (tagName) {
+      case "ACNE_SEVERITY_SCORE_FAST":
+        return 'Acne';
+      case "SPOTS_SEVERITY_SCORE_FAST":
+        return 'Pigmentation';
+      case "REDNESS_SEVERITY_SCORE_FAST":
+        return 'Redness';
+      case "WRINKLES_SEVERITY_SCORE_FAST":
+        return 'Wrinkles';
+      case "DEHYDRATION_SEVERITY_SCORE_FAST":
+        return 'Dehydration';
+      case "DARK_CIRCLES_SEVERITY_SCORE_FAST":
+        return 'Dark Circles';
+      case "UNEVEN_SKINTONE_SEVERITY_SCORE_FAST":
+        return 'Uneven Skintone';
+      case "PORES_SEVERITY_SCORE_FAST":
+        return 'Pores';
+      case "SHININESS_SEVERITY_SCORE_FAST":
+        return 'Oiliness';
+      case "LIP_ROUGHNESS_SEVERITY_SCORE_FAST":
+        return 'Lip Health';
+      case "ELASTICITY":
+        return 'Elasticity';
+      case "FIRMNESS":
+        return 'Firmness';
+      case "TEXTURE_SEVERITY_SCORE_FAST":
+        return 'Texture';
+      default:
+        return 'N/A';
+    }
+  }
+
+  ///
   getHairData() {
-    List hairTags = [
-      "FACIALHAIRTYPE",
-      "HAIRLOSSLEVEL",
-      "HAIRTYPE",
-      "HAIRCOLOR",
-    ];
+    try {
+      Tag? hairColourTag = tagResults?.tags?.firstWhere(
+            (tag) {
+          return tag.tagName == BTBPConstants.hairColourTag;
+        },
+      );
+      hairColor = hairColourTag?.tagValues?.first.value;
 
-    Tag? hairColourTag = tagResults?.tags?.firstWhere(
-      (tag) {
-        return tag.tagName == "HAIRCOLOR";
-      },
-    );
-    hairColor = hairColourTag?.tagValues?.first.value;
+      Tag? hairTypeTag = tagResults?.tags?.firstWhere(
+            (tag) {
+          return tag.tagName == BTBPConstants.hairTypeTag;
+        },
+      );
+      hairType = hairTypeTag?.tagValues?.first.value;
 
-    Tag? hairTypeTag = tagResults?.tags?.firstWhere(
-      (tag) {
-        return tag.tagName == "HAIRTYPE";
-      },
-    );
-    hairType = hairTypeTag?.tagValues?.first.value;
+      Tag? hairLossLevelTag = tagResults?.tags?.firstWhere(
+            (tag) {
+          return tag.tagName == BTBPConstants.hairLossLevelTag;
+        },
+      );
+      hairLossLevel = hairLossLevelTag?.tagValues?.first.value;
 
-    Tag? hairLossLevelTag = tagResults?.tags?.firstWhere(
-      (tag) {
-        return tag.tagName == "HAIRLOSSLEVEL";
-      },
-    );
-    hairLossLevel = hairLossLevelTag?.tagValues?.first.value;
-
-    Tag? facialHairTypeTag = tagResults?.tags?.firstWhere(
-      (tag) {
-        return tag.tagName == "FACIALHAIRTYPE";
-      },
-    );
-    facialHairType = facialHairTypeTag?.tagValues?.first.value;
+      Tag? facialHairTypeTag = tagResults?.tags?.firstWhere(
+            (tag) {
+          return tag.tagName == BTBPConstants.facialHairTypeTag;
+        },
+      );
+      facialHairType = facialHairTypeTag?.tagValues?.first.value;
+    }catch(e,s){
+      logger.e('Exception: $e \n trace: $s');
+    }
   }
 
   Future<String> encodeImageToBase64(String filePath) async {
@@ -278,53 +309,5 @@ class DashboardViewModel extends ChangeNotifier {
     String base64Image = base64Encode(imageBytes);
 
     return base64Image;
-  }
-}
-
-class SkinConcernModel {
-  String? tagName;
-  int? tagScore;
-  double? tagPercentage;
-  String? tagImage;
-  String? tagType;
-
-  String? get getTagName {
-    return tagName;
-  }
-
-  set setTagName(String? name) {
-    tagName = name;
-  }
-
-  int? get getTagScore {
-    return tagScore;
-  }
-
-  set setTagScore(int? score) {
-    tagScore = score;
-  }
-
-  double? get getTagPercentage {
-    return tagPercentage;
-  }
-
-  set setTagPercentage(double? value) {
-    tagPercentage = value;
-  }
-
-  String? get getTagImage {
-    return tagName;
-  }
-
-  set setTagImage(String? image) {
-    tagImage = image;
-  }
-
-  String? get getTagType {
-    return tagType;
-  }
-
-  set setTagType(String? type) {
-    tagType = type;
   }
 }
