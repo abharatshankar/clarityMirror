@@ -59,22 +59,13 @@ class DashboardViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> convertImageAndMakeApiCall(String imagePath) async {
-    try {
-      String base64Image = await encodeImageToBase64(imagePath);
-      isLoading = true;
-      dynamic imageId = await homeRepository.getTagsAsync(base64Image);
-      Future.delayed(const Duration(seconds: 16), () async {
-        dynamic tagResultsData = await homeRepository.getTagResults(imageId);
-        tagResults = TagResults.fromJson(tagResultsData);
-
-        _skinHealthTags = tagResults?.tags?.where(
+   calculateHealthIndex() {
+      _skinHealthTags = tagResults?.tags?.where(
           (element) {
             return _tagsForSkinHealth.contains(element.tagName);
           },
         ).toList();
 
-        // int sumOfAges = filteredPeople.fold(0, (sum, person) => sum + person["age"]);
         int? sumOfTags = _skinHealthTags?.fold(
             0,
             (sum, tag) =>
@@ -85,14 +76,10 @@ class DashboardViewModel extends ChangeNotifier {
                     '0'));
 
         avgOfTags = (((sumOfTags ?? 0) / 6).toInt() / 5 * 100).toInt();
+  }
 
-        print("avg of tags hhhhhhhh $avgOfTags");
-
-// List<Map<String, dynamic>> filteredPeople = people.where((person) {
-//     return allowedAges.contains(person["age"]);
-//   }).toList();
-
-        _tempTag = tagResults?.tags?.firstWhere(
+  calculateTemperature(){
+     _tempTag = tagResults?.tags?.firstWhere(
           (tag) {
             return tag.tagName == "WEATHER";
           },
@@ -101,6 +88,9 @@ class DashboardViewModel extends ChangeNotifier {
           return tagValue.valueName == 'TEMPARATURE_C';
         });
         temperatureStr = tempTagValue?.value;
+  }
+
+  calculateUvIndex(){
 
         _uvTag = tagResults?.tags?.firstWhere(
           (tag) {
@@ -111,8 +101,11 @@ class DashboardViewModel extends ChangeNotifier {
           return tagValue.valueName == 'Category';
         });
         uvIndexTxt = uvTagValue?.value;
+  }
 
-        _pollutionTag = tagResults?.tags?.firstWhere(
+
+  calculatePollutionLevel(){
+    _pollutionTag = tagResults?.tags?.firstWhere(
           (tag) {
             return tag.tagName == "POLLUTION_AQI";
           },
@@ -122,12 +115,35 @@ class DashboardViewModel extends ChangeNotifier {
           return tagValue.valueName == 'AirPollutionLevel';
         });
         pollutionLevelStr = pollutionTagValue?.value;
+  }
+
+  calculateTips(){
 
         TagValue? tipsTagValue =
             _pollutionTag?.tagValues?.firstWhere((tagValue) {
           return tagValue.valueName == 'HealthImplications';
         });
         tipsStr = tipsTagValue?.value;
+  }
+
+  Future<void> convertImageAndMakeApiCall(String imagePath) async {
+    try {
+      String base64Image = await encodeImageToBase64(imagePath);
+      isLoading = true;
+      dynamic imageId = await homeRepository.getTagsAsync(base64Image);
+      Future.delayed(const Duration(seconds: 16), () async {
+        dynamic tagResultsData = await homeRepository.getTagResults(imageId);
+        tagResults = TagResults.fromJson(tagResultsData);
+
+       calculateHealthIndex();
+
+       calculateTemperature();
+
+       calculateUvIndex();
+
+       calculatePollutionLevel();
+
+       calculateTips();
         // logger.d('Tags data: ${tagResults?.tags?.length} & Message: ${tagResults?.message}');
         logger.d(
             'Tags info: Pending count is -> ${tagResults?.pendingTagCount} & Processed count is: ${tagResults?.processedTagCount}');

@@ -16,7 +16,7 @@ import SkinCareWidget
                  
              let customViewFactory = CustomViewFactory(messenger: controller.binaryMessenger)
             
-            registrar.register(customViewFactory, withId: "custom_view")
+             registrar.register(customViewFactory, withId: "custom_view")
          } else {
              print("no custom ")
 //             GeneratedPluginRegistrant.register(withRegistry: self)

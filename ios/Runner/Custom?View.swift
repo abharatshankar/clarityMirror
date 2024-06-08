@@ -16,27 +16,29 @@ class CustomViewController: NSObject, FlutterPlatformView {
     
     private var viewId: Int64 = 0
     private var frame: CGRect
-    private var viewController: ViewController?
+//    private var viewController: ViewController?
+    var viewController = ViewController.getInstance()
+
     var controlSelectionView: ControlView?
     
     init(withFrame frame: CGRect, viewIdentifier viewId: Int64, arguments args: Any?, binaryMessenger messenger: FlutterBinaryMessenger,flutterEngine: FlutterEngine) {
         self.frame = frame
         self.viewId = viewId
         super.init()
-        
-        createView()
+        createView(viewId: self.viewId )
    
     }
     
     
     func view() -> UIView {
 
-        return viewController?.view ?? UIView()
+        return ViewController.shared.view ?? UIView()
     }
     
-    private func createView() {
+    private func createView(viewId:Int64) {
   
-        viewController = ViewController()
+        viewController = ViewController.shared
+        
     }
 }
 
@@ -44,6 +46,7 @@ class CustomViewController: NSObject, FlutterPlatformView {
 
 class ViewController: UIViewController {
     
+    var viewIdentifier : Int64?
     let autoCaptureOnLabel = UILabel()
     var config = Configurations()
     var overlayControl : CameraOverLayControls?
@@ -73,6 +76,19 @@ class ViewController: UIViewController {
     var selectedTags: [String]?
     var widgetCurrentScreen : ScreenName?
     
+    static let shared = ViewController()
+        
+        // Step 2: Make the initializer private
+        private init() {
+            super.init(nibName: nil, bundle: nil)
+        }
+        
+        required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+    static func getInstance() -> ViewController {
+            return shared
+        }
     
     func infoForKey(_ key: String) -> String? {
         let value = Bundle.main.object(forInfoDictionaryKey: key) as! String
@@ -181,6 +197,43 @@ class ViewController: UIViewController {
             self.mainView?.isHidden = false
 //            self.overlayControl?.isHidden = false
         }
+    }
+    
+    
+    private func getUpdatedWidgetConfig() -> Configurations {
+        let widgetConfig  = Configurations()
+
+        //set Required tags for process
+        widgetConfig.btbpTags = self.btbpTags
+        widgetConfig.tags = self.selectedTags
+        
+        //Widget UI configurations
+        widgetConfig.resultsRightPane = false
+        widgetConfig.isInstructionScreenDisplay = false
+        widgetConfig.isAutoCapture = false
+        widgetConfig.isCaptureButtonDisplayed = false
+        widgetConfig.analyzeImage = false
+        widgetConfig.resultsRightPane = true//self.controlSelectionView?.configarray[2]
+        widgetConfig.isGalleryOption = false//self.controlSelectionView?.configarray[0]
+        widgetConfig.isFlipCamera = false//self.controlSelectionView?.configarray[1]
+        widgetConfig.isInstructionScreenDisplay = false//self.controlSelectionView?.configarray[3]
+        
+        //Set resources to widget
+        widgetConfig.instrScreenImages = [UIImage(named: "Instruction_1.png", in: Bundle(for: ViewController.self), compatibleWith: nil)!,
+                                         UIImage(named: "Instruction_2.png", in: Bundle(for: ViewController.self), compatibleWith: nil)!,
+                                         UIImage(named: "Instruction_3.png", in: Bundle(for: ViewController.self), compatibleWith: nil)!,
+                                         UIImage(named: "Instruction_4.png", in: Bundle(for: ViewController.self), compatibleWith: nil)!]
+        widgetConfig.instrScreenText = ["Remove Glasses",
+                                       "Remove Makeup",
+                                       "Pull your hair back",
+                                       "Align face correctly"]
+        widgetConfig.captureButtonImage = UIImage(named: "Capture_Icon.png", in: Bundle(for: ViewController.self), compatibleWith: nil)!
+        widgetConfig.flipCamButtonImage = UIImage(named: "Flip_Camera_Icon.png", in: Bundle(for: ViewController.self), compatibleWith: nil)!
+        widgetConfig.uploadButtonImage = UIImage(named: "Upload icon.png", in: Bundle(for: ViewController.self), compatibleWith: nil)!
+        widgetConfig.analyzeTickMark = UIImage(named: "ok.png", in: Bundle(for: ViewController.self), compatibleWith: nil)!
+        widgetConfig.retakeCrossMark = UIImage(named: "cancel.png", in: Bundle(for: ViewController.self), compatibleWith: nil)!
+        
+        return widgetConfig
     }
     
     private func getWidgetConfig() -> Configurations {
@@ -370,6 +423,7 @@ extension ViewController: CaptureScreenCallbacks {
 //        NotificationCenter.default.post(name: Notification.Name("NotificationIdentifier"), object: imageData.getBase64FromImage(image: imageData))
 //        uploadImage(config: self.config, serviceMager: serviceManager!, imageData: self.capturedImage!,tagsToAnalysed:tagsToAnalysed)
         
+        SkinCareWidget.skinCareWidget.updateConfig(newConfig: self.getUpdatedWidgetConfig())
         if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
               // Call the method from AppDelegate
             appDelegate.callFlutterFunction(message: self.getImagePath(for: self.capturedImage!)!)

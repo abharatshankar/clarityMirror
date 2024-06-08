@@ -50,16 +50,31 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
               child: Stack(
                 alignment: AlignmentDirectional.center,
                 children: [
+                  // Positioned(
+                  //   child: SizedBox(
+                  //     width: MediaQuery.of(context).size.width,
+                  //     height: MediaQuery.of(context).size.height - 110,
+                  //     child: dashboardViewModel.capturedImagePath != null ? Image.file(File(dashboardViewModel.capturedImagePath!),fit: BoxFit.cover,) : Image.asset(
+                  //       "assets/images/Dermatolgist6.png",
+                  //       fit: BoxFit.cover,
+                  //     ),
+                  //   ),
+                  // ),
                   Positioned(
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height - 110,
-                      child: dashboardViewModel.capturedImagePath != null ? Image.file(File(dashboardViewModel.capturedImagePath!),fit: BoxFit.cover,) : Image.asset(
-                        "assets/images/Dermatolgist6.png",
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                height:
+                                    MediaQuery.of(context).size.height - 200,
+                                // child: Image.asset(
+                                //   "assets/images/Dermatolgist6.png",
+                                //   fit: BoxFit.cover,
+                                // ),
+                                child: UiKitView(
+                                  viewType: 'custom_view',
+                                  layoutDirection: TextDirection.ltr,
+                                ),
+                              ),
+                            ),
                   goliveButton(),
                   gradientContainer(),
                   skinHairTabs(),
