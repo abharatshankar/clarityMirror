@@ -10,6 +10,9 @@ import 'package:clarity_mirror/viewModel/user_view_model.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import 'utils/app_colors.dart';
+import 'viewModel/theme_provider.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -20,6 +23,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+       
+
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
       systemNavigationBarColor: Colors.black,
       statusBarColor: Colors.black, // Black color for the status bar
@@ -32,18 +37,31 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => UserViewModel()),
         ChangeNotifierProvider(create: (_) => HomeViewModel()),
         ChangeNotifierProvider(create: (_) => DashboardViewModel()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        navigatorKey: NavigationService.navigatorKey,
-        title: 'Clarity Mirror',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        // initialRoute: RouteNames.tabbarScreen,
-        onGenerateRoute: Routes.generateRoutes,
-        initialRoute: RouteNames.splashScreen,
+      child: ChangeNotifierProvider(
+        create: (context) => ThemeProvider(),
+        builder: (context, child) {
+           final themeProvider = Provider.of<ThemeProvider>(context);
+          return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          navigatorKey: NavigationService.navigatorKey,
+          title: 'Clarity Mirror',
+          // theme: ThemeData(
+          //   primarySwatch: Colors.blue,
+          // ),
+          themeMode: themeProvider.themeMode,
+          theme: lightTheme,
+        darkTheme: darkTheme,
+          // initialRoute: RouteNames.tabbarScreen,
+          onGenerateRoute: Routes.generateRoutes,
+          initialRoute: RouteNames.splashScreen,
+        );
+        },
+        
       ),
     );
   }
 }
+
+
