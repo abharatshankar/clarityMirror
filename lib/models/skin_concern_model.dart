@@ -1,6 +1,7 @@
 class SkinConcernModel {
   String? tagName;
   String? actualTagName;
+  String? actualTagImageName;
   int? tagScore;
   double? tagPercentage;
   String? tagImage;
@@ -20,6 +21,14 @@ class SkinConcernModel {
 
   set setActualTagName(String? name) {
     actualTagName = name;
+  }
+
+  String? get getActualTagImageName {
+    return actualTagImageName;
+  }
+
+  set setActualTagImageName(String? name) {
+    actualTagImageName = name;
   }
 
   int? get getTagScore {
