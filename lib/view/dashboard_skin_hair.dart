@@ -1,9 +1,19 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:before_after/before_after.dart';
 import 'package:buttons_tabbar/buttons_tabbar.dart';
+import 'package:clarity_mirror/models/skin_concern_model.dart';
 import 'package:clarity_mirror/models/tag_results_model.dart';
 import 'package:clarity_mirror/viewModel/dashboard_viewmodel.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_fonts.dart';
@@ -26,7 +36,8 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
   Widget build(BuildContext context) {
     return Consumer<DashboardViewModel>(
       builder: (context, dashboardViewModel, _) {
-
+        print('Selected TagImage Name ${dashboardViewModel.selectedTagImageModel?.tagName}');
+        print('Selected TagImage Value ${dashboardViewModel.selectedTagImageModel?.tagImage}');
       /*  print(
             'skin & hair tab - tags length: ${dashboardViewModel.tagResults?.tags?.length}');
         print(
@@ -50,41 +61,134 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
               child: Stack(
                 alignment: AlignmentDirectional.center,
                 children: [
-                  // Positioned(
-                  //   child: SizedBox(
-                  //     width: MediaQuery.of(context).size.width,
-                  //     height: MediaQuery.of(context).size.height - 110,
-                  //     child: dashboardViewModel.capturedImagePath != null ? Image.file(File(dashboardViewModel.capturedImagePath!),fit: BoxFit.cover,) : Image.asset(
-                  //       "assets/images/Dermatolgist6.png",
-                  //       fit: BoxFit.cover,
-                  //     ),
-                  //   ),
-                  // ),
-                  Positioned(
-                              child: SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                height:
-                                    MediaQuery.of(context).size.height - 200,
-                                // child: Image.asset(
-                                //   "assets/images/Dermatolgist6.png",
-                                //   fit: BoxFit.cover,
-                                // ),
-                                child: UiKitView(
-                                  viewType: 'custom_view',
-                                  layoutDirection: TextDirection.ltr,
-                                ),
-                              ),
-                            ),
+                  (dashboardViewModel.selectedTagImageModel != null && dashboardViewModel.selectedTagImageModel?.tagImage != null) ? SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height - 110,
+                    child: getImageCompareWidget(dashboardViewModel),
+                  ) : getOriginalImageWidget(dashboardViewModel),
                   goliveButton(),
                   gradientContainer(),
                   skinHairTabs(),
-                  tabPosition == 0 ? skinList(dashboardViewModel.tagResults?.tags) : hairResultWidget(),
+                  tabPosition == 0 ? skinList(dashboardViewModel) : hairResultWidget(),
                 ],
               ),
             ),
           ),
         );
       },
+    );
+  }
+
+  Widget getOriginalImageWidget(dashboardViewModel) {
+   return Positioned(
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height - 110,
+        child: dashboardViewModel.capturedImagePath != null ? Image.file(File(dashboardViewModel.capturedImagePath!),fit: BoxFit.cover,) : Image.asset(
+          "assets/images/Dermatolgist6.png",
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+
+  Widget getImageCompareWidget(DashboardViewModel dashboardViewModel) {
+    return Container(
+      // color: Colors.green,
+      height: MediaQuery.of(context).size.height,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: BeforeAfter(
+          value: dashboardViewModel.value,
+          // divisions: 4,
+          thumbWidth: 20.0,
+          // thumbColor: Colors.red,
+          trackColor: Colors.red,
+          trackWidth: 2,
+          // hideThumb: true,
+          hideThumb: false,
+          overlayColor: MaterialStateProperty.all(Colors.red),
+            thumbDecoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle),
+            before: Image.memory(
+            base64Decode(dashboardViewModel.selectedTagImageModel!.tagImage!),
+            width: double.infinity,
+            fit: BoxFit.fitWidth,
+          ),
+          // after: dashboardViewModel.getOriginalImage(context),
+          after: Image.memory(
+            base64Decode(dashboardViewModel.base64ThumbValue!),
+            width: double.infinity,
+            fit: BoxFit.fitWidth,
+          ),
+          direction: SliderDirection.horizontal,
+          onValueChanged: (value) {
+            // setState(() => this.value = value);
+            dashboardViewModel.onCompareValueChanged(value);
+          },
+        ),
+      ),
+    );
+  }
+
+  /// TODO: Handle android live cam error handling
+  Widget getAndroidCameraViewWidget() {
+    return Positioned(
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height:
+        MediaQuery.of(context).size.height * 0.85,
+        child: PlatformViewLink(
+          viewType:
+          'com.example.clarity_mirror/my_native_view',
+          surfaceFactory: (BuildContext context,
+              PlatformViewController controller) {
+            if (controller is AndroidViewController) {
+              return AndroidViewSurface(
+                controller: controller,
+                gestureRecognizers: const <Factory<
+                    OneSequenceGestureRecognizer>>{},
+                hitTestBehavior:
+                PlatformViewHitTestBehavior.opaque,
+              );
+            }
+            return Container();
+          },
+          onCreatePlatformView:
+              (PlatformViewCreationParams params) {
+            return PlatformViewsService
+                .initSurfaceAndroidView(
+              id: params.id,
+              viewType:
+              'com.example.clarity_mirror/my_native_view',
+              layoutDirection: TextDirection.ltr,
+              creationParams: null,
+              creationParamsCodec:
+              const StandardMessageCodec(),
+            )
+              ..addOnPlatformViewCreatedListener(
+                  params.onPlatformViewCreated)
+              ..create();
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget getIosCameraViewWidget() {
+    return Positioned(
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height:
+        MediaQuery.of(context).size.height - 200,
+        // child: Image.asset(
+        //   "assets/images/Dermatolgist6.png",
+        //   fit: BoxFit.cover,
+        // ),
+        child: UiKitView(
+          viewType: 'custom_view',
+          layoutDirection: TextDirection.ltr,
+        ),
+      ),
     );
   }
 
@@ -115,8 +219,9 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
       left: 0,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12),
-        child: SizedBox(
+        child: Container(
           width: MediaQuery.of(context).size.width,
+          // color: Colors.red,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -356,9 +461,9 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
     );
   }
 
-  Widget skinList(List<Tag>? tagResults) {
-    Provider.of<DashboardViewModel>(context).getSkinConcernResults();
-
+  Widget skinList(DashboardViewModel provider) {
+    // var provider = Provider.of<DashboardViewModel>(context, listen: true);
+    provider.getSkinConcernResults();
     return Positioned(
       left: 0,
       right: 0,
@@ -367,47 +472,52 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
         height: 120,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: Provider.of<DashboardViewModel>(context).skinConcernList.length,
+          itemCount: provider.skinConcernList.length,
           itemBuilder: (context, index) {
             // Tag? tagData = tagResults?.elementAt(index);
-            SkinConcernModel? skinConcern = Provider.of<DashboardViewModel>(context).skinConcernList.elementAt(index);
-            return Container(
-              margin: const EdgeInsets.symmetric(horizontal: 24.0),
-              padding: const EdgeInsets.only(top: 16),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: Text(
-                      '${skinConcern.getTagType}',
-                      // tagData?.tagName ?? '',
-                      overflow: TextOverflow.ellipsis,
-                      style:
-                      AppFonts().sego14normal.copyWith(color: Colors.white),
+            SkinConcernModel? skinConcern = provider.skinConcernList.elementAt(index);
+            return InkWell(
+              onTap: () {
+                provider.onSkinConcernTap(skinConcern);
+              },
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 24.0),
+                padding: const EdgeInsets.only(top: 16),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Text(
+                        '${skinConcern.getTagType}',
+                        // tagData?.tagName ?? '',
+                        overflow: TextOverflow.ellipsis,
+                        style:
+                        AppFonts().sego14normal.copyWith(color: Colors.white),
+                      ),
                     ),
-                  ),
-                  CircularPercentIndicator(
-                    radius: 20.0,
-                    lineWidth: 5.0,
-                    // percent: (skinConcern.getTagScore! * 20) / 100,
-                    percent: skinConcern.getTagPercentage ?? 0,
-                    center: Text("${skinConcern.getTagScore}",
-                        style: const TextStyle(
-                            color: AppConstColors.appThemeCayan)),
-                    progressColor: AppConstColors.appThemeCayan,
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: Text(
-                      // tagData?.tagName ?? 'N/A',
-                      skinConcern.getTagName ?? 'N/A',
-                      style: AppFonts().sego10bold,
+                    CircularPercentIndicator(
+                      radius: 20.0,
+                      lineWidth: 5.0,
+                      // percent: (skinConcern.getTagScore! * 20) / 100,
+                      percent: skinConcern.getTagPercentage ?? 0,
+                      center: Text("${skinConcern.getTagScore}",
+                          style: const TextStyle(
+                              color: AppConstColors.appThemeCayan)),
+                      progressColor: AppConstColors.appThemeCayan,
                     ),
-                  ),
-                  // Text(tagData?.tagValues?.length?.toString() ?? '0', style: TextStyle(color: Colors.white),),
 
-                ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Text(
+                        // tagData?.tagName ?? 'N/A',
+                        skinConcern.getTagName ?? 'N/A',
+                        style: AppFonts().sego10bold,
+                      ),
+                    ),
+                    // Text(tagData?.tagValues?.length?.toString() ?? '0', style: TextStyle(color: Colors.white),),
+
+                  ],
+                ),
               ),
             );
           },
