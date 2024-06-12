@@ -1,15 +1,16 @@
 import 'package:clarity_mirror/utils/app_colors.dart';
 import 'package:clarity_mirror/utils/app_strings.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
+import '../viewModel/tab_bar_provider.dart';
 import 'dashboard_beauty.dart';
 import 'dashboard_mirror.dart';
 import 'dashboard_more_menu.dart';
 import 'dashboard_skin_hair.dart';
 
 class TabsDemoScreen extends StatefulWidget {
-  int? tabPosition;
+  int? tabPosition = 0;
 
   TabsDemoScreen({super.key, this.tabPosition});
 
@@ -20,7 +21,7 @@ class TabsDemoScreen extends StatefulWidget {
 }
 
 class _TabsDemoScreenState extends State<TabsDemoScreen> {
-  late int currentTabIndex;
+  // late int currentTabIndex;
 
   List<Widget> tabs = [
     DashboardMirror(),
@@ -29,60 +30,69 @@ class _TabsDemoScreenState extends State<TabsDemoScreen> {
     const DashboardMoreMenu(),
   ];
 
-  onTapped(int index) {
-    setState(() {
-      currentTabIndex = index;
-      if (index == 0) {
-        // _startLoadCamera();
-      } else {
-        // _releaseCamera();
-      }
-    });
-  }
+  // onTapped(int index) {
+  //   setState(() {
+  //     currentTabIndex = index;
+  //     if (index == 0) {
+  //       // _startLoadCamera();
+  //     } else {
+  //       // _releaseCamera();
+  //     }
+  //   });
+  // }
 
   @override
   void initState() {
-    setState(() {
-      currentTabIndex = widget.tabPosition ?? 0;
-    });
+    // setState(() {
+    //   currentTabIndex = widget.tabPosition ?? 0;
+    // });
+    // Provider.of<TabControllerProvider>(context).setIndex(widget.tabPosition ?? 0);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: tabs[currentTabIndex],
-      bottomNavigationBar: Theme(
-        data: Theme.of(context).copyWith(
-            // sets the background color of the `BottomNavigationBar`
-            canvasColor: Colors.black,
-            // sets the active color of the `BottomNavigationBar` if `Brightness` is light
-            primaryColor: Colors.red,
-            textTheme: Theme.of(context).textTheme),
-        child: BottomNavigationBar(
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
+    return Consumer<TabControllerProvider>(
+      builder: (context, bottomNavigationBarProvider, _) {
+        return Scaffold(
           backgroundColor: Colors.black,
-          selectedItemColor: AppConstColors.appThemeCayan,
-          onTap: onTapped,
-          currentIndex: currentTabIndex,
-          items: [
-            tabWidget(
-                selectedIcon: AppStrings.mirrorSelected,
-                normalIcon: AppStrings.mirrorNormal),
-            tabWidget(
-                selectedIcon: AppStrings.beautySelected,
-                normalIcon: AppStrings.beautyNormal),
-            tabWidget(
-                selectedIcon: AppStrings.skinCareSelected,
-                normalIcon: AppStrings.skinCareNormal),
-            tabWidget(
-                selectedIcon: AppStrings.dashboardSelected,
-                normalIcon: AppStrings.dashboardNormal)
-          ],
-        ),
-      ),
+          body: tabs[bottomNavigationBarProvider.currentIndex],
+          bottomNavigationBar: Theme(
+            data: Theme.of(context).copyWith(
+                // sets the background color of the `BottomNavigationBar`
+                canvasColor: Colors.black,
+                // sets the active color of the `BottomNavigationBar` if `Brightness` is light
+                primaryColor: Colors.red,
+                textTheme: Theme.of(context).textTheme),
+            child: BottomNavigationBar(
+              showSelectedLabels: false,
+              showUnselectedLabels: false,
+              backgroundColor: Colors.black,
+              selectedItemColor: AppConstColors.appThemeCayan,
+              // onTap: onTapped,
+              // currentIndex: currentTabIndex,
+            currentIndex: bottomNavigationBarProvider.currentIndex,
+            onTap: (index) {
+              bottomNavigationBarProvider.setIndex(index);
+            },
+              items: [
+                tabWidget(
+                    selectedIcon: AppStrings.mirrorSelected,
+                    normalIcon: AppStrings.mirrorNormal),
+                tabWidget(
+                    selectedIcon: AppStrings.beautySelected,
+                    normalIcon: AppStrings.beautyNormal),
+                tabWidget(
+                    selectedIcon: AppStrings.skinCareSelected,
+                    normalIcon: AppStrings.skinCareNormal),
+                tabWidget(
+                    selectedIcon: AppStrings.dashboardSelected,
+                    normalIcon: AppStrings.dashboardNormal)
+              ],
+            ),
+          ),
+        );
+      }
     );
   }
 

@@ -11,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'utils/app_colors.dart';
+import 'viewModel/tab_bar_provider.dart';
 import 'viewModel/theme_provider.dart';
 
 void main() {
@@ -38,6 +39,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => HomeViewModel()),
         ChangeNotifierProvider(create: (_) => DashboardViewModel()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (context) => TabControllerProvider()),
+        
       ],
       child: ChangeNotifierProvider(
         create: (context) => ThemeProvider(),

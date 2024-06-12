@@ -108,8 +108,9 @@ class NetworkApiServices extends BaseApiServices {
       logger.i('Tag Results Response================>: ${responseData.toString()}');
     } on SocketException {
       throw InternetException("NO Internet is available right now");
-    } catch (e) {
+    } catch (e,s) {
       logger.e('Api Error: $e');
+      print(s);
     }
 
     return responseData;

@@ -28,9 +28,25 @@ class DashboardSkinHair extends StatefulWidget {
   State<DashboardSkinHair> createState() => _DashboardSkinHairState();
 }
 
-class _DashboardSkinHairState extends State<DashboardSkinHair> {
+class _DashboardSkinHairState extends State<DashboardSkinHair> with SingleTickerProviderStateMixin  {
+late TabController _tabController;
 
-  int tabPosition = 0;
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+  // int tabPosition = 0;
+
+  changeTab(){
+    _tabController.animateTo(1);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,11 +81,11 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height - 110,
                     child: getImageCompareWidget(dashboardViewModel),
-                  ) : getOriginalImageWidget(dashboardViewModel),
+                  ) :Platform.isAndroid ? getAndroidCameraViewWidget() : getIosCameraViewWidget(),
                   goliveButton(),
                   gradientContainer(),
-                  skinHairTabs(),
-                  tabPosition == 0 ? skinList(dashboardViewModel) : hairResultWidget(),
+                  skinHairTabs(dashboardViewModel),
+                  dashboardViewModel.tabPosition == 0 ? skinList(dashboardViewModel) : hairResultWidget(),
                 ],
               ),
             ),
@@ -311,7 +327,7 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
     );
   }
 
-  Widget skinHairTabs() {
+  Widget skinHairTabs(DashboardViewModel dashboardViewModel) {
     return Positioned(
       bottom: 110,
       child: Center(
@@ -324,6 +340,7 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
             child: Column(
               children: <Widget>[
                 ButtonsTabBar(
+                  controller: _tabController,
                   backgroundColor: AppConstColors.appThemeCayan,
                   unselectedBackgroundColor: Colors.blueGrey.shade700,
                   labelStyle: const TextStyle(
@@ -336,9 +353,10 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
                   ),
                   onTap: (index) {
                     print('tab position: $index');
-                    setState(() {
-                      tabPosition = index;
-                    });
+                    // setState(() {
+                    //   tabPosition = index;
+                    // });
+                    dashboardViewModel.setTabIndex(index);
                   },
                   radius: 100,
                   tabs: [
@@ -378,6 +396,29 @@ class _DashboardSkinHairState extends State<DashboardSkinHair> {
               ],
             ),
           ),
+          // child: TabBar(
+          //       controller: _tabController,
+          //       // give the indicator a decoration (color and border radius)
+          //       indicator: BoxDecoration(
+          //         borderRadius: BorderRadius.circular(
+          //           25.0,
+          //         ),
+          //         color: Colors.green,
+          //       ),
+          //       labelColor: Colors.white,
+          //       unselectedLabelColor: Colors.black,
+          //       tabs: [
+          //         // first tab [you can add an icon using the icon property]
+          //         Tab(
+          //           text: 'Place Bid',
+          //         ),
+
+          //         // second tab [you can add an icon using the icon property]
+          //         Tab(
+          //           text: 'Buy Now',
+          //         ),
+          //       ],
+          //     ),
         ),
       ),
     );

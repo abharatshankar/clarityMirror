@@ -5,12 +5,42 @@ import 'package:clarity_mirror/models/skin_concern_model.dart';
 import 'package:clarity_mirror/models/tag_results_model.dart';
 import 'package:clarity_mirror/repository/home_repository.dart';
 import 'package:clarity_mirror/utils/btbp_constants.dart';
-import 'package:clarity_mirror/utils/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 
 class DashboardViewModel extends ChangeNotifier {
+  int _tabPosition = 0;
+
+  int get tabPosition => _tabPosition;
+
+  void setTabIndex(int index) {
+    _tabPosition = index;
+    notifyListeners();
+  }
+
+// late final TabController _tabController;
+
+//   tabControllerProvider(int initialLength, TickerProvider vsync) {
+//     _tabController = TabController(length: initialLength, vsync: vsync);
+//   }
+
+//   TabController get tabController => _tabController;
+
+//   void dispose() {
+//     _tabController.dispose();
+//     super.dispose();
+//   }
+
+int _currentIndex = 0;
+
+  int get currentIndex => _currentIndex;
+
+  void setCurrentIndex(int index) {
+    _currentIndex = index;
+    notifyListeners();
+  }
+
   MethodChannel channel =
       const MethodChannel('com.example.clarity_mirror/mirror_channel');
   String? capturedImagePath;
@@ -201,8 +231,9 @@ class DashboardViewModel extends ChangeNotifier {
       });
 
       /// updating the data to controller
-    } catch (e) {
+    } catch (e,stackTrace) {
       logger.e(e.toString());
+      print(stackTrace);
       isLoading = false;
       notifyListeners();
     }

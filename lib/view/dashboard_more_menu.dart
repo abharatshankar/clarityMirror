@@ -2,8 +2,13 @@ import 'package:clarity_mirror/utils/app_fonts.dart';
 import 'package:clarity_mirror/utils/app_strings.dart';
 import 'package:clarity_mirror/utils/utils.dart';
 import 'package:clarity_mirror/view/settings_page.dart';
+import 'package:clarity_mirror/viewModel/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import '../viewModel/dashboard_viewmodel.dart';
+import '../viewModel/tab_bar_provider.dart';
+import 'dashboard_skin_hair.dart';
 import 'notification_screen.dart';
 import 'profile_page.dart';
 
@@ -69,6 +74,17 @@ class DashboardMoreMenu extends StatelessWidget {
                           }
                           if(index == 0) {
                             Utils.getNewActivity();
+                            Provider.of<TabControllerProvider>(context,listen: false).setIndex(1);
+                          }
+                          else if(index == 1){
+                            Provider.of<TabControllerProvider>(context,listen: false).setIndex(2);
+                            Provider.of<DashboardViewModel>(context,listen: false).setTabIndex(0);
+                          }
+                          else if(index == 2){
+                            Provider.of<TabControllerProvider>(context,listen: false).setIndex(2);
+                            Provider.of<DashboardViewModel>(context,listen: false).setTabIndex(1);
+// Provider.of<DashboardViewModel>(context,listen: false).setCurrentIndex(1);
+
                           }
                         },
                         child: GridItem(
