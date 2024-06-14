@@ -2,21 +2,35 @@ import 'package:clarity_mirror/utils/app_fonts.dart';
 import 'package:clarity_mirror/utils/app_strings.dart';
 import 'package:clarity_mirror/utils/utils.dart';
 import 'package:clarity_mirror/view/settings_page.dart';
-import 'package:clarity_mirror/viewModel/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../viewModel/dashboard_viewmodel.dart';
 import '../viewModel/tab_bar_provider.dart';
-import 'dashboard_skin_hair.dart';
 import 'notification_screen.dart';
 import 'profile_page.dart';
 
-class DashboardMoreMenu extends StatelessWidget {
+// class DashboardMoreMenu extends StatelessWidget {
+//   const DashboardMoreMenu({super.key});
+
+// }
+
+class DashboardMoreMenu extends StatefulWidget {
   const DashboardMoreMenu({super.key});
 
   @override
+  State<DashboardMoreMenu> createState() => _DashboardMoreMenuState();
+}
+
+class _DashboardMoreMenuState extends State<DashboardMoreMenu> with  AutomaticKeepAliveClientMixin {
+  
+@override
+  bool get wantKeepAlive => true;
+  
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.black,
     ));
@@ -25,80 +39,87 @@ class DashboardMoreMenu extends StatelessWidget {
         statusBarColor: Colors.black, // Set status bar color to black
       ),
       child: SafeArea(
-        child: Scaffold(
-          backgroundColor: Colors.black,
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: dashboardAppBar(context),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.15,
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.6,
-                  child: GridView.builder(
-                    itemCount: AppStrings.dashbordMoreMenuItems.length,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,
-                      childAspectRatio: 0.8,
-                      crossAxisSpacing: 6.0,
-                      mainAxisSpacing: 3.0,
+        child: 
+         Consumer<DashboardViewModel>(
+      builder: (context, dashboardViewModel, _) {
+            return Scaffold(
+              backgroundColor: Colors.black,
+              body: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: dashboardAppBar(context),
                     ),
-                    itemBuilder: (BuildContext context, int index) {
-                      return GestureDetector(
-                        onTap: () {
-                          if (index == 11) {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: ((context) => SearchableList(
-                                          items: [
-                                            AppStrings.accountSettings,
-                                            'NOTIFICATION SETTINGS',
-                                            'APPEARANCE',
-                                            'ADVANCED SETTINGS',
-                                            'HELP AND SUPPORT',
-                                            'ABOUT',
-                                          ],
-                                        ))));
-                          }
-                          if (index == 4) {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ProfilePage()));
-                          }
-                          if(index == 0) {
-                            Utils.getNewActivity();
-                            Provider.of<TabControllerProvider>(context,listen: false).setIndex(1);
-                          }
-                          else if(index == 1){
-                            Provider.of<TabControllerProvider>(context,listen: false).setIndex(2);
-                            Provider.of<DashboardViewModel>(context,listen: false).setTabIndex(0);
-                          }
-                          else if(index == 2){
-                            Provider.of<TabControllerProvider>(context,listen: false).setIndex(2);
-                            Provider.of<DashboardViewModel>(context,listen: false).setTabIndex(1);
-// Provider.of<DashboardViewModel>(context,listen: false).setCurrentIndex(1);
-
-                          }
-                        },
-                        child: GridItem(
-                          itemImage:
-                              'assets/images/${AppStrings.dashbordMoreMenuItems[index]}.png',
-                          itemName: AppStrings.dashbordMoreMenuItems[index],
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.15,
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.6,
+                      child: GridView.builder(
+                        itemCount: AppStrings.dashbordMoreMenuItems.length,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 4,
+                          childAspectRatio: 0.8,
+                          crossAxisSpacing: 6.0,
+                          mainAxisSpacing: 3.0,
                         ),
-                      );
-                    },
-                  ),
+                        itemBuilder: (BuildContext context, int index) {
+                          return GestureDetector(
+                            onTap: () {
+                              if (index == 11) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: ((context) => SearchableList(
+                                              items: [
+                                                AppStrings.accountSettings,
+                                                'NOTIFICATION SETTINGS',
+                                                'APPEARANCE',
+                                                'ADVANCED SETTINGS',
+                                                'HELP AND SUPPORT',
+                                                'ABOUT',
+                                              ],
+                                            ))));
+                              }
+                              if (index == 4) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ProfilePage()));
+                              }
+                              if(index == 0) {
+                                Utils.getNewActivity();
+                                Provider.of<TabControllerProvider>(context,listen: false).setIndex(1);
+                              }
+                              else if(index == 1){
+                                Provider.of<TabControllerProvider>(context,listen: false).setIndex(2);
+                                dashboardViewModel.setTabIndex(0);
+                                dashboardViewModel.setCurrentIndex(0);
+            
+                              }
+                              else if(index == 2){
+                                Provider.of<TabControllerProvider>(context,listen: false).setIndex(2);
+                                dashboardViewModel.setTabIndex(1);
+                                dashboardViewModel.setCurrentIndex(1);
+            
+                              }
+                            },
+                            child: GridItem(
+                              itemImage:
+                                  'assets/images/${AppStrings.dashbordMoreMenuItems[index]}.png',
+                              itemName: AppStrings.dashbordMoreMenuItems[index],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
+              ),
+            );
+          }
         ),
       ),
     );
@@ -177,6 +198,7 @@ class DashboardMoreMenu extends StatelessWidget {
                   ),
                 );
   }
+
 }
 
 class GridItem extends StatelessWidget {

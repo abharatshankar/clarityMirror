@@ -56,7 +56,10 @@ class _TabsDemoScreenState extends State<TabsDemoScreen> {
       builder: (context, bottomNavigationBarProvider, _) {
         return Scaffold(
           backgroundColor: Colors.black,
-          body: tabs[bottomNavigationBarProvider.currentIndex],
+          body: bottomNavigationBarProvider.currentIndex == 0 ? tabs[bottomNavigationBarProvider.currentIndex] :
+          IndexedStack(index:bottomNavigationBarProvider.currentIndex ,children: tabs,),
+                    // body: tabs[bottomNavigationBarProvider.currentIndex],
+
           bottomNavigationBar: Theme(
             data: Theme.of(context).copyWith(
                 // sets the background color of the `BottomNavigationBar`

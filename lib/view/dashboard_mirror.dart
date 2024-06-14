@@ -18,7 +18,7 @@ class DashboardMirror extends StatefulWidget {
   State<DashboardMirror> createState() => _DashboardMirrorState();
 }
 
-class _DashboardMirrorState extends State<DashboardMirror> {
+class _DashboardMirrorState extends State<DashboardMirror> with AutomaticKeepAliveClientMixin {
 
   @override
   void initState() {
@@ -26,7 +26,11 @@ class _DashboardMirrorState extends State<DashboardMirror> {
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Consumer<DashboardViewModel>(
       builder: (context, dashboardViewModel, _) {
         /// Handle the method call and return the image path and calling api after getting image

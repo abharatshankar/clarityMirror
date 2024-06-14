@@ -15,7 +15,7 @@ import SkinCareWidget
                                                              binaryMessenger: controller.binaryMessenger)
                  
              let customViewFactory = CustomViewFactory(messenger: controller.binaryMessenger)
-            
+            print("--- - ---- -")
              registrar.register(customViewFactory, withId: "custom_view")
          } else {
              print("no custom ")

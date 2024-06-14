@@ -4,16 +4,12 @@ import 'dart:io';
 import 'package:before_after/before_after.dart';
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:clarity_mirror/models/skin_concern_model.dart';
-import 'package:clarity_mirror/models/tag_results_model.dart';
 import 'package:clarity_mirror/viewModel/dashboard_viewmodel.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_fonts.dart';
@@ -28,28 +24,40 @@ class DashboardSkinHair extends StatefulWidget {
   State<DashboardSkinHair> createState() => _DashboardSkinHairState();
 }
 
-class _DashboardSkinHairState extends State<DashboardSkinHair> with SingleTickerProviderStateMixin  {
+class _DashboardSkinHairState extends State<DashboardSkinHair> with SingleTickerProviderStateMixin , AutomaticKeepAliveClientMixin  {
 late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+     WidgetsBinding.instance.addPostFrameCallback((_) {
+      final notifier = Provider.of<DashboardViewModel>(context, listen: false);
+      notifier.addListener(_handleTabChange);
+    });
   }
 
   @override
   void dispose() {
+    final notifier = Provider.of<DashboardViewModel>(context, listen: false);
+    notifier.removeListener(_handleTabChange);
     _tabController.dispose();
     super.dispose();
   }
   // int tabPosition = 0;
-
-  changeTab(){
-    _tabController.animateTo(1);
+@override
+  bool get wantKeepAlive => true;
+  
+  void _handleTabChange() {
+    
+    final notifier = Provider.of<DashboardViewModel>(context, listen: false);
+    print("tabbb barrrrrrr ${notifier.currentIndex}");
+    _tabController.animateTo(notifier.currentIndex);
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Consumer<DashboardViewModel>(
       builder: (context, dashboardViewModel, _) {
         print('Selected TagImage Name ${dashboardViewModel.selectedTagImageModel?.tagName}');
@@ -77,6 +85,11 @@ late TabController _tabController;
               child: Stack(
                 alignment: AlignmentDirectional.center,
                 children: [
+                  dashboardViewModel.featureRecogImage ? SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height - 110,
+                    child: getImageCompareWidget(dashboardViewModel),
+                  ) :
                   (dashboardViewModel.selectedTagImageModel != null && dashboardViewModel.selectedTagImageModel?.tagImage != null) ? SizedBox(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height - 110,
@@ -327,6 +340,8 @@ late TabController _tabController;
     );
   }
 
+
+
   Widget skinHairTabs(DashboardViewModel dashboardViewModel) {
     return Positioned(
       bottom: 110,
@@ -357,6 +372,7 @@ late TabController _tabController;
                     //   tabPosition = index;
                     // });
                     dashboardViewModel.setTabIndex(index);
+                    dashboardViewModel.setCurrentIndex(index);
                   },
                   radius: 100,
                   tabs: [
@@ -520,10 +536,12 @@ late TabController _tabController;
             return InkWell(
               onTap: () {
                 provider.onSkinConcernTap(skinConcern);
+                provider.updateSkinIndex(index);
               },
               child: Container(
                 margin: const EdgeInsets.symmetric(horizontal: 24.0),
                 padding: const EdgeInsets.only(top: 16),
+                decoration: BoxDecoration(color: Colors.white.withOpacity(0.1)),
                 child: Column(
                   children: [
                     Padding(

@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:clarity_mirror/models/skin_concern_model.dart';
 import 'package:clarity_mirror/models/tag_results_model.dart';
 import 'package:clarity_mirror/repository/home_repository.dart';
@@ -32,7 +31,7 @@ class DashboardViewModel extends ChangeNotifier {
 //     super.dispose();
 //   }
 
-int _currentIndex = 0;
+  int _currentIndex = 0;
 
   int get currentIndex => _currentIndex;
 
@@ -63,7 +62,7 @@ int _currentIndex = 0;
   String? facialHairType;
   bool isLoading = false;
 
-  List<String> _tagsForSkinHealth = [
+  static const List<String> _tagsForSkinHealth = [
     'ACNE_SEVERITY_SCORE_FAST',
     'SPOTS_SEVERITY_SCORE_FAST',
     'REDNESS_SEVERITY_SCORE_FAST',
@@ -324,6 +323,16 @@ int _currentIndex = 0;
     /// Set the selected tag name & selected tag original image
   }
 
+
+int _selectedSkinIndex = 0;
+
+  int get selectedSkinIndex => _selectedSkinIndex;
+
+  updateSkinIndex(int index){
+    _selectedSkinIndex = index;
+    notifyListeners();
+  }
+
   onSkinConcernTap(SkinConcernModel? concern) {
     try {
       selectedTagImageModel = null; /// Resetting the [selectedTagImageModel] for updating the UI Original Image if not match the tags
@@ -381,7 +390,7 @@ int _currentIndex = 0;
     }
   }
 
-  ///
+
   getHairData() {
     try {
       Tag? hairColourTag = tagResults?.tags?.firstWhere(
@@ -428,6 +437,16 @@ int _currentIndex = 0;
 
   onCompareValueChanged(updatedValue) {
     value = updatedValue;
+    notifyListeners();
+  }
+
+
+bool _featureRecogImage = false;
+
+  bool get featureRecogImage => _featureRecogImage;
+// user can change option in advanced settings to show feature recognization image to be shown or live camera 
+  showFeatureRecogImage({required bool showImage}){
+    _featureRecogImage = showImage;
     notifyListeners();
   }
 }

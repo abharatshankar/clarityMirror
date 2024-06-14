@@ -27,11 +27,11 @@ class TagResults {
 
   factory TagResults.fromJson(Map<String, dynamic> json) => TagResults(
     timeStamp: json["TimeStamp"] == null ? null : DateTime.parse(json["TimeStamp"]),
-    imageId: json["ImageID"],
-    message: json["Message"],
-    tags: json["Tags"] == null ? [] : List<Tag>.from(json["Tags"]!.map((x) => Tag.fromJson(x))),
-    processedTagCount: json["ProcessedTagCount"],
-    pendingTagCount: json["PendingTagCount"],
+    imageId: json["ImageID"] ?? '',
+    message: json["Message"] ?? '',
+    tags: json["Tags"] == null ? [] : List<Tag>.from(json["Tags"].map((x) => Tag.fromJson(x))),
+    processedTagCount: json["ProcessedTagCount"] ?? 0,
+    pendingTagCount: json["PendingTagCount"] ?? 0,
   );
 
   Map<String, dynamic> toJson() => {
