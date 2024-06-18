@@ -1,5 +1,6 @@
 import 'package:clarity_mirror/utils/app_colors.dart';
 import 'package:clarity_mirror/utils/app_strings.dart';
+import 'package:clarity_mirror/viewModel/dashboard_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -76,7 +77,12 @@ class _TabsDemoScreenState extends State<TabsDemoScreen> {
               // currentIndex: currentTabIndex,
             currentIndex: bottomNavigationBarProvider.currentIndex,
             onTap: (index) {
-              bottomNavigationBarProvider.setIndex(index);
+              if(Provider.of<DashboardViewModel>(context,listen: false).selectedTagImageModel?.tagImage != null && index == 2){
+                bottomNavigationBarProvider.setIndex(index);
+              }else if(index == 0 || index == 1 || index == 3){
+                bottomNavigationBarProvider.setIndex(index);
+              }
+              
             },
               items: [
                 tabWidget(

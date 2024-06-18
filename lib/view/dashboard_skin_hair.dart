@@ -24,7 +24,7 @@ class DashboardSkinHair extends StatefulWidget {
   State<DashboardSkinHair> createState() => _DashboardSkinHairState();
 }
 
-class _DashboardSkinHairState extends State<DashboardSkinHair> with SingleTickerProviderStateMixin , AutomaticKeepAliveClientMixin  {
+class _DashboardSkinHairState extends State<DashboardSkinHair> with SingleTickerProviderStateMixin   {
 late TabController _tabController;
 
   @override
@@ -39,14 +39,11 @@ late TabController _tabController;
 
   @override
   void dispose() {
-    final notifier = Provider.of<DashboardViewModel>(context, listen: false);
-    notifier.removeListener(_handleTabChange);
+    // final notifier = Provider.of<DashboardViewModel>(context, listen: false);
+    // notifier.removeListener(_handleTabChange);
     _tabController.dispose();
     super.dispose();
   }
-  // int tabPosition = 0;
-@override
-  bool get wantKeepAlive => true;
   
   void _handleTabChange() {
     
@@ -57,7 +54,6 @@ late TabController _tabController;
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return Consumer<DashboardViewModel>(
       builder: (context, dashboardViewModel, _) {
         print('Selected TagImage Name ${dashboardViewModel.selectedTagImageModel?.tagName}');
@@ -113,7 +109,7 @@ late TabController _tabController;
       child: SizedBox(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height - 110,
-        child: dashboardViewModel.capturedImagePath != null ? Image.file(File(dashboardViewModel.capturedImagePath!),fit: BoxFit.cover,) : Image.asset(
+        child: dashboardViewModel.capturedImagePath != null ? Image.file(File(dashboardViewModel.capturedImagePath),fit: BoxFit.cover,) : Image.asset(
           "assets/images/Dermatolgist6.png",
           fit: BoxFit.cover,
         ),
@@ -122,7 +118,7 @@ late TabController _tabController;
   }
 
   Widget getImageCompareWidget(DashboardViewModel dashboardViewModel) {
-    return Container(
+    return SizedBox(
       // color: Colors.green,
       height: MediaQuery.of(context).size.height,
       child: ClipRRect(
@@ -136,8 +132,9 @@ late TabController _tabController;
           trackWidth: 2,
           // hideThumb: true,
           hideThumb: false,
-          overlayColor: MaterialStateProperty.all(Colors.red),
-            thumbDecoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle),
+          overlayColor: WidgetStateProperty.all(Colors.white),
+            thumbDecoration: const BoxDecoration( shape: BoxShape.circle,image: DecorationImage(image: ExactAssetImage('assets/images/Progress.png'),
+            fit: BoxFit.fill,)),
             before: Image.memory(
             base64Decode(dashboardViewModel.selectedTagImageModel!.tagImage!),
             width: double.infinity,

@@ -46,6 +46,7 @@ dependencies:
   animated_segmented_tab_control: ^2.0.0
   logger: ^2.3.0
   before_after: ^3.0.0+1
+  fl_chart: ^0.68.0
 
 dev_dependencies:
   flutter_test:

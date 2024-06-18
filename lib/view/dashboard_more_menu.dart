@@ -1,6 +1,7 @@
 import 'package:clarity_mirror/utils/app_fonts.dart';
 import 'package:clarity_mirror/utils/app_strings.dart';
 import 'package:clarity_mirror/utils/utils.dart';
+import 'package:clarity_mirror/view/progress_page.dart';
 import 'package:clarity_mirror/view/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -104,6 +105,11 @@ class _DashboardMoreMenuState extends State<DashboardMoreMenu> with  AutomaticKe
                                 dashboardViewModel.setTabIndex(1);
                                 dashboardViewModel.setCurrentIndex(1);
             
+                              }else if (index == 3){
+                                 Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const ProgressPage()));
                               }
                             },
                             child: GridItem(

@@ -25,7 +25,7 @@ class _ProfilePageState extends State<ProfilePage> {
               SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: 56,
-                child: const CustomAppBar(titleTxt: "Profile",),
+                child: const CustomAppBar(titleTxt: "Profile",showNotificationIcon: true,),
               ),
               seperatorLine(),
               const SizedBox(

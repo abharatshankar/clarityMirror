@@ -423,7 +423,8 @@ extension ViewController: CaptureScreenCallbacks {
 //        NotificationCenter.default.post(name: Notification.Name("NotificationIdentifier"), object: imageData.getBase64FromImage(image: imageData))
 //        uploadImage(config: self.config, serviceMager: serviceManager!, imageData: self.capturedImage!,tagsToAnalysed:tagsToAnalysed)
         
-        SkinCareWidget.skinCareWidget.updateConfig(newConfig: self.getUpdatedWidgetConfig())
+//        SkinCareWidget.skinCareWidget.updateConfig(newConfig: self.getUpdatedWidgetConfig())
+        SkinCareWidget.skinCareWidget.stopCamera()
         if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
               // Call the method from AppDelegate
             appDelegate.callFlutterFunction(message: self.getImagePath(for: self.capturedImage!)!)

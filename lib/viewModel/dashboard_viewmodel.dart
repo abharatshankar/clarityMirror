@@ -101,7 +101,7 @@ class DashboardViewModel extends ChangeNotifier {
           (element) {
             return _tagsForSkinHealth.contains(element.tagName);
           },
-        ).toList();
+        ).toList() ?? [];
 
         int? sumOfTags = _skinHealthTags?.fold(
             0,
@@ -112,7 +112,7 @@ class DashboardViewModel extends ChangeNotifier {
                     }).value ??
                     '0'));
 
-        avgOfTags = (((sumOfTags ?? 0) / 6).toInt() / 5 * 100).toInt();
+        avgOfTags = ((sumOfTags ?? 0) ~/ 6 / 5 * 100).toInt();
   }
 
   getOriginalThumbImage() {
@@ -203,11 +203,14 @@ class DashboardViewModel extends ChangeNotifier {
 
   Future<void> convertImageAndMakeApiCall(String imagePath) async {
     try {
+            isLoading = true;
       String base64Image = await encodeImageToBase64(imagePath);
-      isLoading = true;
       dynamic imageId = await homeRepository.getTagsAsync(base64Image);
       Future.delayed(const Duration(seconds: 16), () async {
         dynamic tagResultsData = await homeRepository.getTagResults(imageId);
+        if(tagResultsData == null){
+          isLoading = false;
+        }   
         tagResults = TagResults.fromJson(tagResultsData);
 
        calculateHealthIndex();

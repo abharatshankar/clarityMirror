@@ -5,9 +5,10 @@ import '../utils/app_strings.dart';
 import 'notification_screen.dart';
 
 class CustomAppBar extends StatelessWidget {
-  const CustomAppBar({super.key, required this.titleTxt});
+  const CustomAppBar({super.key, required this.titleTxt, this.showNotificationIcon = false});
 
   final String titleTxt;
+  final bool showNotificationIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class CustomAppBar extends StatelessWidget {
                       titleTxt,
                       style: AppFonts().sego32normal),
                     const Spacer(),
-                    GestureDetector(
+                   showNotificationIcon ? GestureDetector(
                         onTap: () {
                           Navigator.push(
                               context,
@@ -42,7 +43,7 @@ class CustomAppBar extends StatelessWidget {
                           Icons.notifications,
                           size: 40,
                           color: Colors.white,
-                        ))
+                        )) : const SizedBox()
                   ],
                 );
   }

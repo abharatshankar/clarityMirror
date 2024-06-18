@@ -17,13 +17,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return Scaffold(
       backgroundColor: AppConstColors.editProfileBtnColor,
       body: SafeArea(
-      
       child: SingleChildScrollView(
         child: Column(children: [
           SizedBox(
                   width: MediaQuery.of(context).size.width,
                   height: 56,
-                  child: const CustomAppBar(titleTxt: "Edit Profile",),
+                  child: const CustomAppBar(titleTxt: "Edit Profile",showNotificationIcon: true,),
                 ),
         profilePic(),
         editProfileBody(context),
