@@ -88,19 +88,19 @@ class _DashboardMoreMenuState extends State<DashboardMoreMenu> with  AutomaticKe
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => ProfilePage()));
+                                        builder: (context) => const ProfilePage()));
                               }
                               if(index == 0) {
                                 Utils.getNewActivity();
                                 Provider.of<TabControllerProvider>(context,listen: false).setIndex(1);
                               }
-                              else if(index == 1){
+                              else if(index == 1 && dashboardViewModel.skinConcernList.isNotEmpty && dashboardViewModel.featureRecogImage){
                                 Provider.of<TabControllerProvider>(context,listen: false).setIndex(2);
                                 dashboardViewModel.setTabIndex(0);
                                 dashboardViewModel.setCurrentIndex(0);
             
                               }
-                              else if(index == 2){
+                              else if(index == 2 && dashboardViewModel.skinConcernList.isNotEmpty && dashboardViewModel.featureRecogImage){
                                 Provider.of<TabControllerProvider>(context,listen: false).setIndex(2);
                                 dashboardViewModel.setTabIndex(1);
                                 dashboardViewModel.setCurrentIndex(1);

@@ -84,17 +84,17 @@ late TabController _tabController;
                   dashboardViewModel.featureRecogImage ? SizedBox(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height - 110,
-                    child: getImageCompareWidget(dashboardViewModel),
-                  ) :
-                  (dashboardViewModel.selectedTagImageModel != null && dashboardViewModel.selectedTagImageModel?.tagImage != null) ? SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height - 110,
-                    child: getImageCompareWidget(dashboardViewModel),
+                    child: (dashboardViewModel.selectedTagImageModel != null && dashboardViewModel.selectedTagImageModel?.tagImage != null) ? SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height - 110,
+                      child: getImageCompareWidget(dashboardViewModel),
+                    ) : getOriginalImageWidget(dashboardViewModel)
                   ) :Platform.isAndroid ? getAndroidCameraViewWidget() : getIosCameraViewWidget(),
                   goliveButton(),
                   gradientContainer(),
-                  skinHairTabs(dashboardViewModel),
-                  dashboardViewModel.tabPosition == 0 ? skinList(dashboardViewModel) : hairResultWidget(),
+                 dashboardViewModel.featureRecogImage ? skinHairTabs(dashboardViewModel): SizedBox.shrink(),
+                  dashboardViewModel.featureRecogImage ?
+                  (dashboardViewModel.tabPosition == 0 ? skinList(dashboardViewModel) : hairResultWidget()): SizedBox.shrink(),
                 ],
               ),
             ),
@@ -132,7 +132,7 @@ late TabController _tabController;
           trackWidth: 2,
           // hideThumb: true,
           hideThumb: false,
-          overlayColor: WidgetStateProperty.all(Colors.white),
+          // overlayColor: WidgetStateProperty.all(Colors.white),
             thumbDecoration: const BoxDecoration( shape: BoxShape.circle,image: DecorationImage(image: ExactAssetImage('assets/images/Progress.png'),
             fit: BoxFit.fill,)),
             before: Image.memory(
@@ -536,6 +536,7 @@ late TabController _tabController;
                 provider.updateSkinIndex(index);
               },
               child: Container(
+                width: 70,
                 margin: const EdgeInsets.symmetric(horizontal: 24.0),
                 padding: const EdgeInsets.only(top: 16),
                 decoration: BoxDecoration(color: Colors.white.withOpacity(0.1)),

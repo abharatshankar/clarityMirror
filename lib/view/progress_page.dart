@@ -35,6 +35,21 @@ class _ProgressPageState extends State<ProgressPage> {
                         ),
               ),
             ),
+            Row(children: [Column(children: [const Text('Low'),Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Container(
+                width: 15,height: 15,
+                decoration: const BoxDecoration(color: Colors.red,shape: BoxShape.circle),
+                ),
+            )],),
+            Column(children: [const Text('Low-Moderate'),Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Container(
+                width: 15,height: 15,
+                decoration: const BoxDecoration(color: Colors.orange,shape: BoxShape.circle),
+                ),
+            )],),],),
+            
             // Stack(
             //   children: <Widget>[
             //     AspectRatio(
@@ -121,49 +136,39 @@ class _ProgressPageState extends State<ProgressPage> {
     switch (value.toInt()) {
        
       case 2:
-        text =  Container(
-          child: Column(children: [
-            Text('Oct 4'),
-            Image.asset("assets/images/Dermatolgist6.png",height: 60,width:40,fit: BoxFit.fitHeight,),
-            Text('21%'),
-          ],),
-        );
+        text =  Column(children: [
+          Text('Oct 4'),
+          Image.asset("assets/images/Dermatolgist6.png",height: 60,width:40,fit: BoxFit.fitHeight,),
+          Text('21%'),
+        ],);
         break;
       case 5:
-        text =  Container(
-          child: Column(children: [
-            Text('Oct 4'),
-            Image.asset("assets/images/Dermatolgist6.png",height: 60,width:40,fit: BoxFit.fitHeight,),
-            Text('35%'),
-          ],),
-        );
+        text =  Column(children: [
+          Text('Oct 4'),
+          Image.asset("assets/images/Dermatolgist6.png",height: 60,width:40,fit: BoxFit.fitHeight,),
+          Text('35%'),
+        ],);
         break;
       case 8:
-        text =  Container(
-          child: Column(children: [
-            Text('Oct 4'),
-            Image.asset("assets/images/Dermatolgist6.png",height: 60,width:40,fit: BoxFit.fitHeight,),
-            Text('38%'),
-          ],),
-        );
+        text =  Column(children: [
+          Text('Oct 4'),
+          Image.asset("assets/images/Dermatolgist6.png",height: 60,width:40,fit: BoxFit.fitHeight,),
+          Text('38%'),
+        ],);
         break;
       case 11:
-        text =  Container(
-          child: Column(children: [
-            Text('Oct 4'),
-            Image.asset("assets/images/Dermatolgist6.png",height: 60,width:40,fit: BoxFit.fitHeight,),
-            Text('32%'),
-          ],),
-        );
+        text =  Column(children: [
+          Text('Oct 4'),
+          Image.asset("assets/images/Dermatolgist6.png",height: 60,width:40,fit: BoxFit.fitHeight,),
+          Text('32%'),
+        ],);
         break;
       case 13:
-        text =  Container(
-          child: Column(children: [
-            Text('Oct 4'),
-            Image.asset("assets/images/Dermatolgist6.png",height: 60,width:40,fit: BoxFit.fitHeight,),
-            Text('32%'),
-          ],),
-        );
+        text =  Column(children: [
+          Text('Oct 4'),
+          Image.asset("assets/images/Dermatolgist6.png",height: 60,width:40,fit: BoxFit.fitHeight,),
+          Text('32%'),
+        ],);
         break;
       default:
         text = const Text('', style: style);
@@ -253,7 +258,7 @@ class _ProgressPageState extends State<ProgressPage> {
       borderData: FlBorderData(
         show: true,
         border: Border.all(
-          color: const Color(0xff37434d)
+          color: Colors.transparent//const Color(0xff37434d)
           ),
       ),
       minX: 0,
@@ -334,7 +339,7 @@ class _ProgressPageState extends State<ProgressPage> {
           ),
         ),
         topTitles: AxisTitles(
-          axisNameWidget: Icon(Icons.abc,color: Colors.white,),
+          axisNameWidget: const Icon(Icons.abc,color: Colors.white,),
           sideTitles: SideTitles(
             showTitles: true,
             reservedSize: 30,

@@ -77,7 +77,7 @@ class _TabsDemoScreenState extends State<TabsDemoScreen> {
               // currentIndex: currentTabIndex,
             currentIndex: bottomNavigationBarProvider.currentIndex,
             onTap: (index) {
-              if(Provider.of<DashboardViewModel>(context,listen: false).selectedTagImageModel?.tagImage != null && index == 2){
+              if(Provider.of<DashboardViewModel>(context,listen: false).capturedImagePath != null && index == 2 && Provider.of<DashboardViewModel>(context,listen: false).skinConcernList.isNotEmpty){
                 bottomNavigationBarProvider.setIndex(index);
               }else if(index == 0 || index == 1 || index == 3){
                 bottomNavigationBarProvider.setIndex(index);

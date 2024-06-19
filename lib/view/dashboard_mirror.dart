@@ -158,23 +158,17 @@ class _DashboardMirrorState extends State<DashboardMirror> with AutomaticKeepAli
             alignment: AlignmentDirectional.center,
             children: [
               Positioned(
-                child: Container(
-                  color: Colors.green,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height:
-                      MediaQuery.of(context).size.height * 0.85,
-                      // child: Image.asset(
-                      //   "assets/images/Dermatolgist6.png",
-                      //   fit: BoxFit.cover,
-                      // ),
-                      child: UiKitView(
-                        viewType: 'custom_view',
-                        layoutDirection: TextDirection.ltr,
-                      ),
-                    ),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height:
+                  MediaQuery.of(context).size.height * 0.85,
+                  // child: Image.asset(
+                  //   "assets/images/Dermatolgist6.png",
+                  //   fit: BoxFit.cover,
+                  // ),
+                  child: UiKitView(
+                    viewType: 'custom_view',
+                    layoutDirection: TextDirection.ltr,
                   ),
                 ),
               ),

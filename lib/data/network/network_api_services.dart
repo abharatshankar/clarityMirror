@@ -93,7 +93,7 @@ class NetworkApiServices extends BaseApiServices {
     dynamic responseData;
     try {
       Map<String, dynamic> requestBody = {
-        'APIKey': 'PORP-UDGU-KVMG-6TLM',
+        'APIKey': 'PORP-UDGU-KVMG-6TLM',//CV8T-ZTNE-6UYR-MT39
         'ImageId': imageId,
       };
       var encodedData = json.encode(requestBody);
@@ -103,7 +103,7 @@ class NetworkApiServices extends BaseApiServices {
             "https://gserver1.btbp.org/deeptag/AppService.svc/getTagResults"),
         body: encodedData,
         headers: {"Content-type": "application/json", "Accept": "*/*"},
-      ).timeout(const Duration(seconds: 40));
+      );
       responseData = responseJson(response);
       logger.i('Tag Results Response================>: ${responseData.toString()}');
     } on SocketException {
