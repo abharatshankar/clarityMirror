@@ -29,7 +29,7 @@ class AppBarWithMoreButton extends StatelessWidget {
                     ),
                     Text(
                       titleTxt,
-                      style: AppFonts().sego32normal),
+                      style: AppFonts().sego18bold),
                     const Spacer(),
                     GestureDetector(
                         onTap: () {

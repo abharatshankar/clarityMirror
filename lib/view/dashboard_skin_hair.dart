@@ -83,10 +83,7 @@ late TabController _tabController;
                 dashboardViewModel.featureRecogImage ? SizedBox(
                   // height: MediaQuery.of(context).size.height * 0.7.h,
                   child: (dashboardViewModel.selectedTagImageModel != null && dashboardViewModel.selectedTagImageModel?.tagImage != null) ? SizedBox(
-                    // width: MediaQuery.of(context).size.width,
-                    // height: MediaQuery.of(context).size.height * 0.668.h,
                     height: MediaQuery.of(context).size.height ,
-                    
                     child: getImageCompareWidget(dashboardViewModel),
                   ) : getOriginalImageWidget(dashboardViewModel)
                 ) :Platform.isAndroid ? getAndroidCameraViewWidget() : getIosCameraViewWidget(),
@@ -106,10 +103,10 @@ late TabController _tabController;
   Widget getOriginalImageWidget(dashboardViewModel) {
    return Align(
       child: Container(
-        color: Colors.red,
+        // color: Colors.red,
         width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height ,
-        child: dashboardViewModel.capturedImagePath != null ? Image.file(File(dashboardViewModel.capturedImagePath),fit: BoxFit.fitHeight,) : Image.asset(
+        height: MediaQuery.of(context).size.height,
+        child: dashboardViewModel.capturedImagePath != null ? Image.file(File(dashboardViewModel.capturedImagePath),fit: BoxFit.cover,) : Image.asset(
           "assets/images/Dermatolgist6.png",
           fit: BoxFit.cover,
         ),
@@ -119,38 +116,43 @@ late TabController _tabController;
 
   Widget getImageCompareWidget(DashboardViewModel dashboardViewModel) {
     return Container(
-      color: Colors.green,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: BeforeAfter(
-          value: dashboardViewModel.value,
-          // divisions: 4,
-          thumbWidth: 20.0,
-          // thumbColor: Colors.red,
-          trackColor: Colors.red,
-          trackWidth: 2,
-          // hideThumb: true,
-          hideThumb: false,
-          // overlayColor: WidgetStateProperty.all(Colors.white),
-            thumbDecoration: const BoxDecoration( shape: BoxShape.circle,image: DecorationImage(image: ExactAssetImage('assets/images/Progress.png'),
-            fit: BoxFit.fill,)),
-            before: Image.memory(
-            base64Decode(dashboardViewModel.selectedTagImageModel!.tagImage!),
-            width: double.infinity,
-            fit: BoxFit.fitWidth,
-          ),
-          // after: dashboardViewModel.getOriginalImage(context),
-          after: Image.memory(
-            base64Decode(dashboardViewModel.base64ThumbValue!),
-            width: double.infinity,
-            fit: BoxFit.fitWidth,
-          ),
-          direction: SliderDirection.horizontal,
-          onValueChanged: (value) {
-            // setState(() => this.value = value);
-            dashboardViewModel.onCompareValueChanged(value);
-          },
+      // color: Colors.green,
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      child: BeforeAfter(
+        value: dashboardViewModel.value,
+        // divisions: 4,
+        thumbWidth: 20.0,
+        // thumbColor: Colors.red,
+        trackColor: Colors.red,
+        trackWidth: 2,
+        // hideThumb: true,
+        hideThumb: false,
+        // overlayColor: WidgetStateProperty.all(Colors.white),
+          thumbDecoration: const BoxDecoration( shape: BoxShape.circle,image: DecorationImage(image: ExactAssetImage('assets/images/Progress.png'),
+          fit: BoxFit.fill,)),
+          before: Image.memory(
+          base64Decode(dashboardViewModel.selectedTagImageModel!.tagImage!),
+          fit: BoxFit.fill,
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          gaplessPlayback: true,
+            scale: 0.5,
+          // cacheWidth: int.parse(MediaQuery.of(context).size.width.toString()),
+          // cacheHeight: int.parse(MediaQuery.of(context).size.height.toString()),
         ),
+        after: Image.memory(
+          base64Decode(dashboardViewModel.base64ThumbValue!),
+          fit: BoxFit.fill,
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          gaplessPlayback: true,
+          scale: 0.5,
+        ),
+        direction: SliderDirection.horizontal,
+        onValueChanged: (value) {
+          dashboardViewModel.onCompareValueChanged(value);
+        },
       ),
     );
   }
@@ -161,7 +163,7 @@ late TabController _tabController;
       child: SizedBox(
         width: MediaQuery.of(context).size.width,
         height:
-        MediaQuery.of(context).size.height * 0.85,
+        MediaQuery.of(context).size.height * 0.86.h,
         child: PlatformViewLink(
           viewType:
           'com.example.clarity_mirror/my_native_view',
@@ -526,6 +528,7 @@ late TabController _tabController;
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: provider.skinConcernList.length,
+          padding: const EdgeInsets.only(left: 24),
           itemBuilder: (context, index) {
             // Tag? tagData = tagResults?.elementAt(index);
             SkinConcernModel? skinConcern = provider.skinConcernList.elementAt(index);
@@ -535,20 +538,22 @@ late TabController _tabController;
                 provider.updateSkinIndex(index);
               },
               child: Container(
-                
-                width: 80.w,
-                margin: const EdgeInsets.only(right: 24.0),
-                padding: const EdgeInsets.only(top: 16),
-                decoration: BoxDecoration(color: Colors.white.withOpacity(0.1),borderRadius: BorderRadius.circular(16)),
+                width: 85.w,
+                margin: const EdgeInsets.only(right: 24.0, top: 16),
+                alignment: Alignment.center,
+                // padding: const EdgeInsets.only(top: 16),
+                decoration: provider.selectedSkinConcern == skinConcern ? BoxDecoration(color: Colors.white.withOpacity(0.1),borderRadius: BorderRadius.circular(16)) : null,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(bottom: 5),
+                      margin: const EdgeInsets.only(bottom: 8),
                       child: Text(
                         '${skinConcern.getTagType}',
                         // tagData?.tagName ?? '',
                         maxLines: 1,
-                        overflow: TextOverflow.fade,
+                        overflow: TextOverflow.ellipsis,
                         style:
                         AppFonts().sego14normal.copyWith(color: Colors.white,fontSize: 12),
                       ),
@@ -565,15 +570,15 @@ late TabController _tabController;
                     ),
 
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      padding: const EdgeInsets.only(top: 8),
                       child: Text(
                         // tagData?.tagName ?? 'N/A',
                         skinConcern.getTagName ?? 'N/A',
                         style: AppFonts().sego10bold,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    // Text(tagData?.tagValues?.length?.toString() ?? '0', style: TextStyle(color: Colors.white),),
-
                   ],
                 ),
               ),
@@ -590,7 +595,7 @@ late TabController _tabController;
     return Positioned(
       left: 0,
       right: 0,
-      bottom: -10,
+      bottom: 0,
       child: SizedBox(
         height: 120,
         child: ListView(
@@ -611,7 +616,6 @@ late TabController _tabController;
   Widget getHairTagDataWidget({String? title, int? value, String? type}) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 24.0),
-      padding: const EdgeInsets.only(top: 16),
       child: Column(
         children: [
           Padding(

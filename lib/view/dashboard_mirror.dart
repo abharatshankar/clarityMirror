@@ -7,6 +7,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import '../utils/app_strings.dart';
 import '../utils/custom_circle.dart';
@@ -57,7 +58,7 @@ class _DashboardMirrorState extends State<DashboardMirror> with AutomaticKeepAli
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width,
                   height:
-                  MediaQuery.of(context).size.height * 0.85,
+                  MediaQuery.of(context).size.height * 0.73.h,
                   child: PlatformViewLink(
                     viewType:
                     'com.example.clarity_mirror/my_native_view',
@@ -372,6 +373,8 @@ class _DashboardMirrorState extends State<DashboardMirror> with AutomaticKeepAli
       left: 5,
       bottom: 0,
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Icon(
             Icons.lightbulb_outlined,

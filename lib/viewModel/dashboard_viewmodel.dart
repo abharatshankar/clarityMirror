@@ -317,6 +317,15 @@ class DashboardViewModel extends ChangeNotifier {
         }
       }
     });
+
+    /// TO highlight & set the default selection in the skin concern list as 0 position
+    if(skinConcernList.isNotEmpty) {
+      selectedSkinConcern = skinConcernList.elementAt(0);
+    }
+    /// To set the default comparison image
+    if(tagImageList.isNotEmpty) {
+      selectedTagImageModel = tagImageList.elementAt(0);
+    }
     // logger.d('Final Tag REsults: ${skinConcernList.length}');
     // logger.d('Final Tag Image Results: ${tagImageList.length}');
 
@@ -331,6 +340,7 @@ class DashboardViewModel extends ChangeNotifier {
 int _selectedSkinIndex = 0;
 
   int get selectedSkinIndex => _selectedSkinIndex;
+  SkinConcernModel? selectedSkinConcern;
 
   updateSkinIndex(int index){
     _selectedSkinIndex = index;
@@ -339,6 +349,7 @@ int _selectedSkinIndex = 0;
 
   onSkinConcernTap(SkinConcernModel? concern) {
     try {
+      selectedSkinConcern = concern;
       selectedTagImageModel = null; /// Resetting the [selectedTagImageModel] for updating the UI Original Image if not match the tags
       for(int i = 0; i<tagImageList.length; i++) {
         String? imageTagName = tagImageList[i].tagName?.split('_').first;
