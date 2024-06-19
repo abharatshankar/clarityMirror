@@ -225,6 +225,7 @@ class DashboardViewModel extends ChangeNotifier {
 
         // getOriginalImage(NavigationService.navigatorKey.currentContext!);
         getOriginalThumbImage();
+        getSkinConcernResults();
         // logger.d('Tags data: ${tagResults?.tags?.length} & Message: ${tagResults?.message}');
         logger.d(
             'Tags info: Pending count is -> ${tagResults?.pendingTagCount} & Processed count is: ${tagResults?.processedTagCount}');

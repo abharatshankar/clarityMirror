@@ -8,6 +8,7 @@ import 'package:clarity_mirror/viewModel/auth_viewmodel.dart';
 import 'package:clarity_mirror/viewModel/home_view_model.dart';
 import 'package:clarity_mirror/viewModel/user_view_model.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import 'utils/app_colors.dart';
@@ -46,20 +47,25 @@ class MyApp extends StatelessWidget {
         create: (context) => ThemeProvider(),
         builder: (context, child) {
            final themeProvider = Provider.of<ThemeProvider>(context);
-          return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          navigatorKey: NavigationService.navigatorKey,
-          title: 'Clarity Mirror',
-          // theme: ThemeData(
-          //   primarySwatch: Colors.blue,
-          // ),
-          themeMode: themeProvider.themeMode,
-          theme: lightTheme,
-        darkTheme: darkTheme,
-          // initialRoute: RouteNames.tabbarScreen,
-          onGenerateRoute: Routes.generateRoutes,
-          initialRoute: RouteNames.splashScreen,
-        );
+          return ScreenUtilInit(
+            designSize: const Size(360, 690),
+      minTextAdapt: true,
+      splitScreenMode: true,
+            child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            navigatorKey: NavigationService.navigatorKey,
+            title: 'Clarity Mirror',
+            // theme: ThemeData(
+            //   primarySwatch: Colors.blue,
+            // ),
+            themeMode: themeProvider.themeMode,
+            theme: lightTheme,
+                    darkTheme: darkTheme,
+            // initialRoute: RouteNames.tabbarScreen,
+            onGenerateRoute: Routes.generateRoutes,
+            initialRoute: RouteNames.splashScreen,
+                    ),
+          );
         },
         
       ),

@@ -4,7 +4,6 @@ import '../utils/app_colors.dart';
 import '../utils/app_fonts.dart';
 import '../utils/app_strings.dart';
 import '../utils/custom_circle.dart';
-import '../utils/custom_circular_percent.dart';
 
 class DashboardBeauty extends StatefulWidget {
   const DashboardBeauty({super.key});
@@ -333,7 +332,7 @@ class _DashboardBeautyState extends State<DashboardBeauty> {
             left: 0,
             right: 0,
             bottom: -10, 
-            child: Container(
+            child: SizedBox(
               height: 100, 
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,

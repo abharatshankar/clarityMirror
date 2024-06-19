@@ -25,7 +25,7 @@ class AppFonts{
                 fontSize: 14.0,
                 color: Colors.white,
                 fontWeight: FontWeight.normal,
-                height: 0.1
+                // height: 0.1
               );
 
   TextStyle sego14bold  = const TextStyle(

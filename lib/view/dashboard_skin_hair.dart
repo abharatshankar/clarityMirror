@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:before_after/before_after.dart';
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:clarity_mirror/models/skin_concern_model.dart';
@@ -10,6 +9,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_fonts.dart';
@@ -77,26 +77,25 @@ late TabController _tabController;
         return SafeArea(
           child: Scaffold(
             backgroundColor: AppConstColors.themeBackgroundColor,
-            body: SingleChildScrollView(
-              child: Stack(
-                alignment: AlignmentDirectional.center,
-                children: [
-                  dashboardViewModel.featureRecogImage ? SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height - 110,
-                    child: (dashboardViewModel.selectedTagImageModel != null && dashboardViewModel.selectedTagImageModel?.tagImage != null) ? SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height - 110,
-                      child: getImageCompareWidget(dashboardViewModel),
-                    ) : getOriginalImageWidget(dashboardViewModel)
-                  ) :Platform.isAndroid ? getAndroidCameraViewWidget() : getIosCameraViewWidget(),
-                  goliveButton(),
-                  gradientContainer(),
-                 dashboardViewModel.featureRecogImage ? skinHairTabs(dashboardViewModel): SizedBox.shrink(),
-                  dashboardViewModel.featureRecogImage ?
-                  (dashboardViewModel.tabPosition == 0 ? skinList(dashboardViewModel) : hairResultWidget()): SizedBox.shrink(),
-                ],
-              ),
+            body: Stack(
+              alignment: AlignmentDirectional.center,
+              children: [
+                dashboardViewModel.featureRecogImage ? SizedBox(
+                  // height: MediaQuery.of(context).size.height * 0.7.h,
+                  child: (dashboardViewModel.selectedTagImageModel != null && dashboardViewModel.selectedTagImageModel?.tagImage != null) ? SizedBox(
+                    // width: MediaQuery.of(context).size.width,
+                    // height: MediaQuery.of(context).size.height * 0.668.h,
+                    height: MediaQuery.of(context).size.height ,
+                    
+                    child: getImageCompareWidget(dashboardViewModel),
+                  ) : getOriginalImageWidget(dashboardViewModel)
+                ) :Platform.isAndroid ? getAndroidCameraViewWidget() : getIosCameraViewWidget(),
+                goliveButton(),
+                gradientContainer(),
+               dashboardViewModel.featureRecogImage ? skinHairTabs(dashboardViewModel): const SizedBox.shrink(),
+                dashboardViewModel.featureRecogImage ?
+                (dashboardViewModel.tabPosition == 0 ? skinList(dashboardViewModel) : hairResultWidget()): const SizedBox.shrink(),
+              ],
             ),
           ),
         );
@@ -105,11 +104,12 @@ late TabController _tabController;
   }
 
   Widget getOriginalImageWidget(dashboardViewModel) {
-   return Positioned(
-      child: SizedBox(
+   return Align(
+      child: Container(
+        color: Colors.red,
         width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height - 110,
-        child: dashboardViewModel.capturedImagePath != null ? Image.file(File(dashboardViewModel.capturedImagePath),fit: BoxFit.cover,) : Image.asset(
+        height: MediaQuery.of(context).size.height ,
+        child: dashboardViewModel.capturedImagePath != null ? Image.file(File(dashboardViewModel.capturedImagePath),fit: BoxFit.fitHeight,) : Image.asset(
           "assets/images/Dermatolgist6.png",
           fit: BoxFit.cover,
         ),
@@ -118,9 +118,8 @@ late TabController _tabController;
   }
 
   Widget getImageCompareWidget(DashboardViewModel dashboardViewModel) {
-    return SizedBox(
-      // color: Colors.green,
-      height: MediaQuery.of(context).size.height,
+    return Container(
+      color: Colors.green,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: BeforeAfter(
@@ -210,7 +209,7 @@ late TabController _tabController;
         //   "assets/images/Dermatolgist6.png",
         //   fit: BoxFit.cover,
         // ),
-        child: UiKitView(
+        child: const UiKitView(
           viewType: 'custom_view',
           layoutDirection: TextDirection.ltr,
         ),
@@ -245,7 +244,7 @@ late TabController _tabController;
       left: 0,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12),
-        child: Container(
+        child: SizedBox(
           width: MediaQuery.of(context).size.width,
           // color: Colors.red,
           child: Row(
@@ -281,7 +280,7 @@ late TabController _tabController;
                         "Go Live",
                         style: AppFonts().sego14bold,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 12,
                       ),
                       const Icon(
@@ -292,7 +291,7 @@ late TabController _tabController;
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 18,
               )
             ],
@@ -341,7 +340,7 @@ late TabController _tabController;
 
   Widget skinHairTabs(DashboardViewModel dashboardViewModel) {
     return Positioned(
-      bottom: 110,
+      bottom: MediaQuery.of(context).size.height * 0.14.h,
       child: Center(
         child: Container(
           decoration: BoxDecoration(
@@ -507,7 +506,7 @@ late TabController _tabController;
             padding: const EdgeInsets.all(8.0),
             child: Text(
               "Excellent",
-              style: AppFonts().sego10bold.copyWith(height: 1.5),
+              style: AppFonts().sego10bold.copyWith(height: 1.5.sp),
             ),
           ),
         ],
@@ -517,11 +516,11 @@ late TabController _tabController;
 
   Widget skinList(DashboardViewModel provider) {
     // var provider = Provider.of<DashboardViewModel>(context, listen: true);
-    provider.getSkinConcernResults();
+    // provider.getSkinConcernResults();
     return Positioned(
       left: 0,
       right: 0,
-      bottom: -10,
+      bottom: 0,
       child: SizedBox(
         height: 120,
         child: ListView.builder(
@@ -536,20 +535,22 @@ late TabController _tabController;
                 provider.updateSkinIndex(index);
               },
               child: Container(
-                width: 70,
-                margin: const EdgeInsets.symmetric(horizontal: 24.0),
+                
+                width: 80.w,
+                margin: const EdgeInsets.only(right: 24.0),
                 padding: const EdgeInsets.only(top: 16),
-                decoration: BoxDecoration(color: Colors.white.withOpacity(0.1)),
+                decoration: BoxDecoration(color: Colors.white.withOpacity(0.1),borderRadius: BorderRadius.circular(16)),
                 child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 5),
                       child: Text(
                         '${skinConcern.getTagType}',
                         // tagData?.tagName ?? '',
-                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        overflow: TextOverflow.fade,
                         style:
-                        AppFonts().sego14normal.copyWith(color: Colors.white),
+                        AppFonts().sego14normal.copyWith(color: Colors.white,fontSize: 12),
                       ),
                     ),
                     CircularPercentIndicator(
@@ -593,7 +594,7 @@ late TabController _tabController;
       child: SizedBox(
         height: 120,
         child: ListView(
-          physics: ClampingScrollPhysics(),
+          physics: const ClampingScrollPhysics(),
           shrinkWrap: true,
           scrollDirection: Axis.horizontal,
           children: [
@@ -628,8 +629,8 @@ late TabController _tabController;
             lineWidth: 3.0,
             // percent: (skinConcern.getTagScore! * 20) / 100,
             percent: 1.0,
-            center: Text("",
-                style: const TextStyle(
+            center: const Text("",
+                style: TextStyle(
                     color: AppConstColors.appThemeCayan)),
             progressColor: AppConstColors.appThemeCayan,
           ),

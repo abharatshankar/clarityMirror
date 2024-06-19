@@ -69,6 +69,7 @@ class _DashboardMoreMenuState extends State<DashboardMoreMenu> with  AutomaticKe
                         itemBuilder: (BuildContext context, int index) {
                           return GestureDetector(
                             onTap: () {
+                              print( dashboardViewModel.skinConcernList);
                               if (index == 11) {
                                 Navigator.push(
                                     context,
@@ -94,14 +95,14 @@ class _DashboardMoreMenuState extends State<DashboardMoreMenu> with  AutomaticKe
                                 Utils.getNewActivity();
                                 Provider.of<TabControllerProvider>(context,listen: false).setIndex(1);
                               }
-                              else if(index == 1 && dashboardViewModel.skinConcernList.isNotEmpty && dashboardViewModel.featureRecogImage){
-                                Provider.of<TabControllerProvider>(context,listen: false).setIndex(2);
+                              else if(index == 1 && dashboardViewModel.skinConcernList.isNotEmpty ){
+                                Provider.of<TabControllerProvider>(context,listen: false).setIndex(2);// bottom tab bar index
                                 dashboardViewModel.setTabIndex(0);
                                 dashboardViewModel.setCurrentIndex(0);
             
                               }
-                              else if(index == 2 && dashboardViewModel.skinConcernList.isNotEmpty && dashboardViewModel.featureRecogImage){
-                                Provider.of<TabControllerProvider>(context,listen: false).setIndex(2);
+                              else if(index == 2 && dashboardViewModel.skinConcernList.isNotEmpty ){
+                                Provider.of<TabControllerProvider>(context,listen: false).setIndex(2);// bottom tab bar index
                                 dashboardViewModel.setTabIndex(1);
                                 dashboardViewModel.setCurrentIndex(1);
             

@@ -158,10 +158,10 @@ class _DashboardMirrorState extends State<DashboardMirror> with AutomaticKeepAli
             alignment: AlignmentDirectional.center,
             children: [
               Positioned(
-                child: SizedBox(
+                child: Container(
                   width: MediaQuery.of(context).size.width,
                   height:
-                  MediaQuery.of(context).size.height * 0.85,
+                  MediaQuery.of(context).size.height * 0.76,
                   // child: Image.asset(
                   //   "assets/images/Dermatolgist6.png",
                   //   fit: BoxFit.cover,
