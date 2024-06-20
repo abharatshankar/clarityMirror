@@ -48,6 +48,7 @@ dependencies:
   before_after: ^3.0.0+1
   fl_chart: ^0.68.0
   flutter_screenutil: ^5.9.3
+  carousel_slider: ^4.2.1
 
 dev_dependencies:
   flutter_test:

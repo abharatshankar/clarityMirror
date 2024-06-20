@@ -1,3 +1,4 @@
+import 'package:clarity_mirror/features/products/products_main_page.dart';
 import 'package:clarity_mirror/utils/app_fonts.dart';
 import 'package:clarity_mirror/utils/app_strings.dart';
 import 'package:clarity_mirror/utils/utils.dart';
@@ -111,6 +112,11 @@ class _DashboardMoreMenuState extends State<DashboardMoreMenu> with  AutomaticKe
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => const ProgressPage()));
+                              } else if(index == 7) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ProductsMainPage()));
                               }
                             },
                             child: GridItem(
