@@ -61,6 +61,15 @@ class AppFonts{
                 fontWeight: FontWeight.bold,
                 height: 1.4
               );
+  
+
+  TextStyle sego10normal  = const TextStyle(
+                fontFamily: 'segoe',
+                fontSize: 10.0,
+                color: AppConstColors.appBoldTextColor,
+                fontWeight: FontWeight.normal,
+                height: 1.4
+              );
 
 TextStyle sego18normal  = const TextStyle(
                 fontFamily: 'segoe',

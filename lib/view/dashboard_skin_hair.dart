@@ -82,10 +82,11 @@ late TabController _tabController;
               children: [
                 dashboardViewModel.featureRecogImage ? SizedBox(
                   // height: MediaQuery.of(context).size.height * 0.7.h,
-                  child: (dashboardViewModel.selectedTagImageModel != null && dashboardViewModel.selectedTagImageModel?.tagImage != null) ? SizedBox(
+                  
+                  child:dashboardViewModel.currentIndex == 0 ? ((dashboardViewModel.selectedTagImageModel != null && dashboardViewModel.selectedTagImageModel?.tagImage != null) ? SizedBox(
                     height: MediaQuery.of(context).size.height ,
                     child: getImageCompareWidget(dashboardViewModel),
-                  ) : getOriginalImageWidget(dashboardViewModel)
+                  ) : getOriginalImageWidget(dashboardViewModel)):getOriginalImageWidget(dashboardViewModel) 
                 ) :Platform.isAndroid ? getAndroidCameraViewWidget() : getIosCameraViewWidget(),
                 goliveButton(),
                 gradientContainer(),
@@ -124,8 +125,8 @@ late TabController _tabController;
         // divisions: 4,
         thumbWidth: 20.0,
         // thumbColor: Colors.red,
-        trackColor: Colors.red,
-        trackWidth: 2,
+        trackColor: Colors.white.withOpacity(0.6),
+        trackWidth: 1,
         // hideThumb: true,
         hideThumb: false,
         // overlayColor: WidgetStateProperty.all(Colors.white),
@@ -206,7 +207,7 @@ late TabController _tabController;
       child: SizedBox(
         width: MediaQuery.of(context).size.width,
         height:
-        MediaQuery.of(context).size.height - 200,
+        MediaQuery.of(context).size.height ,
         // child: Image.asset(
         //   "assets/images/Dermatolgist6.png",
         //   fit: BoxFit.cover,

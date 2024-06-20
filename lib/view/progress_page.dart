@@ -1,5 +1,7 @@
+import 'package:clarity_mirror/utils/app_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'custom_appbar.dart';
 
 class ProgressPage extends StatefulWidget {
@@ -14,7 +16,7 @@ class _ProgressPageState extends State<ProgressPage> {
     Colors.red,
     Colors.green,
   ];
-
+String _selectedItem = 'Skin health score'; 
   bool showAvg = false;
 
   @override
@@ -35,61 +37,102 @@ class _ProgressPageState extends State<ProgressPage> {
                         ),
               ),
             ),
-            Row(children: [Column(children: [const Text('Low'),Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Container(
-                width: 15,height: 15,
-                decoration: const BoxDecoration(color: Colors.red,shape: BoxShape.circle),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: chartColorGuide(),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 16,right: 16,top: 20,bottom: 5),
+              child: SizedBox(
+                width: double.infinity,
+                child: Container(color: Colors.white.withOpacity(0.3),height: 1,),),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: SizedBox(
+                width: double.infinity,
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                            value: _selectedItem,
+                            isExpanded: true,
+                            onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedItem = newValue!;
+                  });
+                            },
+                            items: <String>['Skin health score', 'Wrinkles', 'Acne score', 'Pigmentation score']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Center(child: Text(value,style: AppFonts().sego14normal,)),
+                  );
+                            }).toList(),
+                          ),
                 ),
-            )],),
-            Column(children: [const Text('Low-Moderate'),Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Container(
-                width: 15,height: 15,
-                decoration: const BoxDecoration(color: Colors.orange,shape: BoxShape.circle),
-                ),
-            )],),],),
-            
-            // Stack(
-            //   children: <Widget>[
-            //     AspectRatio(
-            //       aspectRatio: 1.70,
-            //       child: Padding(
-            //         padding: const EdgeInsets.only(
-            //           right: 18,
-            //           left: 12,
-            //           top: 24,
-            //           bottom: 12,
-            //         ),
-            //         child: LineChart(
-            //           showAvg ? avgData() : mainData(),
-            //         ),
-            //       ),
-            //     ),
-            //     SizedBox(
-            //       width: 60,
-            //       height: 34,
-            //       child: TextButton(
-            //         onPressed: () {
-            //           setState(() {
-            //             showAvg = !showAvg;
-            //           });
-            //         },
-            //         child: Text(
-            //           'avg',
-            //           style: TextStyle(
-            //             fontSize: 12,
-            //             color: showAvg ? Colors.white.withOpacity(0.5) : Colors.white,
-            //           ),
-            //         ),
-            //       ),
-            //     ),
-            //   ],
-            // ),
+              ),
+            ),
+      Padding(
+              padding: const EdgeInsets.only(left: 16,right: 16,top: 5,bottom: 5),
+              child: SizedBox(
+                width: double.infinity,
+                child: Container(color: Colors.white.withOpacity(0.3),height: 1,),),
+            ),
+Spacer(),
+            SizedBox(
+              width: double.infinity,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Container(
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: Colors.cyanAccent),height: 50,
+                  child:  Center(child: Text('Share Progress',style: AppFonts().sego14bold.copyWith(color: Colors.white),)),),
+              ),)
           ],
         ),
       ),
     );
+  }
+
+  Widget chartColorGuide(){
+    return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+              Column(children: [ Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Container(
+                width: 10,height: 10,
+                decoration: const BoxDecoration(color: Colors.red,shape: BoxShape.circle),
+                ),
+            ),Text('Low',style: AppFonts().sego10normal,),],),
+            Column(children: [ Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Container(
+                width: 10,height: 10,
+                decoration: const BoxDecoration(color: Colors.orange,shape: BoxShape.circle),
+                ),
+            ),Text('Low-Medium',style: AppFonts().sego10normal,),],),
+            Column(children: [ Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Container(
+                width: 10,height: 10,
+                decoration: const BoxDecoration(color: Colors.yellow,shape: BoxShape.circle),
+                ),
+            ),Text('Moderate',style: AppFonts().sego10normal,),],),
+            Column(children: [ Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Container(
+                width: 10,height: 10,
+                decoration: const BoxDecoration(color: Colors.lightGreen,shape: BoxShape.circle),
+                ),
+            ),Text('Moderate-High',style: AppFonts().sego10normal,),],),
+            Column(children: [ Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Container(
+                width: 10,height: 10,
+                decoration: const BoxDecoration(color: Colors.green,shape: BoxShape.circle),
+                ),
+            ),Text('High',style: AppFonts().sego10normal,),],),
+            
+            ],);
   }
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
@@ -211,7 +254,7 @@ class _ProgressPageState extends State<ProgressPage> {
         show: true,
         drawVerticalLine: true,
         horizontalInterval: 1,
-        verticalInterval: 1,
+        verticalInterval: 3,
         getDrawingHorizontalLine: (value) {
           return const FlLine(
             color: Colors.transparent,
@@ -220,7 +263,7 @@ class _ProgressPageState extends State<ProgressPage> {
         },
         getDrawingVerticalLine: (value) {
           return const FlLine(
-            color: Colors.black,
+            color: Colors.transparent,
             strokeWidth: 1,
           );
         },
@@ -242,7 +285,7 @@ class _ProgressPageState extends State<ProgressPage> {
           sideTitles: SideTitles(
             showTitles: false,
             reservedSize: 30,
-            interval: 1,
+            interval: 3,
             getTitlesWidget: bottomTitleWidgets,
           ),
         ),
