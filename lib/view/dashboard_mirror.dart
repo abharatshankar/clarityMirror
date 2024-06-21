@@ -11,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import '../utils/app_strings.dart';
 import '../utils/custom_circle.dart';
+import '../utils/txt_scroll_view.dart';
 
 class DashboardMirror extends StatefulWidget {
   const DashboardMirror({super.key});
@@ -315,7 +316,7 @@ class _DashboardMirrorState extends State<DashboardMirror> with AutomaticKeepAli
 
   Widget tempratureText(String? temp) {
     return Positioned(
-        right: 15,
+        right: 17,
         top: MediaQuery.of(context).size.height * 0.05,
         child: Text(
           "$temp\u00B0",
@@ -328,7 +329,7 @@ class _DashboardMirrorState extends State<DashboardMirror> with AutomaticKeepAli
 
   Widget tempIndexTxt({required String tempIndexStatus}) {
     return Positioned(
-      right: 10,
+      right: 14,
       top: MediaQuery.of(context).size.height * 0.1,
       child: Text(
         tempIndexStatus,
@@ -339,7 +340,7 @@ class _DashboardMirrorState extends State<DashboardMirror> with AutomaticKeepAli
 
   Widget humidityStatus({required String humidityStr}) {
     return Positioned(
-      right: 10,
+      right: 14,
       top: MediaQuery.of(context).size.height * 0.122,
       child: Text(
         humidityStr,
@@ -350,7 +351,7 @@ class _DashboardMirrorState extends State<DashboardMirror> with AutomaticKeepAli
 
   Widget pollutionStatus({required String pollutionStr}) {
     return Positioned(
-      left: 10,
+      left: 14,
       bottom: MediaQuery.of(context).size.height * 0.05,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -370,34 +371,44 @@ class _DashboardMirrorState extends State<DashboardMirror> with AutomaticKeepAli
 
   Widget ideaIconAndTxt(String? tipsString) {
     return Positioned(
-      left: 5,
+      left: 0,
       bottom: 0,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Icon(
-            Icons.lightbulb_outlined,
-            color: Color.fromARGB(255, 255, 147, 7),
-          ),
-          const SizedBox(
-            width: 10,
-          ),
-          Text(
-            tipsString ?? '',
-            overflow: TextOverflow.fade,
-            style: AppFonts()
-                .sego18normal
-                .copyWith(color: const Color.fromARGB(255, 255, 147, 7)),
-          ),
-        ],
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width - 40,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.lightbulb_outlined,
+              color: Color.fromARGB(255, 255, 147, 7),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            SizedBox(
+              height: 40,
+              width: MediaQuery.of(context).size.width - 100,
+              child: ScrollingText(
+                speed: 40.0,
+                text: "${tipsString ?? ''}            ",
+                textStyle: AppFonts()
+                      .sego18normal
+                      .copyWith(color: const Color.fromARGB(255, 255, 147, 7)),
+                onFinish: () {
+                  
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget excersiceWidget() {
     return const Positioned(
-      right: 5,
+      right: 14,
       bottom: 7,
       child: Icon(
         Icons.sports_gymnastics_rounded,
@@ -409,7 +420,7 @@ class _DashboardMirrorState extends State<DashboardMirror> with AutomaticKeepAli
 
   Widget percentageCircle(String? percentage) {
     return Positioned(
-      right: 5,
+      right: 10,
       bottom: MediaQuery.of(context).size.height * 0.07,
       child: Column(
         children: [

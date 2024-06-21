@@ -131,17 +131,3 @@ class _TabsDemoScreenState extends State<TabsDemoScreen> {
   }
 }
 
-class TabScreen extends StatelessWidget {
-  final Color color;
-
-  TabScreen(this.color);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        color: color,
-      ),
-    );
-  }
-}

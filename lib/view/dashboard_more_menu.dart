@@ -57,72 +57,75 @@ class _DashboardMoreMenuState extends State<DashboardMoreMenu> with  AutomaticKe
                       height: MediaQuery.of(context).size.height * 0.15,
                     ),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.6,
+                      height: MediaQuery.of(context).size.height * 0.62,
                       child: GridView.builder(
                         itemCount: AppStrings.dashbordMoreMenuItems.length,
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 4,
-                          childAspectRatio: 0.8,
+                          childAspectRatio: 0.75,
                           crossAxisSpacing: 6.0,
                           mainAxisSpacing: 3.0,
                         ),
                         itemBuilder: (BuildContext context, int index) {
-                          return GestureDetector(
-                            onTap: () {
-                              print( dashboardViewModel.skinConcernList);
-                              if (index == 11) {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: ((context) => SearchableList(
-                                              items: [
-                                                AppStrings.accountSettings,
-                                                'NOTIFICATION SETTINGS',
-                                                'APPEARANCE',
-                                                'ADVANCED SETTINGS',
-                                                'HELP AND SUPPORT',
-                                                'ABOUT',
-                                              ],
-                                            ))));
-                              }
-                              if (index == 4) {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const ProfilePage()));
-                              }
-                              if(index == 0) {
-                                Utils.getNewActivity();
-                                Provider.of<TabControllerProvider>(context,listen: false).setIndex(1);
-                              }
-                              else if(index == 1 && dashboardViewModel.skinConcernList.isNotEmpty ){
-                                Provider.of<TabControllerProvider>(context,listen: false).setIndex(2);// bottom tab bar index
-                                dashboardViewModel.setTabIndex(0);
-                                dashboardViewModel.setCurrentIndex(0);
-            
-                              }
-                              else if(index == 2 && dashboardViewModel.skinConcernList.isNotEmpty ){
-                                Provider.of<TabControllerProvider>(context,listen: false).setIndex(2);// bottom tab bar index
-                                dashboardViewModel.setTabIndex(1);
-                                dashboardViewModel.setCurrentIndex(1);
-            
-                              }else if (index == 3){
-                                 Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const ProgressPage()));
-                              } else if(index == 7) {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ProductsMainPage()));
-                              }
-                            },
-                            child: GridItem(
-                              itemImage:
-                                  'assets/images/${AppStrings.dashbordMoreMenuItems[index]}.png',
-                              itemName: AppStrings.dashbordMoreMenuItems[index],
+                          return Container(
+                            // color: Colors.amber,
+                            child: GestureDetector(
+                              onTap: () {
+                                print( dashboardViewModel.skinConcernList);
+                                if (index == 11) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: ((context) => SearchableList(
+                                                items: [
+                                                  AppStrings.accountSettings,
+                                                  'NOTIFICATION SETTINGS',
+                                                  'APPEARANCE',
+                                                  'ADVANCED SETTINGS',
+                                                  'HELP AND SUPPORT',
+                                                  'ABOUT',
+                                                ],
+                                              ))));
+                                }
+                                if (index == 4) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => const ProfilePage()));
+                                }
+                                if(index == 0) {
+                                  Utils.getNewActivity();
+                                  Provider.of<TabControllerProvider>(context,listen: false).setIndex(1);
+                                }
+                                else if(index == 1 && dashboardViewModel.skinConcernList.isNotEmpty ){
+                                  Provider.of<TabControllerProvider>(context,listen: false).setIndex(2);// bottom tab bar index
+                                  dashboardViewModel.setTabIndex(0);
+                                  dashboardViewModel.setCurrentIndex(0);
+                                        
+                                }
+                                else if(index == 2 && dashboardViewModel.skinConcernList.isNotEmpty ){
+                                  Provider.of<TabControllerProvider>(context,listen: false).setIndex(2);// bottom tab bar index
+                                  dashboardViewModel.setTabIndex(1);
+                                  dashboardViewModel.setCurrentIndex(1);
+                                        
+                                }else if (index == 3){
+                                   Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => const ProgressPage()));
+                                } else if(index == 7) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ProductsMainPage()));
+                                }
+                              },
+                              child: GridItem(
+                                itemImage:
+                                    'assets/images/${AppStrings.dashbordMoreMenuItems[index]}.png',
+                                itemName: AppStrings.dashbordMoreMenuItems[index],
+                              ),
                             ),
                           );
                         },
