@@ -160,7 +160,7 @@ class _DashboardMirrorState extends State<DashboardMirror> with AutomaticKeepAli
             alignment: AlignmentDirectional.center,
             children: [
               Positioned(
-                child: Container(
+                child: SizedBox(
                   width: MediaQuery.of(context).size.width,
                   height:
                   MediaQuery.of(context).size.height * 0.76,
@@ -168,7 +168,7 @@ class _DashboardMirrorState extends State<DashboardMirror> with AutomaticKeepAli
                   //   "assets/images/Dermatolgist6.png",
                   //   fit: BoxFit.cover,
                   // ),
-                  child: UiKitView(
+                  child: const UiKitView(
                     viewType: 'custom_view',
                     layoutDirection: TextDirection.ltr,
                   ),
