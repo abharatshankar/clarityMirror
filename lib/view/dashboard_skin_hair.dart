@@ -134,7 +134,7 @@ late TabController _tabController;
           fit: BoxFit.fill,)),
           before: Image.memory(
           base64Decode(dashboardViewModel.selectedTagImageModel!.tagImage!),
-          fit: BoxFit.fill,
+          fit: BoxFit.contain,
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           gaplessPlayback: true,
@@ -144,7 +144,7 @@ late TabController _tabController;
         ),
         after: Image.memory(
           base64Decode(dashboardViewModel.base64ThumbValue!),
-          fit: BoxFit.fill,
+          fit: BoxFit.contain,
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           gaplessPlayback: true,
