@@ -90,9 +90,8 @@ late TabController _tabController;
                 ) :Platform.isAndroid ? getAndroidCameraViewWidget() : getIosCameraViewWidget(),
                 goliveButton(),
                 gradientContainer(),
-               dashboardViewModel.featureRecogImage ? skinHairTabs(dashboardViewModel): const SizedBox.shrink(),
-                dashboardViewModel.featureRecogImage ?
-                (dashboardViewModel.tabPosition == 0 ? skinList(dashboardViewModel) : hairResultWidget()): const SizedBox.shrink(),
+               skinHairTabs(dashboardViewModel),
+                (dashboardViewModel.tabPosition == 0 ? skinList(dashboardViewModel) : hairResultWidget()),
               ],
             ),
           ),
