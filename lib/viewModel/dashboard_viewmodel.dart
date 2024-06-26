@@ -107,10 +107,12 @@ class DashboardViewModel extends ChangeNotifier {
             0,
             (sum, tag) =>
                 (sum ?? 0) +
-                int.parse(tag.tagValues?.firstWhere((combineVal) {
+                int.parse(
+                  (tag.tagValues != null && (tag.tagValues ?? []).isNotEmpty) ?
+                  tag.tagValues?.firstWhere((combineVal) {
                       return combineVal.valueName == 'Combined';
                     }).value ??
-                    '0'));
+                    '0' : '0') ) ?? 0;
 
         avgOfTags = ((sumOfTags ?? 0) ~/ 6 / 5 * 100).toInt();
   }
@@ -210,6 +212,8 @@ class DashboardViewModel extends ChangeNotifier {
         dynamic tagResultsData = await homeRepository.getTagResults(imageId);
         if(tagResultsData == null){
           isLoading = false;
+          notifyListeners();
+          return;
         }   
         tagResults = TagResults.fromJson(tagResultsData);
 

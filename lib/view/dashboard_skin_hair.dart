@@ -90,9 +90,8 @@ late TabController _tabController;
                 ) :Platform.isAndroid ? getAndroidCameraViewWidget() : getIosCameraViewWidget(),
                 goliveButton(),
                 gradientContainer(),
-               dashboardViewModel.featureRecogImage ? skinHairTabs(dashboardViewModel): const SizedBox.shrink(),
-                dashboardViewModel.featureRecogImage ?
-                (dashboardViewModel.tabPosition == 0 ? skinList(dashboardViewModel) : hairResultWidget()): const SizedBox.shrink(),
+               skinHairTabs(dashboardViewModel),
+                (dashboardViewModel.tabPosition == 0 ? skinList(dashboardViewModel) : hairResultWidget()),
               ],
             ),
           ),
@@ -525,7 +524,7 @@ late TabController _tabController;
       right: 0,
       bottom: 0,
       child: SizedBox(
-        height: 120,
+        height: 120.h,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: provider.skinConcernList.length,
@@ -616,29 +615,34 @@ late TabController _tabController;
 
   Widget getHairTagDataWidget({String? title, int? value, String? type}) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 24.0),
+      margin: const EdgeInsets.symmetric(horizontal: 8.0),
+      width: 90,
+      // color: Colors.amber,
       child: Column(
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Text(
-              '$title',
-              // tagData?.tagName ?? '',
-              overflow: TextOverflow.ellipsis,
-              style:
-              AppFonts().sego14normal.copyWith(color: Colors.white),
+            child: Expanded(
+              child: Text(
+                '$title',
+                // tagData?.tagName ?? '',
+                overflow: TextOverflow.ellipsis,
+                maxLines: 3,
+                style:
+                AppFonts().sego14normal.copyWith(color: AppConstColors.appThemeCayan),
+              ),
             ),
           ),
-          CircularPercentIndicator(
-            radius: 20.0,
-            lineWidth: 3.0,
-            // percent: (skinConcern.getTagScore! * 20) / 100,
-            percent: 1.0,
-            center: const Text("",
-                style: TextStyle(
-                    color: AppConstColors.appThemeCayan)),
-            progressColor: AppConstColors.appThemeCayan,
-          ),
+          // CircularPercentIndicator(
+          //   radius: 20.0,
+          //   lineWidth: 3.0,
+          //   // percent: (skinConcern.getTagScore! * 20) / 100,
+          //   percent: 1.0,
+          //   center: const Text("",
+          //       style: TextStyle(
+          //           color: AppConstColors.appThemeCayan)),
+          //   progressColor: AppConstColors.appThemeCayan,
+          // ),
 
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
