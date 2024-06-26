@@ -1,6 +1,11 @@
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:clarity_mirror/utils/app_colors.dart';
+import 'package:clarity_mirror/utils/app_fonts.dart';
 import 'package:flutter/material.dart';
+
+import '../../view/custom_appbar.dart';
+import '../../view/dots_indicator.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   const ProductDetailsPage({super.key});
@@ -9,15 +14,8 @@ class ProductDetailsPage extends StatefulWidget {
   State<ProductDetailsPage> createState() => _ProductDetailsPageState();
 }
 
-class _ProductDetailsPageState extends State<ProductDetailsPage> {
-  var dummyImage = "https://plus.unsplash.com/premium_photo-1677541205130-51e60e937318?q=80&w=480&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
-  var dummyImage2 = "https://images.pexels.com/photos/2533266/pexels-photo-2533266.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2";
-  var dummyImage3 = "https://img.freepik.com/free-photo/makeup-cosmetics-palette-brushes-white-background_1357-247.jpg?w=540&t=st=1718853597~exp=1718854197~hmac=eec34130f2e102de7e55e200f998b168f14a1f937351f44c04fb6c4368245929";
-
+class _ProductDetailsPageState extends State<ProductDetailsPage>  with SingleTickerProviderStateMixin{
   final List<String> imgList = [
-    'https://plus.unsplash.com/premium_photo-1677541205130-51e60e937318?q=80&w=480&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    'https://images.pexels.com/photos/2533266/pexels-photo-2533266.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    'https://img.freepik.com/free-photo/makeup-cosmetics-palette-brushes-white-background_1357-247.jpg?w=540&t=st=1718853597~exp=1718854197~hmac=eec34130f2e102de7e55e200f998b168f14a1f937351f44c04fb6c4368245929',
     'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
     'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
     'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
@@ -25,71 +23,153 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80',
     'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
   ];
+late TabController _tabController;          //
+  final pageController = PageController();    //
+  int pagedIndex = 0;                         //
 
-  int _current = 0;
-  final CarouselController _controller = CarouselController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _tabController = TabController(length: 4, vsync: this);         //
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _tabController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Products Details'),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              // height: 300,
-              child: CarouselSlider(
-                items: imgList
-                    .map((item) => Container(
-                          child: Center(
-                              child: Image.network(
-                            item,
-                            fit: BoxFit.cover,
-                            height: double.infinity,
-                          )),
-                        ))
-                    .toList(),
-                carouselController: _controller,
-                options: CarouselOptions(
-                    autoPlay: false,
-                    enlargeCenterPage: true,
-                    aspectRatio: 16/9,
-                    onPageChanged: (index, reason) {
-                      setState(() {
-                        _current = index;
-                      });
-                    }),
+    return SafeArea(
+      child: Scaffold(
+        // appBar: AppBar(
+        //   leading: const Icon(Icons.arrow_back_ios_new),
+        //   title: const Text(
+        //     "Product Details",
+        //     style: TextStyle(
+        //         fontSize: 25, fontWeight: FontWeight.w500, color: Colors.black),
+        //   ),
+        //   actions: const [
+        //     Padding(
+        //       padding: EdgeInsets.symmetric(horizontal: 12.0),
+        //       child: Icon(Icons.shopping_cart_outlined),
+        //     )
+        //   ],
+        // ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              const CustomAppBar(titleTxt: "Product Details",showNotificationIcon: false,),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.45,
+                child: PageView(
+                  onPageChanged: (value) {
+                    pagedIndex = value;
+                    setState(() {});
+                  },
+                  controller: pageController,
+                  children: const [
+                    Page1(pagedIndex: 0,),
+                    Page1(pagedIndex: 1,),
+                   Page1(pagedIndex: 2,),
+                    Page1(pagedIndex: 3,),
+                  ],
+                ),
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: imgList.asMap().entries.map((entry) {
-                return GestureDetector(
-                  onTap: () => _controller.animateToPage(entry.key),
-                  child: Container(
-                    width: 8.0,
-                    height: 8.0,
-                    margin: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 4.0),
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: (Theme.of(context).brightness == Brightness.dark
-                            ? Colors.white
-                            : Colors.black)
-                            .withOpacity(_current == entry.key ? 0.9 : 0.4)),
+              TabBar(
+                controller: _tabController,
+                labelColor: AppConstColors.appThemeCayan,
+              indicatorColor: AppConstColors.appThemeCayan,
+              unselectedLabelColor: Colors.white.withOpacity(0.4),
+              indicatorSize: TabBarIndicatorSize.label,
+                tabs:  [
+                  Tab(
+                    // text: "Description",
+                    child: Text("Description",style: AppFonts().sego12bold,),
                   ),
-                );
-              }).toList(),
-            ),
-            SizedBox(height: 16),
-            Text('Products details description'),
-          ],
+                  Tab(
+                    // text: "Ingratients",
+                    child: Text("Ingratients",style: AppFonts().sego12bold,),
+                  ),
+                  Tab(
+                    // text: "How to use",
+                    child: Text("How to use",style: AppFonts().sego12bold,),
+                  ),
+                  Tab(
+                    // text: "Reviews",
+                    child: Text("Reviews",style: AppFonts().sego12bold,),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.3,
+                child: TabBarView(
+                  controller: _tabController,
+                  children:  [
+                    Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Text("An ingredient is one part of a mixture. For example, if you're making chocolate chip cookies, flour is just one ingredient you'll need.",style: AppFonts().sego12normal,),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Text("An ingredient is one part of a mixture. For example, if you're making chocolate chip cookies, flour is just one ingredient you'll need.",style: AppFonts().sego12normal,),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Text("An ingredient is one part of a mixture. For example, if you're making chocolate chip cookies, flour is just one ingredient you'll need.",style: AppFonts().sego12normal,),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Text("An ingredient is one part of a mixture. For example, if you're making chocolate chip cookies, flour is just one ingredient you'll need.",style: AppFonts().sego12normal,),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: Colors.cyanAccent,),width: double.infinity,height: 50,
+                  child:  Center(child: Text("Add to cart",style: AppFonts().sego14bold.copyWith(color: Colors.white),)),),
+              )
+            ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+
+
+
+class Page1 extends StatelessWidget {
+  const Page1({super.key, required this.pagedIndex});
+
+final int pagedIndex;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+      children: [
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Container(
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(25),),
+                height: MediaQuery.of(context).size.width*0.6,
+                width: MediaQuery.of(context).size.width*0.6,
+                child: Image.asset("assets/images/Dermatolgist6.png",fit: BoxFit.fill,),
+              ),
+          ),
+        ),
+DotsIndicator(pagedIndex: pagedIndex,),
+        Text("Deep Raidance Cream ",style: AppFonts().sego18normal),
+        Text("\$52",style: AppFonts().sego18normal),
+      ],
+    ),
     );
   }
 }
