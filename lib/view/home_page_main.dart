@@ -10,18 +10,19 @@ import 'dashboard_mirror.dart';
 import 'dashboard_more_menu.dart';
 import 'dashboard_skin_hair.dart';
 
-class TabsDemoScreen extends StatefulWidget {
+class HomePageMain extends StatefulWidget {
+
+  HomePageMain({super.key, this.tabPosition});
+
+  final String title = "Home Page";
   int? tabPosition = 0;
 
-  TabsDemoScreen({super.key, this.tabPosition});
-
-  final String title = "Flutter Bottom Tab demo";
 
   @override
-  _TabsDemoScreenState createState() => _TabsDemoScreenState();
+  _HomePageMainState createState() => _HomePageMainState();
 }
 
-class _TabsDemoScreenState extends State<TabsDemoScreen> {
+class _HomePageMainState extends State<HomePageMain> {
   // late int currentTabIndex;
 
   List<Widget> tabs = [

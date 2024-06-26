@@ -1,6 +1,6 @@
+import 'package:clarity_mirror/features/products/products_view_model.dart';
 import 'package:clarity_mirror/utils/navigation_service.dart';
 import 'package:clarity_mirror/utils/routes/routes_names.dart';
-import 'package:clarity_mirror/view/splash_screen.dart';
 import 'package:clarity_mirror/viewModel/dashboard_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:clarity_mirror/utils/routes/routes.dart';
@@ -41,7 +41,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => DashboardViewModel()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (context) => TabControllerProvider()),
-        
+        ChangeNotifierProvider(create: (context) => ProductsViewModel()),
+
       ],
       child: ChangeNotifierProvider(
         create: (context) => ThemeProvider(),

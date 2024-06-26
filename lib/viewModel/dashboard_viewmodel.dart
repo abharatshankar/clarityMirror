@@ -31,9 +31,19 @@ class DashboardViewModel extends ChangeNotifier {
 //     super.dispose();
 //   }
 
+  /// ImageId used to send to multiple apis in body params though out the app
+  String _imageId = '';
+
+  String get imageId => _imageId;
+
   int _currentIndex = 0;
 
   int get currentIndex => _currentIndex;
+
+  void setImageId(String imageId) {
+    _imageId = imageId;
+    notifyListeners();
+  }
 
   void setCurrentIndex(int index) {
     _currentIndex = index;
@@ -114,7 +124,7 @@ class DashboardViewModel extends ChangeNotifier {
                     }).value ??
                     '0' : '0') ) ?? 0;
 
-        avgOfTags = ((sumOfTags ?? 0) ~/ 6 / 5 * 100).toInt();
+        avgOfTags = ((sumOfTags) ~/ 6 / 5 * 100).toInt();
   }
 
   getOriginalThumbImage() {

@@ -5,7 +5,7 @@ import 'dart:ui' as ui;
 
 import 'package:clarity_mirror/utils/app_colors.dart';
 import 'package:clarity_mirror/utils/app_fonts.dart';
-import 'package:clarity_mirror/view/tabbar_screen.dart';
+import 'package:clarity_mirror/view/home_page_main.dart';
 import 'package:flutter/material.dart';
 import 'package:clarity_mirror/viewModel/splash_service.dart';
 import 'package:flutter/services.dart';
@@ -160,7 +160,7 @@ class _SplashScreenState extends State<SplashScreen> {
         /// TODO: Handle the navigation based on the response.
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => TabsDemoScreen(tabPosition: 2,)),
+          MaterialPageRoute(builder: (context) => HomePageMain(tabPosition: 2,)),
           ModalRoute.withName(RouteNames
               .tabbarScreen), // Remove all routes until the home route
         );

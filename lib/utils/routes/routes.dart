@@ -3,7 +3,7 @@ import 'package:clarity_mirror/utils/routes/routes_names.dart';
 import 'package:clarity_mirror/view/home_screen.dart';
 import 'package:clarity_mirror/view/splash_screen.dart';
 
-import '../../view/tabbar_screen.dart';
+import '../../view/home_page_main.dart';
 
 class Routes {
   static Route<dynamic> generateRoutes(RouteSettings settings) {
@@ -16,7 +16,7 @@ class Routes {
             builder: (BuildContext context) =>  SplashScreen());
       case (RouteNames.tabbarScreen):
         return MaterialPageRoute(
-            builder: (BuildContext context) =>  TabsDemoScreen());
+            builder: (BuildContext context) =>  HomePageMain());
       
       default:
         return MaterialPageRoute(
