@@ -36,6 +36,22 @@ class AppFonts{
                 height: 1.4
               );
 
+  
+  TextStyle sego12bold  = const TextStyle(
+                fontFamily: 'segoe',
+                fontSize: 12.0,
+                color: AppConstColors.appBoldTextColor,
+                fontWeight: FontWeight.bold,
+              );
+
+  
+  TextStyle sego12normal  = const TextStyle(
+                fontFamily: 'segoe',
+                fontSize: 12.0,
+                color: AppConstColors.appBoldTextColor,
+                fontWeight: FontWeight.normal,
+              );
+
   TextStyle sego32bold  = const TextStyle(
                 fontFamily: 'segoe',
                 fontSize: 32.0,
