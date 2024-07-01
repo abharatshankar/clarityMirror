@@ -16,15 +16,11 @@ class ProductsMainPage extends StatefulWidget {
 }
 
 class _ProductsMainPageState extends State<ProductsMainPage> {
-  var dummyImage =
-      "https://plus.unsplash.com/premium_photo-1677541205130-51e60e937318?q=80&w=480&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
-
-  var dummyImage2 =
-      "https://images.pexels.com/photos/2533266/pexels-photo-2533266.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2";
 
   var dummyImage3 =
       "https://img.freepik.com/free-photo/makeup-cosmetics-palette-brushes-white-background_1357-247.jpg?w=540&t=st=1718853597~exp=1718854197~hmac=eec34130f2e102de7e55e200f998b168f14a1f937351f44c04fb6c4368245929";
   bool _isExpanded = false;
+
 // List of choices
   final List<String> _choices = [
     'Wrinkles',
@@ -55,139 +51,216 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
   Widget build(BuildContext context) {
     return Consumer<ProductsViewModel>(
         builder: (context, productsViewModel, widget) {
-      print(
-          'Products ${productsViewModel.productsModel?.productRecommendations?.length}');
+      // print('Products ${productsViewModel.productsModel?.productRecommendations?.length}');
       return Scaffold(
         appBar: AppBar(
           title: const Text('Products for you'),
+          actions: [
+            IconButton(icon: const Icon(Icons.shopping_cart, size: 28,), onPressed: (){},),
+          ],
         ),
         body: productsViewModel.isLoading
             ? const ProgressIndicatorWidget()
-            : ListView.builder(
-                itemBuilder: (context, index) {
-                  return ExpansionTile(
-                    trailing: (!_isExpanded && index == 0)? const SizedBox.shrink()
-                        : null,onExpansionChanged: index == 0
-                        ? (value) { _isExpanded = !_isExpanded;
-                            setState(() {});
-                          }
-                        : null,
-                    title: (!_isExpanded && index == 0)
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            : SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                children: [
+
+                  Theme(
+                    data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                    child: ExpansionTile(
+                      dense: true,
+                      enabled: true,
+                      initiallyExpanded: true,
+                      trailing: (!_isExpanded) ? const SizedBox.shrink() : null,
+                      onExpansionChanged: (value) {
+                        _isExpanded = !_isExpanded;
+                        setState(() {});
+                      },
+                      title: (!_isExpanded)
+                          ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Regimen for you',
+                            style: AppFonts().sego18bold.copyWith(
+                                color: (!_isExpanded)
+                                    ? AppConstColors.appThemeCayan
+                                    : AppConstColors.editProfileTxtColor),
+                          ),
+                          const Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Text(
-                                  productsViewModel
-                                          .recomendedProductsArr?[index]
-                                          .titleName ??
-                                      '',
-                                  style: AppFonts().sego18bold.copyWith(
-                                      color: (!_isExpanded && index == 0)
-                                          ? AppConstColors.appThemeCayan
-                                          : AppConstColors
-                                              .editProfileTxtColor)),
-                              const Row(
-                                children: [
-                                  Icon(
-                                    Icons.filter_vintage,
-                                    color: Colors.white,
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Icon(
-                                    Icons.file_copy,
-                                    color: Colors.white,
-                                  )
-                                ],
+                              Icon(
+                                Icons.more_horiz,
+                                color: Colors.white,
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Icon(
+                                Icons.keyboard_arrow_down_sharp,
+                                color: Colors.white,
                               )
                             ],
                           )
-                        : Text(
-                            productsViewModel
-                                    .recomendedProductsArr?[index].titleName ??
-                                '',
-                            style: AppFonts().sego14bold),
-                    children: index == 0  ?  [
-                     Wrap(
-                        spacing: 10.0,
-                        children: _choices.map((choice) {
-                          return ChoiceChip(
-                            label: Text(choice),
-                            selected: _selectedChoices.contains(choice),
-                            onSelected: (bool selected) {
-                              setState(() {
-                                if (selected) {
-                                  _selectedChoices.add(choice);
-                                } else {
-                                  _selectedChoices.remove(choice);
-                                }
-                              });
-                            },
-                          );
-                        }).toList(),
+                        ],
+                      )
+                          : Text(
+                        'Regimen for you',
+                        style: AppFonts().sego18bold.copyWith(
+                          color: AppConstColors.appThemeCayan,
+                        ),
                       ),
-                      ...(productsViewModel.recomendedProductsArr?[index]
-                                  .productRecommendations ??
-                              [])
-                          .map<Widget>((subItem) {
-                        return ListTile(title: Text(subItem.productName ?? ''));
-                      })
-                    ] : [],
-                  );
-                },
-                itemCount: productsViewModel.recomendedProductsArr?.length,
+                      children: [
+                        getSkinConcernFilterItems(),
+                        const SizedBox(height: 10),
+                        _getProductsWidget(context, productsViewModel),
+                      ],
+                    ),
+                  ),
+                  Theme(
+                    data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                    child: ExpansionTile(
+                      dense: true,
+                      enabled: true,
+                      initiallyExpanded: true,
+                      trailing: (!_isExpanded) ? const SizedBox.shrink() : null,
+                      onExpansionChanged: (value) {
+                        _isExpanded = !_isExpanded;
+                        setState(() {});
+                      },
+                      title: (!_isExpanded)
+                          ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Other Products',
+                            style: AppFonts().sego18bold.copyWith(
+                                color: (!_isExpanded)
+                                    ? AppConstColors.appThemeCayan
+                                    : AppConstColors.editProfileTxtColor),
+                          ),
+                          const Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Icon(
+                                Icons.more_horiz,
+                                color: Colors.white,
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Icon(
+                                Icons.keyboard_arrow_down_sharp,
+                                color: Colors.white,
+                              )
+                            ],
+                          )
+                        ],
+                      )
+                          : Text(
+                        'Other Products',
+                        style: AppFonts().sego18bold.copyWith(
+                          color: AppConstColors.appThemeCayan,
+                        ),
+                      ),
+                      children: [
+                        const SizedBox(height: 10),
+                        _getProductsWidget(context, productsViewModel),
+                      ],
+                    ),
+                  ),
+                ],
               ),
+            ),
       );
     });
   }
 
+  Widget getSkinConcernFilterItems() {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        border: Border.all(color:  AppConstColors.appThemeCayan),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Wrap(
+        spacing: 8.0,
+        children: _choices.map((choice) {
+          return ChoiceChip(
+            label: Text(choice),
+            padding: EdgeInsets.zero,
+            selected: _selectedChoices.contains(choice),
+            onSelected: (bool selected) {
+              setState(() {
+                if (selected) {
+                  _selectedChoices.add(choice);
+                } else {
+                  _selectedChoices.remove(choice);
+                }
+              });
+            },
+          );
+        }).toList(),
+      ),
+    );
+  }
+
   Widget _getProductsWidget(context, ProductsViewModel productsViewModel) {
     return GridView.builder(
-      physics: const NeverScrollableScrollPhysics(),
+      physics: const ClampingScrollPhysics(),
       shrinkWrap: true,
+      scrollDirection: Axis.vertical,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
-        mainAxisSpacing: 18.0,
-        crossAxisSpacing: 18.0,
-        childAspectRatio: 0.55,
+        crossAxisSpacing: 10.0,
+        // mainAxisSpacing: 10,
+        childAspectRatio: 0.65,
       ),
-      padding: const EdgeInsets.all(8.0),
-      itemCount: productsViewModel.productsModel?.productRecommendations
-          ?.length, // total number of items
+      // padding: const EdgeInsets.all(8.0),
+      itemCount:
+          productsViewModel.productsModel?.productRecommendations?.length,
       itemBuilder: (context, index) {
         ProductRecommendation? productRecommendation = productsViewModel
             .productsModel?.productRecommendations
             ?.elementAt(index);
-        return GestureDetector(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const ProductDetailsPage()));
-          },
-          child: Column(
-            children: [
-              Container(
-                  height: 120,
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 6),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ProductDetailsPage(product: productRecommendation)));
+            },
+            child: Column(
+              children: [
+                Container(
+                  height: 100,
                   margin: const EdgeInsets.only(bottom: 10),
-                  // color: Colors.red,
-                  child: Image.network(
-                    '$dummyImage3',
-                    height: 100,
-                    fit: BoxFit.cover,
-                  )
-                  // child: productRecommendation?.productImageUrl != null ? Image.network('${productRecommendation?.productImageUrl}', height: 100, fit: BoxFit.cover,) : Image.network('$dummyImage3', height: 100, fit: BoxFit.cover,),
-                  ),
-              Text(
-                // 'N/A large product item name goes here',
-                productRecommendation?.productName ?? 'N/A',
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 14.0, color: Colors.white),
-              ),
-            ],
+                  child: productRecommendation?.productImageUrl != null
+                      ? Image.network(
+                          '${productRecommendation?.productImageUrl}',
+                          // height: 90,
+                          fit: BoxFit.cover,
+                        )
+                      : Image.network(
+                          '$dummyImage3',
+                          height: 100,
+                          fit: BoxFit.cover,
+                        ),
+                ),
+                Text(
+                  productRecommendation?.productName ?? 'N/A',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.start,
+                  style: const TextStyle(fontSize: 14.0, color: Colors.white),
+                ),
+              ],
+            ),
           ),
         );
       },

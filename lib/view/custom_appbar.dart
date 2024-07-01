@@ -29,7 +29,7 @@ class CustomAppBar extends StatelessWidget {
                     ),
                     Text(
                       titleTxt,
-                      style: AppFonts().sego32normal),
+                      style: AppFonts().sego29normal),
                     const Spacer(),
                    showNotificationIcon ? GestureDetector(
                         onTap: () {
