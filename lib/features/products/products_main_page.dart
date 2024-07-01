@@ -16,15 +16,26 @@ class ProductsMainPage extends StatefulWidget {
 }
 
 class _ProductsMainPageState extends State<ProductsMainPage> {
+  var dummyImage =
+      "https://plus.unsplash.com/premium_photo-1677541205130-51e60e937318?q=80&w=480&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 
-  var dummyImage = "https://plus.unsplash.com/premium_photo-1677541205130-51e60e937318?q=80&w=480&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+  var dummyImage2 =
+      "https://images.pexels.com/photos/2533266/pexels-photo-2533266.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2";
 
-  var dummyImage2 = "https://images.pexels.com/photos/2533266/pexels-photo-2533266.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2";
-
-  var dummyImage3 = "https://img.freepik.com/free-photo/makeup-cosmetics-palette-brushes-white-background_1357-247.jpg?w=540&t=st=1718853597~exp=1718854197~hmac=eec34130f2e102de7e55e200f998b168f14a1f937351f44c04fb6c4368245929";
-bool _isExpanded = false;
+  var dummyImage3 =
+      "https://img.freepik.com/free-photo/makeup-cosmetics-palette-brushes-white-background_1357-247.jpg?w=540&t=st=1718853597~exp=1718854197~hmac=eec34130f2e102de7e55e200f998b168f14a1f937351f44c04fb6c4368245929";
+  bool _isExpanded = false;
 // List of choices
-  final List<String> _choices = ['Wrinkles', 'Acne', 'Pigmentation','Hyderation','Texture','Elaticity','Redness','Dark Circles'];
+  final List<String> _choices = [
+    'Wrinkles',
+    'Acne',
+    'Pigmentation',
+    'Hyderation',
+    'Texture',
+    'Elaticity',
+    'Redness',
+    'Dark Circles'
+  ];
 
   // Set to store selected choices
   Set<String> _selectedChoices = {'Wrinkles', 'Acne', 'Pigmentation'};
@@ -36,64 +47,97 @@ bool _isExpanded = false;
   }
 
   Future<void> getProducts() async {
-   await Provider.of<ProductsViewModel>(context, listen: false).getProductRecommendations();
+    await Provider.of<ProductsViewModel>(context, listen: false)
+        .getProductRecommendations();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ProductsViewModel>(builder: (context, productsViewModel, widget) {
-      print('Products ${productsViewModel.productsModel?.productRecommendations?.length}');
+    return Consumer<ProductsViewModel>(
+        builder: (context, productsViewModel, widget) {
+      print(
+          'Products ${productsViewModel.productsModel?.productRecommendations?.length}');
       return Scaffold(
         appBar: AppBar(
           title: const Text('Products for you'),
         ),
-        body: productsViewModel.isLoading ? const ProgressIndicatorWidget() : ListView.builder(itemBuilder: (context,index){
+        body: productsViewModel.isLoading
+            ? const ProgressIndicatorWidget()
+            : ListView.builder(
+                itemBuilder: (context, index) {
                   return ExpansionTile(
-                    trailing:(!_isExpanded && index == 0) ? const SizedBox.shrink() : null,
-                    onExpansionChanged: index == 0 ? (value) {
-                      _isExpanded = !_isExpanded;
-                      setState(() {
-                        
-                      });
-                    } : null,
-                    title:(!_isExpanded && index == 0) ?  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                      Text(productsViewModel.recomendedProductsArr?[index].titleName ?? '', style: AppFonts().sego18bold.copyWith(color:(!_isExpanded && index == 0)  ? AppConstColors.appThemeCayan : AppConstColors.editProfileTxtColor)),
-Row(
- 
-  children: [
-  Icon(Icons.filter_vintage,color: Colors.white,),
-  SizedBox(width: 20,),
-  Icon(Icons.file_copy,color: Colors.white,)
-],)
-                    ],) :  Text(productsViewModel.recomendedProductsArr?[index].titleName ?? '', style: AppFonts().sego14bold),
-                    children: 
-                  [ Wrap(
-        spacing: 10.0,
-        children: _choices.map((choice) {
-          return ChoiceChip(
-            label: Text(choice),
-            selected: _selectedChoices.contains(choice),
-            onSelected: (bool selected) {
-              setState(() {
-                if (selected) {
-                  _selectedChoices.add(choice);
-                } else {
-                  _selectedChoices.remove(choice);
-                }
-              });
-            },
-          );
-        }).toList(),
-      ),
-                    
-                    ...(productsViewModel.recomendedProductsArr?[index].productRecommendations ?? [] ).map<Widget>((subItem) {
-                return ListTile(title: Text(subItem.productName ?? ''));
-                            }).toList()]
-                  ,);
+                    trailing: (!_isExpanded && index == 0)? const SizedBox.shrink()
+                        : null,onExpansionChanged: index == 0
+                        ? (value) { _isExpanded = !_isExpanded;
+                            setState(() {});
+                          }
+                        : null,
+                    title: (!_isExpanded && index == 0)
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                  productsViewModel
+                                          .recomendedProductsArr?[index]
+                                          .titleName ??
+                                      '',
+                                  style: AppFonts().sego18bold.copyWith(
+                                      color: (!_isExpanded && index == 0)
+                                          ? AppConstColors.appThemeCayan
+                                          : AppConstColors
+                                              .editProfileTxtColor)),
+                              const Row(
+                                children: [
+                                  Icon(
+                                    Icons.filter_vintage,
+                                    color: Colors.white,
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Icon(
+                                    Icons.file_copy,
+                                    color: Colors.white,
+                                  )
+                                ],
+                              )
+                            ],
+                          )
+                        : Text(
+                            productsViewModel
+                                    .recomendedProductsArr?[index].titleName ??
+                                '',
+                            style: AppFonts().sego14bold),
+                    children: index == 0  ?  [
+                     Wrap(
+                        spacing: 10.0,
+                        children: _choices.map((choice) {
+                          return ChoiceChip(
+                            label: Text(choice),
+                            selected: _selectedChoices.contains(choice),
+                            onSelected: (bool selected) {
+                              setState(() {
+                                if (selected) {
+                                  _selectedChoices.add(choice);
+                                } else {
+                                  _selectedChoices.remove(choice);
+                                }
+                              });
+                            },
+                          );
+                        }).toList(),
+                      ),
+                      ...(productsViewModel.recomendedProductsArr?[index]
+                                  .productRecommendations ??
+                              [])
+                          .map<Widget>((subItem) {
+                        return ListTile(title: Text(subItem.productName ?? ''));
+                      })
+                    ] : [],
+                  );
                 },
-                itemCount: productsViewModel.recomendedProductsArr?.length,),
+                itemCount: productsViewModel.recomendedProductsArr?.length,
+              ),
       );
     });
   }
@@ -109,9 +153,12 @@ Row(
         childAspectRatio: 0.55,
       ),
       padding: const EdgeInsets.all(8.0),
-      itemCount: productsViewModel.productsModel?.productRecommendations?.length, // total number of items
+      itemCount: productsViewModel.productsModel?.productRecommendations
+          ?.length, // total number of items
       itemBuilder: (context, index) {
-        ProductRecommendation? productRecommendation = productsViewModel.productsModel?.productRecommendations?.elementAt(index);
+        ProductRecommendation? productRecommendation = productsViewModel
+            .productsModel?.productRecommendations
+            ?.elementAt(index);
         return GestureDetector(
           onTap: () {
             Navigator.push(
@@ -125,9 +172,13 @@ Row(
                   height: 120,
                   margin: const EdgeInsets.only(bottom: 10),
                   // color: Colors.red,
-                  child: Image.network('$dummyImage3', height: 100, fit: BoxFit.cover,)
+                  child: Image.network(
+                    '$dummyImage3',
+                    height: 100,
+                    fit: BoxFit.cover,
+                  )
                   // child: productRecommendation?.productImageUrl != null ? Image.network('${productRecommendation?.productImageUrl}', height: 100, fit: BoxFit.cover,) : Image.network('$dummyImage3', height: 100, fit: BoxFit.cover,),
-              ),
+                  ),
               Text(
                 // 'N/A large product item name goes here',
                 productRecommendation?.productName ?? 'N/A',
