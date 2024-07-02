@@ -5,7 +5,7 @@ import 'package:clarity_mirror/utils/app_fonts.dart';
 import 'package:clarity_mirror/utils/common_widgets/progress_indicator_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:collection/collection.dart';
 import '../../utils/app_colors.dart';
 
 class ProductsMainPage extends StatefulWidget {
@@ -16,7 +16,6 @@ class ProductsMainPage extends StatefulWidget {
 }
 
 class _ProductsMainPageState extends State<ProductsMainPage> {
-
   var dummyImage3 =
       "https://img.freepik.com/free-photo/makeup-cosmetics-palette-brushes-white-background_1357-247.jpg?w=540&t=st=1718853597~exp=1718854197~hmac=eec34130f2e102de7e55e200f998b168f14a1f937351f44c04fb6c4368245929";
   bool _isExpanded = false;
@@ -51,131 +50,184 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
   Widget build(BuildContext context) {
     return Consumer<ProductsViewModel>(
         builder: (context, productsViewModel, widget) {
-      // print('Products ${productsViewModel.productsModel?.productRecommendations?.length}');
+      print(
+          'Products ${productsViewModel.productsModel?.productRecommendations?.length}');
       return Scaffold(
         appBar: AppBar(
           title: const Text('Products for you'),
           actions: [
-            IconButton(icon: const Icon(Icons.shopping_cart, size: 28,), onPressed: (){},),
+            IconButton(
+              icon: const Icon(
+                Icons.shopping_cart,
+                size: 28,
+              ),
+              onPressed: () {},
+            ),
           ],
         ),
         body: productsViewModel.isLoading
             ? const ProgressIndicatorWidget()
             : SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Column(
-                children: [
-
-                  Theme(
-                    data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-                    child: ExpansionTile(
-                      dense: true,
-                      enabled: true,
-                      initiallyExpanded: true,
-                      trailing: (!_isExpanded) ? const SizedBox.shrink() : null,
-                      onExpansionChanged: (value) {
-                        _isExpanded = !_isExpanded;
-                        setState(() {});
-                      },
-                      title: (!_isExpanded)
-                          ? Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Regimen for you',
-                            style: AppFonts().sego18bold.copyWith(
-                                color: (!_isExpanded)
-                                    ? AppConstColors.appThemeCayan
-                                    : AppConstColors.editProfileTxtColor),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Column(
+                  children: [
+                    Theme(
+                      data: Theme.of(context)
+                          .copyWith(dividerColor: Colors.transparent),
+                      child: ExpansionTile(
+                        initiallyExpanded: true,
+                        title: Text(
+                          'Regimen for you',
+                          style: AppFonts().sego18bold.copyWith(
+                              color: AppConstColors.appThemeCayan,
                           ),
-                          const Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Icon(
-                                Icons.more_horiz,
-                                color: Colors.white,
-                              ),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              Icon(
-                                Icons.keyboard_arrow_down_sharp,
-                                color: Colors.white,
-                              )
-                            ],
-                          )
-                        ],
-                      )
-                          : Text(
-                        'Regimen for you',
-                        style: AppFonts().sego18bold.copyWith(
-                          color: AppConstColors.appThemeCayan,
                         ),
-                      ),
-                      children: [
-                        getSkinConcernFilterItems(),
-                        const SizedBox(height: 10),
-                        _getProductsWidget(context, productsViewModel),
-                      ],
-                    ),
-                  ),
-                  Theme(
-                    data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-                    child: ExpansionTile(
-                      dense: true,
-                      enabled: true,
-                      initiallyExpanded: true,
-                      trailing: (!_isExpanded) ? const SizedBox.shrink() : null,
-                      onExpansionChanged: (value) {
-                        _isExpanded = !_isExpanded;
-                        setState(() {});
-                      },
-                      title: (!_isExpanded)
-                          ? Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Other Products',
-                            style: AppFonts().sego18bold.copyWith(
-                                color: (!_isExpanded)
-                                    ? AppConstColors.appThemeCayan
-                                    : AppConstColors.editProfileTxtColor),
-                          ),
-                          const Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Icon(
-                                Icons.more_horiz,
-                                color: Colors.white,
-                              ),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              Icon(
-                                Icons.keyboard_arrow_down_sharp,
-                                color: Colors.white,
-                              )
-                            ],
-                          )
+                          getSkinConcernFilterItems(),
+                          getGroupedProductsDataWidget(),
                         ],
-                      )
-                          : Text(
-                        'Other Products',
-                        style: AppFonts().sego18bold.copyWith(
-                          color: AppConstColors.appThemeCayan,
-                        ),
                       ),
-                      children: [
-                        const SizedBox(height: 10),
-                        _getProductsWidget(context, productsViewModel),
-                      ],
                     ),
-                  ),
-                ],
+                    Theme(
+                      data: Theme.of(context)
+                          .copyWith(dividerColor: Colors.transparent),
+                      child: ExpansionTile(
+                        dense: true,
+                        enabled: true,
+                        initiallyExpanded: true,
+                        trailing:
+                            (!_isExpanded) ? const SizedBox.shrink() : null,
+                        onExpansionChanged: (value) {
+                          _isExpanded = !_isExpanded;
+                          setState(() {});
+                        },
+                        title: (!_isExpanded)
+                            ? Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Other Products',
+                                    style: AppFonts().sego18bold.copyWith(
+                                        color: (!_isExpanded)
+                                            ? AppConstColors.appThemeCayan
+                                            : AppConstColors
+                                                .editProfileTxtColor),
+                                  ),
+                                  const Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Icon(
+                                        Icons.more_horiz,
+                                        color: Colors.white,
+                                      ),
+                                      SizedBox(
+                                        width: 20,
+                                      ),
+                                      Icon(
+                                        Icons.keyboard_arrow_down_sharp,
+                                        color: Colors.white,
+                                      )
+                                    ],
+                                  )
+                                ],
+                              )
+                            : Text(
+                                'Other Products',
+                                style: AppFonts().sego18bold.copyWith(
+                                      color: AppConstColors.appThemeCayan,
+                                    ),
+                              ),
+                        children: [
+                          // getSkinConcernFilterItems(),
+                          const SizedBox(height: 10),
+                          _getProductsWidget(context,
+                              products: productsViewModel
+                                  .productsModel?.productRecommendations),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
       );
     });
+  }
+
+  Widget getGroupedProductsDataWidget() {
+    Map<String, List<ProductRecommendation?>> groupedProducts = groupBy(
+        Provider.of<ProductsViewModel>(context, listen: false)
+                .productsModel
+                ?.productRecommendations ??
+            [],
+        (product) => product?.regimentName ?? 'N/A');
+    print('Grouped products length: ${groupedProducts.length}');
+    return ListView.builder(
+        shrinkWrap: true,
+        physics: const ClampingScrollPhysics(),
+        itemCount: groupedProducts.length,
+        itemBuilder: (context, index) {
+          // groupedProducts.values.
+          return Column(
+            children: [
+              Theme(
+                data: Theme.of(context)
+                    .copyWith(dividerColor: Colors.transparent),
+                child: ExpansionTile(
+                  dense: true,
+                  enabled: true,
+                  initiallyExpanded: true,
+                  trailing: (!_isExpanded) ? const SizedBox.shrink() : null,
+                  onExpansionChanged: (value) {
+                    _isExpanded = !_isExpanded;
+                    setState(() {});
+                  },
+                  title: (!_isExpanded)
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              flex: 3,
+                              child: Text(
+                                groupedProducts.keys.elementAt(index),
+                                style: AppFonts().sego18bold.copyWith(
+                                    color: (!_isExpanded)
+                                        ? AppConstColors.appThemeCayan
+                                        : AppConstColors.editProfileTxtColor),
+                              ),
+                            ),
+                            const Expanded(
+                              flex: 2,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Icon(
+                                    Icons.more_horiz,
+                                    color: Colors.white,
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        )
+                      : Text(
+                          groupedProducts.keys.elementAt(index),
+                          style: AppFonts().sego18bold.copyWith(
+                                color: AppConstColors.appThemeCayan,
+                              ),
+                        ),
+                  children: [
+                    // getSkinConcernFilterItems(),
+                    const SizedBox(height: 10),
+                    _getProductsWidget(context,
+                        products: groupedProducts.values.elementAt(index)),
+                  ],
+                ),
+              ),
+            ],
+          );
+        });
   }
 
   Widget getSkinConcernFilterItems() {
@@ -183,7 +235,7 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        border: Border.all(color:  AppConstColors.appThemeCayan),
+        border: Border.all(color: AppConstColors.appThemeCayan),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Wrap(
@@ -208,7 +260,8 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
     );
   }
 
-  Widget _getProductsWidget(context, ProductsViewModel productsViewModel) {
+  Widget _getProductsWidget(context,
+      {@required List<ProductRecommendation?>? products}) {
     return GridView.builder(
       physics: const ClampingScrollPhysics(),
       shrinkWrap: true,
@@ -220,12 +273,10 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
         childAspectRatio: 0.65,
       ),
       // padding: const EdgeInsets.all(8.0),
-      itemCount:
-          productsViewModel.productsModel?.productRecommendations?.length,
+      itemCount: products?.length,
       itemBuilder: (context, index) {
-        ProductRecommendation? productRecommendation = productsViewModel
-            .productsModel?.productRecommendations
-            ?.elementAt(index);
+        ProductRecommendation? productRecommendation =
+            products?.elementAt(index);
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 6),
           child: GestureDetector(
@@ -233,7 +284,8 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ProductDetailsPage(product: productRecommendation)));
+                      builder: (context) =>
+                          ProductDetailsPage(product: productRecommendation)));
             },
             child: Column(
               children: [
