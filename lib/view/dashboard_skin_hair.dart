@@ -342,7 +342,7 @@ late TabController _tabController;
 
   Widget skinHairTabs(DashboardViewModel dashboardViewModel) {
     return Positioned(
-      bottom: MediaQuery.of(context).size.height * 0.14.h,
+      bottom: MediaQuery.of(context).size.height < 737 ? MediaQuery.of(context).size.height * 0.17.h : MediaQuery.of(context).size.height * 0.14.h ,
       child: Center(
         child: Container(
           decoration: BoxDecoration(
@@ -379,7 +379,7 @@ late TabController _tabController;
                           width: MediaQuery.of(context).size.width / 3,
                           child: Center(
                               child: Text(
-                            "SKIN CARE",
+                            "SKINCARE",
                             style: AppFonts().sego14normal.copyWith(height: 1),
                           ))),
                     ),
@@ -388,7 +388,7 @@ late TabController _tabController;
                           width: MediaQuery.of(context).size.width / 4,
                           child: Center(
                               child: Text(
-                            "HAIR CARE",
+                            "HAIRCARE",
                             style: AppFonts().sego14normal.copyWith(height: 1),
                           ))),
                     ),

@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 
+import '../utils/utils.dart';
+
 class DashboardViewModel extends ChangeNotifier {
   int _tabPosition = 0;
 
@@ -291,7 +293,7 @@ class DashboardViewModel extends ChangeNotifier {
       /// adding the skin concerns to the list based on [scoreTags] list
       if (scoreTags.contains(tag.tagName)) {
         String? tagName = tag.tagName;
-        skinConcernModel.setTagName = getTagName(tagName);
+        skinConcernModel.setTagName = Utils().getTagName(tagName);
         // skinConcernModel.setTagImage = getTagImage(tagName);
         skinConcernModel.setActualTagName = tag.tagName;
         tag.tagValues?.forEach((TagValue tagValue) {
@@ -384,40 +386,61 @@ int _selectedSkinIndex = 0;
     }
   }
 
-  /// Get tag title based on the tag name
-  String getTagName(String? tagName) {
-    // logger.d('Tag Title Name: $tagName');
-    switch (tagName) {
-      case "ACNE_SEVERITY_SCORE_FAST":
-        return 'Acne';
-      case "SPOTS_SEVERITY_SCORE_FAST":
-        return 'Pigmentation';
-      case "REDNESS_SEVERITY_SCORE_FAST":
-        return 'Redness';
-      case "WRINKLES_SEVERITY_SCORE_FAST":
-        return 'Wrinkles';
-      case "DEHYDRATION_SEVERITY_SCORE_FAST":
-        return 'Dehydration';
-      case "DARK_CIRCLES_SEVERITY_SCORE_FAST":
-        return 'Dark Circles';
-      case "UNEVEN_SKINTONE_SEVERITY_SCORE_FAST":
-        return 'Uneven Skintone';
-      case "PORES_SEVERITY_SCORE_FAST":
-        return 'Pores';
-      case "SHININESS_SEVERITY_SCORE_FAST":
-        return 'Oiliness';
-      case "LIP_ROUGHNESS_SEVERITY_SCORE_FAST":
-        return 'Lip Health';
-      case "ELASTICITY":
-        return 'Elasticity';
-      case "FIRMNESS":
-        return 'Firmness';
-      case "TEXTURE_SEVERITY_SCORE_FAST":
-        return 'Texture';
-      default:
-        return 'N/A';
-    }
-  }
+  // /// Get tag title based on the tag name
+  // String getTagName(String? tagName) {
+  //   // logger.d('Tag Title Name: $tagName');
+  //   switch (tagName) {
+  //     case "ACNE_SEVERITY_SCORE_FAST":
+  //       return 'Acne';
+  //     case "SPOTS_SEVERITY_SCORE_FAST":
+  //       return 'Pigmentation';
+  //     case "REDNESS_SEVERITY_SCORE_FAST":
+  //       return 'Redness';
+  //     case "WRINKLES_SEVERITY_SCORE_FAST":
+  //       return 'Wrinkles';
+  //     case "DEHYDRATION_SEVERITY_SCORE_FAST":
+  //       return 'Dehydration';
+  //     case "DARK_CIRCLES_SEVERITY_SCORE_FAST":
+  //       return 'Dark Circles';
+  //     case "UNEVEN_SKINTONE_SEVERITY_SCORE_FAST":
+  //       return 'Uneven Skintone';
+  //     case "PORES_SEVERITY_SCORE_FAST":
+  //       return 'Pores';
+  //     case "SHININESS_SEVERITY_SCORE_FAST":
+  //       return 'Oiliness';
+  //     case "LIP_ROUGHNESS_SEVERITY_SCORE_FAST":
+  //       return 'Lip Health';
+  //     case "ELASTICITY":
+  //       return 'Elasticity';
+  //     case "FIRMNESS":
+  //       return 'Firmness';
+  //     case "TEXTURE_SEVERITY_SCORE_FAST":
+  //       return 'Texture';
+  //     default:
+  //       return 'N/A';
+  //   }
+  // }
+
+  String getTagIbByName(String? tagName) {
+  const reversedTagMap = {
+    "Acne": "ACNE_SEVERITY_SCORE_FAST",
+    "Pigmentation": "SPOTS_SEVERITY_SCORE_FAST",
+    "Redness": "REDNESS_SEVERITY_SCORE_FAST",
+    "Wrinkles": "WRINKLES_SEVERITY_SCORE_FAST",
+    "Dehydration": "DEHYDRATION_SEVERITY_SCORE_FAST",
+    "Dark Circles": "DARK_CIRCLES_SEVERITY_SCORE_FAST",
+    "Uneven Skintone": "UNEVEN_SKINTONE_SEVERITY_SCORE_FAST",
+    "Pores": "PORES_SEVERITY_SCORE_FAST",
+    "Oiliness": "SHININESS_SEVERITY_SCORE_FAST",
+    "Lip Health": "LIP_ROUGHNESS_SEVERITY_SCORE_FAST",
+    "Elasticity": "ELASTICITY",
+    "Firmness": "FIRMNESS",
+    "Texture": "TEXTURE_SEVERITY_SCORE_FAST"
+  };
+
+  // Return the corresponding key from the map, or 'N/A' if not found
+  return reversedTagMap[tagName] ?? 'N/A';
+}
 
 
   getHairData() {

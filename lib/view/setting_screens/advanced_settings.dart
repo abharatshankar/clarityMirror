@@ -61,7 +61,7 @@ Widget toogleWidget(Widget child,DashboardViewModel dashboardViewModel){
               crossAxisAlignment: CrossAxisAlignment.start,
               
               children: [
-                Text("Feature Recognisation Images",style: AppFonts().sego14bold),
+                Text("Feature Recognition Images",style: AppFonts().sego14bold),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Text("For trained users only",style: AppFonts().sego10bold.copyWith(color: Colors.grey.shade500),),

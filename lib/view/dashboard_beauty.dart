@@ -201,7 +201,7 @@ class _DashboardBeautyState extends State<DashboardBeauty> {
                           width: MediaQuery.of(context).size.width / 3,
                           child: Center(
                               child: Text(
-                            "SKIN CARE",
+                            "SKINCARE",
                             style: AppFonts().sego14normal.copyWith(height: 1),
                           ))),
                     ),

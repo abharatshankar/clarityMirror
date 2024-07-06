@@ -10,6 +10,10 @@ class AppConstColors{
   static const Color editProfileTxtColor = Color(0xffCCCCCC);
   static const Color editProfileBtnColor = Color(0xff707070);
   static const Color themeBackgroundColor = Color(0xff343434);
+  static const Color cartCardColor = Color(0xff151515);
+  static const Color plusMinusBtnColor = Color(0xff00646A);
+  static const Color plusMinusBackgroundColor = Color(0xff003235);
+  //#003235
 }
 
 final lightTheme = ThemeData(

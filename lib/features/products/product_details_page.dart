@@ -1,6 +1,7 @@
 import 'package:clarity_mirror/features/products/model/products_model.dart';
 import 'package:clarity_mirror/utils/app_colors.dart';
 import 'package:clarity_mirror/utils/app_fonts.dart';
+import 'package:clarity_mirror/view/cart_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -38,17 +39,27 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        floatingActionButton: addToCartButtonWidget(),
+      child: Scaffold(appBar: AppBar(
+          title: const Text("Product Details"),
+          actions: [
+            IconButton(
+              icon: const Icon(
+                Icons.shopping_cart,
+                size: 28,
+              ),
+              onPressed: () {},
+            ),
+          ],
+        ),
+        floatingActionButton: GestureDetector(
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>CartList()));
+          },
+          child: addToCartButtonWidget()),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         body: Column(
           children: [
-            const CustomAppBar(
-              titleTxt: "Product Details",
-              showNotificationIcon: false,
-            ),
-
-            const SizedBox(height: 10,),
+             const SizedBox(height: 10,),
             /// Product image
             widget.product?.productImageUrl != null ? Container(
               height: 180.h,
@@ -59,7 +70,11 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
                 fit: BoxFit.cover,
               )
             ) : Container(),
-
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(widget.product?.productName ?? '',style: AppFonts().sego18normal,),
+            ),
+            Text("\$${widget.product?.productPrice ?? ''}",style: AppFonts().sego18normal,),
             TabBar(
               controller: _tabController,
               labelColor: AppConstColors.appThemeCayan,
@@ -79,7 +94,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
                 ),
                 Tab(
                   child: Text(
-                    "Ingratients",
+                    "Ingradients",
                     style: AppFonts().sego12bold,
                   ),
                 ),

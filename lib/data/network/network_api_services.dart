@@ -73,15 +73,19 @@ class NetworkApiServices extends BaseApiServices {
       };
       var encodedData = json.encode(requestBody);
       logger.d('Encoded data: $encodedData');
-      final response = await http.post(Uri.parse(url),
-          body: encodedData,
-          headers: {"Content-type": "application/json", "Accept": "*/*"},
+      final response = await http.post(
+        Uri.parse(url),
+        body: encodedData,
+        headers: {"Content-type": "application/json", "Accept": "*/*"},
       ).timeout(const Duration(seconds: 30));
       Map<String, dynamic> responseData = responseJson(response);
       logger.i('Response: ${responseData.toString()}');
       if (responseData.containsKey('ImageId')) {
         /// Updating the image id to dashboard view mode for further use
-        Provider.of<DashboardViewModel>(NavigationService.navigatorKey.currentContext!, listen: false).setImageId(responseData['ImageId']);
+        Provider.of<DashboardViewModel>(
+                NavigationService.navigatorKey.currentContext!,
+                listen: false)
+            .setImageId(responseData['ImageId']);
         return responseData['ImageId'];
       } else {
         throw Exception('ImageId is null');
@@ -112,10 +116,11 @@ class NetworkApiServices extends BaseApiServices {
         headers: {"Content-type": "application/json", "Accept": "*/*"},
       );
       responseData = responseJson(response);
-      logger.i('Tag Results Response================>: ${responseData.toString()}');
+      logger.i(
+          'Tag Results Response================>: ${responseData.toString()}');
     } on SocketException {
       throw InternetException("NO Internet is available right now");
-    } catch (e,s) {
+    } catch (e, s) {
       logger.e('Api Error: $e');
       print(s);
     }
@@ -131,7 +136,10 @@ class NetworkApiServices extends BaseApiServices {
       var url = ApiConstants.getProductRecommendations;
       Map<String, dynamic> requestBody = {
         'APIKey': ApiConstants.androidApiKey1,
-        'ImageId': Provider.of<DashboardViewModel>(NavigationService.navigatorKey.currentContext!, listen: false).imageId,
+        'ImageId': Provider.of<DashboardViewModel>(
+                NavigationService.navigatorKey.currentContext!,
+                listen: false)
+            .imageId,
       };
       var encodedData = json.encode(requestBody);
       logger.d('Product Recommendations Encoded body: $encodedData');
@@ -141,15 +149,15 @@ class NetworkApiServices extends BaseApiServices {
         headers: {"Content-type": "application/json", "Accept": "*/*"},
       );
       responseData = responseJson(response);
-      logger.i('Recommended products data Response================>: ${responseData.toString()}');
+      logger.i(
+          'Recommended products data Response================>: ${responseData.toString()}');
     } on SocketException {
       throw InternetException("NO Internet is available right now");
-    } catch (e,s) {
+    } catch (e, s) {
       logger.e('Api Error: $e');
       print(s);
     }
 
     return responseData;
   }
-
 }

@@ -63,8 +63,8 @@ class _DashboardMoreMenuState extends State<DashboardMoreMenu> with  AutomaticKe
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 4,
-                          childAspectRatio: 0.75,
-                          crossAxisSpacing: 6.0,
+                          childAspectRatio: 0.68,
+                          crossAxisSpacing: 3.0,
                           mainAxisSpacing: 3.0,
                         ),
                         itemBuilder: (BuildContext context, int index) {
@@ -246,8 +246,11 @@ class GridItem extends StatelessWidget {
           Text(
             itemName,
             textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(
-                fontSize: 12,
+                fontSize: 11,
+                
                 height: 1,
                 color: Colors.white,
                 letterSpacing: 0,

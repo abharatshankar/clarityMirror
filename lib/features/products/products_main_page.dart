@@ -4,6 +4,7 @@ import 'package:clarity_mirror/features/products/products_view_model.dart';
 import 'package:clarity_mirror/utils/app_fonts.dart';
 import 'package:clarity_mirror/utils/common_widgets/progress_indicator_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
 import '../../utils/app_colors.dart';
@@ -25,15 +26,20 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
     'Wrinkles',
     'Acne',
     'Pigmentation',
-    'Hyderation',
+    'Hydration',
     'Texture',
-    'Elaticity',
+    'Elasticity',
     'Redness',
-    'Dark Circles'
+    'Pores',
+    'Dark Circles',
+    'Dehydration',
+    'Uneven Skintone',
+    'Oiliness',
+    'Lip Health',
+    'Firmness',
+    
   ];
 
-  // Set to store selected choices
-  Set<String> _selectedChoices = {'Wrinkles', 'Acne', 'Pigmentation'};
 
   @override
   void initState() {
@@ -83,8 +89,8 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
                           ),
                         ),
                         children: [
-                          getSkinConcernFilterItems(),
-                          getGroupedProductsDataWidget(),
+                          getSkinConcernFilterItems(productsViewModel),
+                          getGroupedProductsDataWidget(productsViewModel),
                         ],
                       ),
                     ),
@@ -117,13 +123,13 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
                                   const Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      Icon(
-                                        Icons.more_horiz,
-                                        color: Colors.white,
-                                      ),
-                                      SizedBox(
-                                        width: 20,
-                                      ),
+                                      // Icon(
+                                      //   Icons.more_horiz,
+                                      //   color: Colors.white,
+                                      // ),
+                                      // SizedBox(
+                                      //   width: 20,
+                                      // ),
                                       Icon(
                                         Icons.keyboard_arrow_down_sharp,
                                         color: Colors.white,
@@ -154,27 +160,30 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
     });
   }
 
-  Widget getGroupedProductsDataWidget() {
-    Map<String, List<ProductRecommendation?>> groupedProducts = groupBy(
-        Provider.of<ProductsViewModel>(context, listen: false)
-                .productsModel
-                ?.productRecommendations ??
-            [],
-        (product) => product?.regimentName ?? 'N/A');
-    print('Grouped products length: ${groupedProducts.length}');
+  Widget getGroupedProductsDataWidget(ProductsViewModel productsVM) {
+    // Map<String, List<ProductRecommendation?>> groupedProducts = groupBy(
+    //     Provider.of<ProductsViewModel>(context, listen: false)
+    //             .productsModel
+    //             ?.productRecommendations ??
+    //         [],
+    //     (product) => product?.regimentName ?? 'N/A');
+    // print('Grouped products length: ${groupedProducts.length}');
     return ListView.builder(
         shrinkWrap: true,
         physics: const ClampingScrollPhysics(),
-        itemCount: groupedProducts.length,
+        itemCount: productsVM.groupedProducts?.length,
         itemBuilder: (context, index) {
           // groupedProducts.values.
+          // return Column(children: [
+
+          // ],);
           return Column(
             children: [
               Theme(
                 data: Theme.of(context)
                     .copyWith(dividerColor: Colors.transparent),
                 child: ExpansionTile(
-                  dense: true,
+                  dense: !_isExpanded,
                   enabled: true,
                   initiallyExpanded: true,
                   trailing: (!_isExpanded) ? const SizedBox.shrink() : null,
@@ -189,7 +198,7 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
                             Expanded(
                               flex: 3,
                               child: Text(
-                                groupedProducts.keys.elementAt(index),
+                                productsVM.groupedProducts?.keys.elementAt(index) ?? '',
                                 style: AppFonts().sego18bold.copyWith(
                                     color: (!_isExpanded)
                                         ? AppConstColors.appThemeCayan
@@ -212,7 +221,7 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
                           ],
                         )
                       : Text(
-                          groupedProducts.keys.elementAt(index),
+                          productsVM.groupedProducts?.keys.elementAt(index) ?? '',
                           style: AppFonts().sego18bold.copyWith(
                                 color: AppConstColors.appThemeCayan,
                               ),
@@ -221,7 +230,7 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
                     // getSkinConcernFilterItems(),
                     const SizedBox(height: 10),
                     _getProductsWidget(context,
-                        products: groupedProducts.values.elementAt(index)),
+                        products: productsVM.groupedProducts?.values.elementAt(index)),
                   ],
                 ),
               ),
@@ -230,7 +239,7 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
         });
   }
 
-  Widget getSkinConcernFilterItems() {
+  Widget getSkinConcernFilterItems(ProductsViewModel productsViewModel) {
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.all(16),
@@ -242,22 +251,51 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
         spacing: 8.0,
         children: _choices.map((choice) {
           return ChoiceChip(
-            label: Text(choice),
+            label: Text(choice,style: AppFonts().sego14normal,),
             padding: EdgeInsets.zero,
-            selected: _selectedChoices.contains(choice),
+            selected: productsViewModel.selectedChoices.contains(choice),
             onSelected: (bool selected) {
-              setState(() {
+              
                 if (selected) {
-                  _selectedChoices.add(choice);
+                  productsViewModel.addSelectedChoice(choice);
+                  
                 } else {
-                  _selectedChoices.remove(choice);
+                  productsViewModel.removeSelectedChoice(choice);
                 }
-              });
+              
             },
           );
         }).toList(),
       ),
     );
+  }
+
+  Widget sunnyOrMoon(String? precribedTime){
+    print(precribedTime);
+    if(precribedTime != null && precribedTime == "Day time"){
+      return Container(
+        decoration: const BoxDecoration(color: Colors.grey,shape: BoxShape.circle),
+        child: const Padding(
+          padding: EdgeInsets.all(2.0),
+          child: Icon(Icons.sunny,color: Colors.black,size: 18,),
+        ));
+    }
+    else if(precribedTime != null && precribedTime == "Night time"){
+      return Container(
+        decoration: const BoxDecoration(color: Colors.grey,shape: BoxShape.circle),
+        child:  const Padding(
+          padding: EdgeInsets.all(2.0),
+          child: Icon(Icons.nightlight_round_outlined,size: 18,color: Colors.black),
+        ));
+    }else if(precribedTime != null && precribedTime == "Day time & Night time"){
+      return Container(
+        decoration: const BoxDecoration(color: Colors.grey,shape: BoxShape.circle),
+        child: const Padding(
+          padding: EdgeInsets.all(2.0),
+          child: Icon(Icons.sunny_snowing,size: 18,color: Colors.black),
+        ));
+    }
+    return const SizedBox();
   }
 
   Widget _getProductsWidget(context,
@@ -287,29 +325,44 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
                       builder: (context) =>
                           ProductDetailsPage(product: productRecommendation)));
             },
-            child: Column(
+            child: Stack(
+              alignment: Alignment.topCenter,
               children: [
-                Container(
-                  height: 100,
-                  margin: const EdgeInsets.only(bottom: 10),
-                  child: productRecommendation?.productImageUrl != null
-                      ? Image.network(
-                          '${productRecommendation?.productImageUrl}',
-                          // height: 90,
-                          fit: BoxFit.cover,
-                        )
-                      : Image.network(
-                          '$dummyImage3',
-                          height: 100,
-                          fit: BoxFit.cover,
-                        ),
+                Positioned(
+                  top: 10,
+                  left: -1,
+                  child: Container(
+                    height: 100,
+                    margin: const EdgeInsets.only(bottom: 10),
+                    child: productRecommendation?.productImageUrl != null
+                        ? Image.network(
+                            '${productRecommendation?.productImageUrl}',
+                            // height: 90,
+                            fit: BoxFit.cover,
+                          )
+                        : Image.network(
+                            dummyImage3,
+                            height: 50,
+                            fit: BoxFit.fill,
+                          ),
+                  ),
                 ),
-                Text(
-                  productRecommendation?.productName ?? 'N/A',
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.start,
-                  style: const TextStyle(fontSize: 14.0, color: Colors.white),
+                Positioned(
+                  right: 0,
+                  top:0 ,
+                  child: sunnyOrMoon(productRecommendation?.prescribedTimeToUse)),
+                Positioned(
+                  top: 110,
+                  child: SizedBox(
+                    width: 105,
+                    child: Text(
+                      productRecommendation?.productName ?? 'N/A',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.start,
+                      style: AppFonts().sego12normal,
+                    ),
+                  ),
                 ),
               ],
             ),

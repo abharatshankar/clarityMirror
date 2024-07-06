@@ -28,7 +28,7 @@ class _AccountSettingsState extends State<AccountSettings> {
               width: MediaQuery.of(context).size.width,
               color: AppConstColors.appBoldTextColor,
             ),
-            titleAndTextfield(title: 'First Name'),
+            titleAndTextfield(title: 'First Name',),
             titleAndTextfield(title: 'Last Name'),
             titleAndTextfield(title: 'Email ID'),
             titleAndTextfield(title: 'Phone Number'),
@@ -53,7 +53,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(25),
                       color: Colors.white),
-                  child: TextFormField(
+                  child: TextFormField(style: TextStyle(color: Colors.black),
                     decoration: const InputDecoration(border: InputBorder.none),
                     minLines:
                         6, // any number you need (It works as the rows for the textarea)
@@ -82,7 +82,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(25),
                       color: Colors.white),
-                  child: TextFormField(
+                  child: TextFormField(style: TextStyle(color: Colors.black),
                     decoration: const InputDecoration(border: InputBorder.none),
                     minLines:
                         6, // any number you need (It works as the rows for the textarea)
@@ -120,7 +120,7 @@ class _AccountSettingsState extends State<AccountSettings> {
           child: Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(25), color: Colors.white),
-              child: TextField(
+              child: TextField(style: TextStyle(color: Colors.black),
                 decoration: InputDecoration(
                   border: InputBorder.none,
                 ),

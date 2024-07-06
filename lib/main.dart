@@ -12,6 +12,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import 'utils/app_colors.dart';
+import 'viewModel/cart_view_model.dart';
 import 'viewModel/tab_bar_provider.dart';
 import 'viewModel/theme_provider.dart';
 
@@ -42,6 +43,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (context) => TabControllerProvider()),
         ChangeNotifierProvider(create: (context) => ProductsViewModel()),
+        ChangeNotifierProvider(create: (context) => CartViewModel()),
+        
 
       ],
       child: ChangeNotifierProvider(
@@ -57,7 +60,7 @@ class MyApp extends StatelessWidget {
             navigatorKey: NavigationService.navigatorKey,
             title: 'Clarity Mirror',
             // theme: ThemeData(
-            //   primarySwatch: Colors.blue,
+              // primarySwatch: Colors.cyan,
             // ),
             themeMode: themeProvider.themeMode,
             theme: lightTheme,

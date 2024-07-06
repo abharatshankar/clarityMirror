@@ -20,8 +20,8 @@ class DashboardMirror extends StatefulWidget {
   State<DashboardMirror> createState() => _DashboardMirrorState();
 }
 
-class _DashboardMirrorState extends State<DashboardMirror> with AutomaticKeepAliveClientMixin {
-
+class _DashboardMirrorState extends State<DashboardMirror>
+    with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
@@ -58,11 +58,9 @@ class _DashboardMirrorState extends State<DashboardMirror> with AutomaticKeepAli
               Positioned(
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  height:
-                  MediaQuery.of(context).size.height * 0.73.h,
+                  height: MediaQuery.of(context).size.height * 0.75.h,
                   child: PlatformViewLink(
-                    viewType:
-                    'com.example.clarity_mirror/my_native_view',
+                    viewType: 'com.example.clarity_mirror/my_native_view',
                     surfaceFactory: (BuildContext context,
                         PlatformViewController controller) {
                       if (controller is AndroidViewController) {
@@ -70,23 +68,18 @@ class _DashboardMirrorState extends State<DashboardMirror> with AutomaticKeepAli
                           controller: controller,
                           gestureRecognizers: const <Factory<
                               OneSequenceGestureRecognizer>>{},
-                          hitTestBehavior:
-                          PlatformViewHitTestBehavior.opaque,
+                          hitTestBehavior: PlatformViewHitTestBehavior.opaque,
                         );
                       }
                       return Container();
                     },
-                    onCreatePlatformView:
-                        (PlatformViewCreationParams params) {
-                      return PlatformViewsService
-                          .initSurfaceAndroidView(
+                    onCreatePlatformView: (PlatformViewCreationParams params) {
+                      return PlatformViewsService.initSurfaceAndroidView(
                         id: params.id,
-                        viewType:
-                        'com.example.clarity_mirror/my_native_view',
+                        viewType: 'com.example.clarity_mirror/my_native_view',
                         layoutDirection: TextDirection.ltr,
                         creationParams: null,
-                        creationParamsCodec:
-                        const StandardMessageCodec(),
+                        creationParamsCodec: const StandardMessageCodec(),
                       )
                         ..addOnPlatformViewCreatedListener(
                             params.onPlatformViewCreated)
@@ -97,53 +90,47 @@ class _DashboardMirrorState extends State<DashboardMirror> with AutomaticKeepAli
               ),
               goliveButton(),
               dashboardViewModel.temperatureStr != null
-                  ? tempratureText(
-                  dashboardViewModel.temperatureStr)
+                  ? tempratureText(dashboardViewModel.temperatureStr)
                   : const SizedBox(),
               dashboardViewModel.uvIndexTxt != null
                   ? tempIndexTxt(
-                  tempIndexStatus:
-                  "uv index ${dashboardViewModel.uvIndexTxt}")
+                      tempIndexStatus:
+                          "UV Index  ${dashboardViewModel.uvIndexTxt}")
                   : const SizedBox(),
-              humidityStatus(humidityStr: "Humidity low"),
+              humidityStatus(humidityStr: "Humidity Low"),
               gradientContainer(),
               dashboardViewModel.pollutionLevelStr != null
                   ? pollutionStatus(
-                  pollutionStr:
-                  dashboardViewModel.pollutionLevelStr ??
-                      '')
+                      pollutionStr: dashboardViewModel.pollutionLevelStr ?? '')
                   : Positioned(
-                left: 10,
-                bottom: MediaQuery.of(context).size.height *
-                    0.05,
-                child: const SizedBox(),
-              ),
+                      left: 10,
+                      bottom: MediaQuery.of(context).size.height * 0.05,
+                      child: const SizedBox(),
+                    ),
               dashboardViewModel.tipsStr != null
                   ? ideaIconAndTxt(dashboardViewModel.tipsStr)
                   : const Positioned(
-                left: 5,
-                bottom: 0,
-                child: SizedBox(),
-              ),
+                      left: 5,
+                      bottom: 0,
+                      child: SizedBox(),
+                    ),
               excersiceWidget(),
               dashboardViewModel.avgOfTags != null
-                  ? percentageCircle(
-                  dashboardViewModel.avgOfTags.toString())
+                  ? percentageCircle(dashboardViewModel.avgOfTags.toString())
                   : Positioned(
-                right: 5,
-                bottom: MediaQuery.of(context).size.height *
-                    0.07,
-                child: const SizedBox(),
-              ),
+                      right: 5,
+                      bottom: MediaQuery.of(context).size.height * 0.07,
+                      child: const SizedBox(),
+                    ),
               dashboardViewModel.isLoading
                   ? Positioned(
-                top: MediaQuery.of(context).size.height / 2,
-                left: MediaQuery.of(context).size.width / 2,
-                child: const CircularProgressIndicator(
-                  color: Colors.red,
-                  backgroundColor: Colors.grey,
-                ),
-              )
+                      top: MediaQuery.of(context).size.height / 2,
+                      left: MediaQuery.of(context).size.width / 2,
+                      child: const CircularProgressIndicator(
+                        color: Colors.red,
+                        backgroundColor: Colors.grey,
+                      ),
+                    )
                   : Container(),
             ],
           ),
@@ -162,8 +149,7 @@ class _DashboardMirrorState extends State<DashboardMirror> with AutomaticKeepAli
               Positioned(
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  height:
-                  MediaQuery.of(context).size.height * 0.76,
+                  height: MediaQuery.of(context).size.height * 0.76,
                   // child: Image.asset(
                   //   "assets/images/Dermatolgist6.png",
                   //   fit: BoxFit.cover,
@@ -176,53 +162,47 @@ class _DashboardMirrorState extends State<DashboardMirror> with AutomaticKeepAli
               ),
               goliveButton(),
               dashboardViewModel.temperatureStr != null
-                  ? tempratureText(
-                  dashboardViewModel.temperatureStr)
+                  ? tempratureText(dashboardViewModel.temperatureStr)
                   : const SizedBox(),
               dashboardViewModel.uvIndexTxt != null
                   ? tempIndexTxt(
-                  tempIndexStatus:
-                  "uv index ${dashboardViewModel.uvIndexTxt}")
+                      tempIndexStatus:
+                          "uv index ${dashboardViewModel.uvIndexTxt}")
                   : const SizedBox(),
               humidityStatus(humidityStr: "Humidity low"),
               // gradientContainer(),
               dashboardViewModel.pollutionLevelStr != null
                   ? pollutionStatus(
-                  pollutionStr:
-                  dashboardViewModel.pollutionLevelStr ??
-                      '')
+                      pollutionStr: dashboardViewModel.pollutionLevelStr ?? '')
                   : Positioned(
-                left: 10,
-                bottom: MediaQuery.of(context).size.height *
-                    0.05,
-                child: const SizedBox(),
-              ),
+                      left: 10,
+                      bottom: MediaQuery.of(context).size.height * 0.05,
+                      child: const SizedBox(),
+                    ),
               dashboardViewModel.tipsStr != null
                   ? ideaIconAndTxt(dashboardViewModel.tipsStr)
                   : const Positioned(
-                left: 5,
-                bottom: 0,
-                child: SizedBox(),
-              ),
+                      left: 5,
+                      bottom: 0,
+                      child: SizedBox(),
+                    ),
               excersiceWidget(),
               dashboardViewModel.avgOfTags != null
-                  ? percentageCircle(
-                  dashboardViewModel.avgOfTags.toString())
+                  ? percentageCircle(dashboardViewModel.avgOfTags.toString())
                   : Positioned(
-                right: 5,
-                bottom: MediaQuery.of(context).size.height *
-                    0.07,
-                child: const SizedBox(),
-              ),
+                      right: 5,
+                      bottom: MediaQuery.of(context).size.height * 0.07,
+                      child: const SizedBox(),
+                    ),
               dashboardViewModel.isLoading
                   ? Positioned(
-                top: MediaQuery.of(context).size.height / 2,
-                left: MediaQuery.of(context).size.width / 2,
-                child: CircularProgressIndicator(
-                  color: Colors.red,
-                  backgroundColor: Colors.grey,
-                ),
-              )
+                      top: MediaQuery.of(context).size.height / 2,
+                      left: MediaQuery.of(context).size.width / 2,
+                      child: const CircularProgressIndicator(
+                        color: Colors.red,
+                        backgroundColor: Colors.grey,
+                      ),
+                    )
                   : Container(),
             ],
           ),
@@ -293,7 +273,7 @@ class _DashboardMirrorState extends State<DashboardMirror> with AutomaticKeepAli
                         "Go Live",
                         style: AppFonts().sego14bold,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 12,
                       ),
                       const Icon(
@@ -304,7 +284,7 @@ class _DashboardMirrorState extends State<DashboardMirror> with AutomaticKeepAli
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 18,
               )
             ],
@@ -357,7 +337,7 @@ class _DashboardMirrorState extends State<DashboardMirror> with AutomaticKeepAli
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Pollition moderate",
+            "Pollution Moderate",
             style: AppFonts().sego14normal.copyWith(color: Colors.white),
           ),
           Text(
@@ -393,11 +373,9 @@ class _DashboardMirrorState extends State<DashboardMirror> with AutomaticKeepAli
                 speed: 40.0,
                 text: "${tipsString ?? ''}            ",
                 textStyle: AppFonts()
-                      .sego18normal
-                      .copyWith(color: const Color.fromARGB(255, 255, 147, 7)),
-                onFinish: () {
-                  
-                },
+                    .sego18normal
+                    .copyWith(color: const Color.fromARGB(255, 255, 147, 7)),
+                onFinish: () {},
               ),
             ),
           ],
@@ -427,7 +405,7 @@ class _DashboardMirrorState extends State<DashboardMirror> with AutomaticKeepAli
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              "Skin health",
+              "Skin Health",
               style: AppFonts().sego14normal.copyWith(height: 1.5),
             ),
           ),
@@ -451,7 +429,7 @@ class _DashboardMirrorState extends State<DashboardMirror> with AutomaticKeepAli
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              "Excellent",
+              "EXCELLENT",
               style: AppFonts().sego10bold.copyWith(height: 1.5),
             ),
           ),

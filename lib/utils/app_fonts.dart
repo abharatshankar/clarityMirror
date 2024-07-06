@@ -94,6 +94,14 @@ TextStyle sego18normal  = const TextStyle(
                 fontWeight: FontWeight.normal,
               );
 
+
+TextStyle sego20normal  = const TextStyle(
+                fontFamily: 'segoe',
+                fontSize: 20.0,
+                color: Colors.white,
+                fontWeight: FontWeight.normal,
+              );
+
 TextStyle sego18medium  =  const TextStyle(
                 fontFamily: 'segoe',
                 fontSize: 18.0,
@@ -112,7 +120,7 @@ TextStyle sego18bold  =  const TextStyle(
 TextStyle sego70normal  = const TextStyle(
                 fontFamily: 'segoe',
                 fontSize: 80.0,
-                color: Colors.white,
+                color: AppConstColors.appThemeCayan,
                 fontWeight: FontWeight.w100,
                 height: 0.1,wordSpacing: 0.0
               );

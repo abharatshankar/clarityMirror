@@ -125,14 +125,14 @@ class _SplashScreenState extends State<SplashScreen> {
           TextSpan(
             text: 'CLARITY',
             style:
-                AppFonts().sego29normal.copyWith(fontWeight: FontWeight.w100),
+                AppFonts().sego29normal.copyWith(fontWeight: FontWeight.w100,color: AppConstColors.appThemeCayan),
           ),
           WidgetSpan(
             child: Transform.translate(
               offset: const Offset(0.0, -20.0),
               child: Text(
                 'TM',
-                style: AppFonts().sego14normal,
+                style: AppFonts().sego14normal.copyWith(color: AppConstColors.appThemeCayan),
               ),
             ),
           ),

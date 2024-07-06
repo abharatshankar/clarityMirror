@@ -28,7 +28,7 @@ String dropdownValue = 'Everyday';
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
           const AppBarWithMoreButton(
-                titleTxt: 'Account Settings',
+                titleTxt: 'Notifications Settings',
               ),
               dividerWidget(),
           toogleWidget(Switch.adaptive(
@@ -79,7 +79,7 @@ String dropdownValue = 'Everyday';
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(
-                    value,
+                    value,style: TextStyle(color: Colors.black),
                   ),
                 );
               }).toList(),

@@ -30,7 +30,6 @@ class AuthViewModel with ChangeNotifier {
     _auth.apiLogin(data).then((value) {
       setLoginLoading(false);
 
-
       final userPreference = Provider.of<UserViewModel>(context, listen: false);
       userPreference.saveUser(UserModel(token: value['token'].toString()));
 

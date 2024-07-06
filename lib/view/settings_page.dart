@@ -71,10 +71,12 @@ class _SearchableListState extends State<SearchableList> {
                     borderRadius: BorderRadius.circular(25)),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: TextField(
+                  child: TextField(style: TextStyle(color: Colors.black),
                     onChanged: _onSearchTextChanged,
                     decoration: const InputDecoration(
                       hintText: 'Search...',
+                      hintStyle: TextStyle(color: Colors.grey),
+                      
                     ),
                   ),
                 ),

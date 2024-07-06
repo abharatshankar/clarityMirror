@@ -16,7 +16,7 @@ class _ProgressPageState extends State<ProgressPage> {
     Colors.red,
     Colors.green,
   ];
-String _selectedItem = 'Skin health score'; 
+String _selectedItem = 'Skin Health Score'; 
   bool showAvg = false;
 
   @override
@@ -60,7 +60,7 @@ String _selectedItem = 'Skin health score';
                     _selectedItem = newValue!;
                   });
                             },
-                            items: <String>['Skin health score', 'Wrinkles', 'Acne score', 'Pigmentation score']
+                            items: <String>['Skin Health Score', 'Wrinkles', 'Acne Score', 'Pigmentation Score']
                     .map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,

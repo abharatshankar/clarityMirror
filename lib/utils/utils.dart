@@ -13,6 +13,41 @@ class Utils {
     FocusScope.of(context).requestFocus(next);
   }
 
+
+  /// Get tag title based on the tag name
+  String getTagName(String? tagName) {
+    // logger.d('Tag Title Name: $tagName');
+    switch (tagName) {
+      case "ACNE_SEVERITY_SCORE_FAST":
+        return 'Acne';
+      case "SPOTS_SEVERITY_SCORE_FAST":
+        return 'Pigmentation';
+      case "REDNESS_SEVERITY_SCORE_FAST":
+        return 'Redness';
+      case "WRINKLES_SEVERITY_SCORE_FAST":
+        return 'Wrinkles';
+      case "DEHYDRATION_SEVERITY_SCORE_FAST":
+        return 'Dehydration';
+      case "DARK_CIRCLES_SEVERITY_SCORE_FAST":
+        return 'Dark Circles';
+      case "UNEVEN_SKINTONE_SEVERITY_SCORE_FAST":
+        return 'Uneven Skintone';
+      case "PORES_SEVERITY_SCORE_FAST":
+        return 'Pores';
+      case "SHININESS_SEVERITY_SCORE_FAST":
+        return 'Oiliness';
+      case "LIP_ROUGHNESS_SEVERITY_SCORE_FAST":
+        return 'Lip Health';
+      case "ELASTICITY":
+        return 'Elasticity';
+      case "FIRMNESS":
+        return 'Firmness';
+      case "TEXTURE_SEVERITY_SCORE_FAST":
+        return 'Texture';
+      default:
+        return 'N/A';
+    }
+  }
   
 
   static void flushBarErrorMessage(String message, BuildContext context) {
