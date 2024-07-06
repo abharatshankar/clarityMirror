@@ -4,9 +4,7 @@ import 'package:clarity_mirror/features/products/products_view_model.dart';
 import 'package:clarity_mirror/utils/app_fonts.dart';
 import 'package:clarity_mirror/utils/common_widgets/progress_indicator_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:collection/collection.dart';
 import '../../utils/app_colors.dart';
 
 class ProductsMainPage extends StatefulWidget {
@@ -60,11 +58,18 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
           'Products ${productsViewModel.productsModel?.productRecommendations?.length}');
       return Scaffold(
         appBar: AppBar(
-          title: const Text('Products for you'),
+          title: const Text('Products'),
           actions: [
             IconButton(
               icon: const Icon(
-                Icons.shopping_cart,
+                Icons.search,
+                size: 28,
+              ),
+              onPressed: () {},
+            ),
+            IconButton(
+              icon: const Icon(
+                Icons.shopping_cart_outlined,
                 size: 28,
               ),
               onPressed: () {},
@@ -183,49 +188,75 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
                 data: Theme.of(context)
                     .copyWith(dividerColor: Colors.transparent),
                 child: ExpansionTile(
+                  
                   dense: !_isExpanded,
                   enabled: true,
                   initiallyExpanded: true,
-                  trailing: (!_isExpanded) ? const SizedBox.shrink() : null,
+
+                  // trailing: const SizedBox.shrink() ,
                   onExpansionChanged: (value) {
                     _isExpanded = !_isExpanded;
                     setState(() {});
                   },
-                  title: (!_isExpanded)
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              flex: 3,
-                              child: Text(
-                                productsVM.groupedProducts?.keys.elementAt(index) ?? '',
-                                style: AppFonts().sego18bold.copyWith(
-                                    color: (!_isExpanded)
-                                        ? AppConstColors.appThemeCayan
-                                        : AppConstColors.editProfileTxtColor),
-                              ),
-                            ),
-                            const Expanded(
-                              flex: 2,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Icon(
-                                    Icons.more_horiz,
-                                    color: Colors.white,
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
+                  title: Container(
+                    // color: Colors.amber,
+                    child: Row(children: [
+                      Text(
+                            productsVM.groupedProducts?.keys.elementAt(index) ?? '',
+                            style: AppFonts().sego18bold.copyWith(
+                                  color: Colors.grey,
+                                ),),
+                        Flexible(
+                          child: Row(
+                            children: [
+                              SizedBox(width: 10,),
+                              Container(height: 6,width: 6,decoration: BoxDecoration(shape: BoxShape.circle,color: AppConstColors.appThemeCayan),),
+                              Flexible(child: Container(color: AppConstColors.appThemeCayan,height: 1,)),
+                            ],
+                          ),
                         )
-                      : Text(
-                          productsVM.groupedProducts?.keys.elementAt(index) ?? '',
-                          style: AppFonts().sego18bold.copyWith(
-                                color: AppConstColors.appThemeCayan,
-                              ),
-                        ),
+                        // SizedBox(width: 20,),
+                        // Row(children: [
+                        //   Container(height: 5,width: 5,decoration: BoxDecoration(shape: BoxShape.circle,color: AppConstColors.appThemeCayan),),
+                        //   // Container(height: 2,width: double.infinity,color: AppConstColors.appThemeCayan,)
+                        // ],)
+                    ],),
+                  ),
+                  // title: (!_isExpanded)
+                  //     ? Row(
+                  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //         children: [
+                  //           Expanded(
+                  //             flex: 3,
+                  //             child: Text(
+                  //               productsVM.groupedProducts?.keys.elementAt(index) ?? '',
+                  //               style: AppFonts().sego18bold.copyWith(
+                  //                   color: (!_isExpanded)
+                  //                       ? AppConstColors.appThemeCayan
+                  //                       : AppConstColors.editProfileTxtColor),
+                  //             ),
+                  //           ),
+                  //           const Expanded(
+                  //             flex: 2,
+                  //             child: Row(
+                  //               mainAxisAlignment: MainAxisAlignment.end,
+                  //               mainAxisSize: MainAxisSize.max,
+                  //               children: [
+                  //                 Icon(
+                  //                   Icons.more_horiz,
+                  //                   color: Colors.white,
+                  //                 ),
+                  //               ],
+                  //             ),
+                  //           )
+                  //         ],
+                  //       )
+                  //     : Text(
+                  //         productsVM.groupedProducts?.keys.elementAt(index) ?? '',
+                  //         style: AppFonts().sego18bold.copyWith(
+                  //               color: AppConstColors.appThemeCayan,
+                  //             ),
+                  //       ),
                   children: [
                     // getSkinConcernFilterItems(),
                     const SizedBox(height: 10),
