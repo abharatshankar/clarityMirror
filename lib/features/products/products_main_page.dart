@@ -250,28 +250,44 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
       child: Wrap(
         spacing: 8.0,
         children: _choices.map((choice) {
-          return ChoiceChip(
-            label: Text(choice,style: AppFonts().sego14normal,),
-            padding: EdgeInsets.zero,
-            selected: productsViewModel.selectedChoices.contains(choice),
-            onSelected: (bool selected) {
-              
-                if (selected) {
-                  productsViewModel.addSelectedChoice(choice);
-                  
-                } else {
-                  productsViewModel.removeSelectedChoice(choice);
-                }
-              
+          return GestureDetector(
+            onTap: () {
+
+             productsViewModel.selectedChoices.contains(choice) ? productsViewModel.removeSelectedChoice(choice) : productsViewModel.addSelectedChoice(choice)  ;
+print(productsViewModel.selectedChoices);
+               
             },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 3),
+              child: Container(decoration: BoxDecoration(
+                color: productsViewModel.selectedChoices.contains(choice) ? AppConstColors.appThemeCayan.withOpacity(0.2) : Colors.transparent,
+                border: Border.all(color:productsViewModel.selectedChoices.contains(choice) ? AppConstColors.appThemeCayan: Colors.white),borderRadius: BorderRadius.circular(10)),child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(choice,style: AppFonts().sego14normal,),
+              ),),
+            ),
           );
+          // ChoiceChip(
+          //   label: Text(choice,style: AppFonts().sego14normal,),
+          //   padding: EdgeInsets.zero,
+          //   selected: productsViewModel.selectedChoices.contains(choice),
+          // //   onSelected: (bool selected) {
+              
+          //       if (selected) {
+          //         productsViewModel.addSelectedChoice(choice);
+                  
+          //       } else {
+          //         productsViewModel.removeSelectedChoice(choice);
+          //       }
+              
+          //   },
+          // );
         }).toList(),
       ),
     );
   }
 
   Widget sunnyOrMoon(String? precribedTime){
-    print(precribedTime);
     if(precribedTime != null && precribedTime == "Day time"){
       return Container(
         decoration: const BoxDecoration(color: Colors.grey,shape: BoxShape.circle),
