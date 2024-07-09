@@ -3,7 +3,9 @@ import 'package:clarity_mirror/features/products/product_details_page.dart';
 import 'package:clarity_mirror/features/products/products_view_model.dart';
 import 'package:clarity_mirror/utils/app_fonts.dart';
 import 'package:clarity_mirror/utils/common_widgets/progress_indicator_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import '../../utils/app_colors.dart';
 
@@ -105,8 +107,7 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
                         dense: true,
                         enabled: true,
                         initiallyExpanded: true,
-                        trailing:
-                            (!_isExpanded) ? const SizedBox.shrink() : null,
+                        trailing: (!_isExpanded) ? const SizedBox.shrink() : null,
                         onExpansionChanged: (value) {
                           _isExpanded = !_isExpanded;
                           setState(() {});
@@ -187,7 +188,7 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
                 data: Theme.of(context)
                     .copyWith(dividerColor: Colors.transparent),
                 child: ExpansionTile(
-                  
+                  // trailing: const SizedBox.shrink(),
                   dense: !_isExpanded,
                   enabled: true,
                   initiallyExpanded: true,
@@ -200,15 +201,19 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
                   title: Container(
                     // color: Colors.amber,
                     child: Row(children: [
-                      Text(
-                            productsVM.groupedProducts?.keys.elementAt(index) ?? '',
-                            style: AppFonts().sego18bold.copyWith(
-                                  color: Colors.grey,
-                                ),),
-                        Flexible(
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                              productsVM.groupedProducts?.keys.elementAt(index) ?? '',
+                              style: AppFonts().sego18bold.copyWith(
+                                    color: Colors.grey,
+                                  ),),
+                      ),
+                        Expanded(
+                          flex: 3,
                           child: Row(
                             children: [
-                              SizedBox(width: 10,),
+                              // SizedBox(width: 10,),
                               Container(height: 6,width: 6,decoration: BoxDecoration(shape: BoxShape.circle,color: AppConstColors.appThemeCayan),),
                               Flexible(child: Container(color: AppConstColors.appThemeCayan,height: 1,)),
                             ],
@@ -351,64 +356,61 @@ print(productsViewModel.selectedChoices);
         crossAxisCount: 3,
         crossAxisSpacing: 10.0,
         // mainAxisSpacing: 10,
-        childAspectRatio: 0.65,
+        childAspectRatio: 0.58,
       ),
       // padding: const EdgeInsets.all(8.0),
       itemCount: products?.length,
       itemBuilder: (context, index) {
         ProductRecommendation? productRecommendation =
             products?.elementAt(index);
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 6),
-          child: GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          ProductDetailsPage(product: productRecommendation)));
-            },
-            child: Stack(
-              alignment: Alignment.topCenter,
-              children: [
-                Positioned(
-                  top: 10,
-                  left: -1,
-                  child: Container(
-                    height: 100,
-                    margin: const EdgeInsets.only(bottom: 10),
-                    child: productRecommendation?.productImageUrl != null
-                        ? Image.network(
-                            '${productRecommendation?.productImageUrl}',
-                            // height: 90,
-                            fit: BoxFit.cover,
-                          )
-                        : Image.network(
-                            dummyImage3,
-                            height: 50,
-                            fit: BoxFit.fill,
-                          ),
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ProductDetailsPage(product: productRecommendation)));
+          },
+          child: Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              Positioned(
+                top: 10,
+                left: -1,
+                child: Container(
+                  height: 100,
+                  margin: const EdgeInsets.only(bottom: 10),
+                  child: productRecommendation?.productImageUrl != null
+                      ? Image.network(
+                          '${productRecommendation?.productImageUrl}',
+                          // height: 90,
+                          fit: BoxFit.cover,
+                        )
+                      : Image.network(
+                          dummyImage3,
+                          height: 50,
+                          fit: BoxFit.fill,
+                        ),
+                ),
+              ),
+              Positioned(
+                right: 0,
+                top:0 ,
+                child: sunnyOrMoon(productRecommendation?.prescribedTimeToUse)),
+              Positioned(
+                top: 110,
+                child: SizedBox(
+                  width: 105,
+                  child: Text(
+                    productRecommendation?.productName ?? 'N/A',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.start,
+                    style: AppFonts().sego12normal,
                   ),
                 ),
-                Positioned(
-                  right: 0,
-                  top:0 ,
-                  child: sunnyOrMoon(productRecommendation?.prescribedTimeToUse)),
-                Positioned(
-                  top: 110,
-                  child: SizedBox(
-                    width: 105,
-                    child: Text(
-                      productRecommendation?.productName ?? 'N/A',
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.start,
-                      style: AppFonts().sego12normal,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       },
