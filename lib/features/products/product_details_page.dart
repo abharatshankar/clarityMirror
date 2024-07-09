@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../view/custom_appbar.dart';
+import 'product_certifications.dart';
+import 'product_reviews.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   const ProductDetailsPage({super.key, required this.product});
@@ -27,7 +29,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 5, vsync: this);
   }
 
   @override
@@ -39,7 +41,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(appBar: AppBar(
+      child: Scaffold(
+        appBar: AppBar(
           title: const Text("Product Details"),
           actions: [
             IconButton(
@@ -51,30 +54,40 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
             ),
           ],
         ),
-        floatingActionButton: GestureDetector(
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>CartList()));
-          },
-          child: addToCartButtonWidget()),
+        // floatingActionButton: GestureDetector(
+        //   onTap: () {
+        //     Navigator.push(context, MaterialPageRoute(builder: (context)=>CartList()));
+        //   },
+        //   child: addToCartButtonWidget()),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         body: Column(
           children: [
-             const SizedBox(height: 10,),
+            const SizedBox(
+              height: 10,
+            ),
+
             /// Product image
-            widget.product?.productImageUrl != null ? Container(
-              height: 180.h,
-              margin: const EdgeInsets.only(bottom: 10),
-              child: Image.network(
-                  widget.product?.productImageUrl ?? '',
-                // height: 90,
-                fit: BoxFit.cover,
-              )
-            ) : Container(),
+            widget.product?.productImageUrl != null
+                ? Container(
+                    height: 180.h,
+                    margin: const EdgeInsets.only(bottom: 10),
+                    child: Image.network(
+                      widget.product?.productImageUrl ?? '',
+                      // height: 90,
+                      fit: BoxFit.cover,
+                    ))
+                : Container(),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(widget.product?.productName ?? '',style: AppFonts().sego18normal,),
+              child: Text(
+                widget.product?.productName ?? '',
+                style: AppFonts().sego18normal,
+              ),
             ),
-            Text("\$${widget.product?.productPrice ?? ''}",style: AppFonts().sego18normal,),
+            Text(
+              "\$${widget.product?.productPrice ?? ''}",
+              style: AppFonts().sego18normal,
+            ),
             TabBar(
               controller: _tabController,
               labelColor: AppConstColors.appThemeCayan,
@@ -94,13 +107,19 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
                 ),
                 Tab(
                   child: Text(
-                    "Ingradients",
+                    "Ingredients",
                     style: AppFonts().sego12bold,
                   ),
                 ),
                 Tab(
                   child: Text(
                     "How to use",
+                    style: AppFonts().sego12bold,
+                  ),
+                ),
+                Tab(
+                  child: Text(
+                    "Certifications",
                     style: AppFonts().sego12bold,
                   ),
                 ),
@@ -115,16 +134,19 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
 
             Expanded(
               child: TabBarView(
-                physics: const ClampingScrollPhysics(),
+                  physics: const ClampingScrollPhysics(),
                   controller: _tabController,
                   children: [
                     getContentWidget(content: widget.product?.description),
                     getContentWidget(content: widget.product?.ingredients),
                     getContentWidget(content: widget.product?.usageInfo),
-                    getContentWidget(content: widget.product?.localizationInfo),
-              ]),
+                    //certifications
+                    ProductCertifications(),
+                    //reviews
+                    ProductReviews(),
+                    // getContentWidget(content: widget.product?.localizationInfo),
+                  ]),
             ),
-
           ],
         ),
       ),
@@ -144,19 +166,40 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
         height: 50,
         child: Center(
             child: Text(
-              "Add to cart",
-              style: AppFonts().sego14bold.copyWith(color: Colors.white),
-            )),
+          "Add to cart",
+          style: AppFonts().sego14bold.copyWith(color: Colors.white),
+        )),
       ),
     );
   }
-  
-  Widget getContentWidget({@ required String? content}) {
-    return SingleChildScrollView(
-      child: Container(
-          padding: const EdgeInsets.only(bottom: 80, left: 16, right: 16, top: 16),
-          child: Text(content ?? 'N/A'),
-      ),
+
+  Widget getContentWidget({@required String? content}) {
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        Positioned(top:15,left:15,right:15,child: SizedBox(width: MediaQuery.of(context).size.width,child: Text(content ?? 'N/A'))),
+        Positioned(
+          // bottom: 2,
+          // left: 5,
+          // top: 10,
+          // right: 5,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 5),
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: 50,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10), color: Colors.cyan),
+              child: const Center(
+                child: Text(
+                  "Add to Cart",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

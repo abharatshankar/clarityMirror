@@ -24,13 +24,13 @@ class ProductsViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addSelectedChoice(String choice){
+  void addSelectedChoice(String choice) {
     selectedChoices.add(choice);
     // seperateByGroups();
     notifyListeners();
   }
 
-  void removeSelectedChoice(String choice){
+  void removeSelectedChoice(String choice) {
     selectedChoices.remove(choice);
     // seperateByGroups();
     notifyListeners();

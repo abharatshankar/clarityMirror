@@ -1,6 +1,5 @@
 /// Constant class which will have all the BTBP tags and the tags info
 class BTBPConstants {
-
   /// Score tags only [13 Tags]
   static List scoreTags = [
     "ACNE_SEVERITY_SCORE_FAST",
@@ -30,7 +29,9 @@ class BTBPConstants {
     "PORES_IMAGE_FAST",
     "SHININESS_IMAGE_FAST",
     "LIP_ROUGHNESS_IMAGE_FAST",
-    "INPUT_IMAGE_THUMB", /// It will return the Original image to compare
+    "INPUT_IMAGE_THUMB",
+
+    /// It will return the Original image to compare
   ];
 
   /// Weather related tags only [5 Tags]
@@ -76,5 +77,4 @@ class BTBPConstants {
   static String elasticity = "Elasticity";
   static String firmness = "Firmness";
   static String texture = "Texture";
-
 }

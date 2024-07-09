@@ -35,8 +35,7 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
     'Oiliness',
     'Lip Health',
     'Firmness',
-    
-  ];
+    ];
 
 
   @override
@@ -303,14 +302,11 @@ print(productsViewModel.selectedChoices);
           //   padding: EdgeInsets.zero,
           //   selected: productsViewModel.selectedChoices.contains(choice),
           // //   onSelected: (bool selected) {
-              
           //       if (selected) {
           //         productsViewModel.addSelectedChoice(choice);
-                  
           //       } else {
           //         productsViewModel.removeSelectedChoice(choice);
           //       }
-              
           //   },
           // );
         }).toList(),
