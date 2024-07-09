@@ -42,7 +42,7 @@ class _DashboardMirrorState extends State<DashboardMirror>
             backgroundColor: AppConstColors.themeBackgroundColor,
             body: Platform.isAndroid
                 ? getAndroidViewWidget(dashboardViewModel)
-                : getIosViewWidget(dashboardViewModel),
+                : getIosViewWidget(dashboardViewModel,context),
           ),
         );
       },
@@ -139,75 +139,68 @@ class _DashboardMirrorState extends State<DashboardMirror>
     );
   }
 
-  Widget getIosViewWidget(dashboardViewModel) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Stack(
-            alignment: AlignmentDirectional.center,
-            children: [
-              Positioned(
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height * 0.76,
-                  // child: Image.asset(
-                  //   "assets/images/Dermatolgist6.png",
-                  //   fit: BoxFit.cover,
-                  // ),
-                  child: const UiKitView(
-                    viewType: 'custom_view',
-                    layoutDirection: TextDirection.ltr,
-                  ),
-                ),
-              ),
-              goliveButton(),
-              dashboardViewModel.temperatureStr != null
-                  ? tempratureText(dashboardViewModel.temperatureStr)
-                  : const SizedBox(),
-              dashboardViewModel.uvIndexTxt != null
-                  ? tempIndexTxt(
-                      tempIndexStatus:
-                          "uv index ${dashboardViewModel.uvIndexTxt}")
-                  : const SizedBox(),
-              humidityStatus(humidityStr: "Humidity low"),
-              // gradientContainer(),
-              dashboardViewModel.pollutionLevelStr != null
-                  ? pollutionStatus(
-                      pollutionStr: dashboardViewModel.pollutionLevelStr ?? '')
-                  : Positioned(
-                      left: 10,
-                      bottom: MediaQuery.of(context).size.height * 0.05,
-                      child: const SizedBox(),
-                    ),
-              dashboardViewModel.tipsStr != null
-                  ? ideaIconAndTxt(dashboardViewModel.tipsStr)
-                  : const Positioned(
-                      left: 5,
-                      bottom: 0,
-                      child: SizedBox(),
-                    ),
-              excersiceWidget(),
-              dashboardViewModel.avgOfTags != null
-                  ? percentageCircle(dashboardViewModel.avgOfTags.toString())
-                  : Positioned(
-                      right: 5,
-                      bottom: MediaQuery.of(context).size.height * 0.07,
-                      child: const SizedBox(),
-                    ),
-              dashboardViewModel.isLoading
-                  ? Positioned(
-                      top: MediaQuery.of(context).size.height / 2,
-                      left: MediaQuery.of(context).size.width / 2,
-                      child: const CircularProgressIndicator(
-                        color: Colors.red,
-                        backgroundColor: Colors.grey,
-                      ),
-                    )
-                  : Container(),
-            ],
+  Widget getIosViewWidget(dashboardViewModel,BuildContext context ){
+    print("screen size ${MediaQuery.of(context).size.height}");
+    return Stack(
+      alignment: AlignmentDirectional.center,
+      children: [
+        SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: (MediaQuery.of(context).size.height - (MediaQuery.of(context).size.height * 0.335) ).h,
+          // child: Image.asset(
+          //   "assets/images/Dermatolgist6.png",
+          //   fit: BoxFit.cover,
+          // ),
+          child: const UiKitView(
+            viewType: 'custom_view',
+            layoutDirection: TextDirection.ltr,
           ),
-        ],
-      ),
+        ),
+        goliveButton(),
+        dashboardViewModel.temperatureStr != null
+            ? tempratureText(dashboardViewModel.temperatureStr)
+            : const SizedBox(),
+        dashboardViewModel.uvIndexTxt != null
+            ? tempIndexTxt(
+                tempIndexStatus:
+                    "uv index ${dashboardViewModel.uvIndexTxt}")
+            : const SizedBox(),
+        humidityStatus(humidityStr: "Humidity low"),
+        gradientContainer(),
+        dashboardViewModel.pollutionLevelStr != null
+            ? pollutionStatus(
+                pollutionStr: dashboardViewModel.pollutionLevelStr ?? '')
+            : Positioned(
+                left: 10,
+                bottom: MediaQuery.of(context).size.height * 0.05,
+                child: const SizedBox(),
+              ),
+        dashboardViewModel.tipsStr != null
+            ? ideaIconAndTxt(dashboardViewModel.tipsStr)
+            : const Positioned(
+                left: 5,
+                bottom: 0,
+                child: SizedBox(),
+              ),
+        excersiceWidget(),
+        dashboardViewModel.avgOfTags != null
+            ? percentageCircle(dashboardViewModel.avgOfTags.toString())
+            : Positioned(
+                right: 5,
+                bottom: MediaQuery.of(context).size.height * 0.07,
+                child: const SizedBox(),
+              ),
+        dashboardViewModel.isLoading
+            ? Positioned(
+                top: MediaQuery.of(context).size.height / 2,
+                left: MediaQuery.of(context).size.width / 2,
+                child: const CircularProgressIndicator(
+                  color: Colors.red,
+                  backgroundColor: Colors.grey,
+                ),
+              )
+            : Container(),
+      ],
     );
   }
 

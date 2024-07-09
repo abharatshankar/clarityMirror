@@ -14,14 +14,4 @@ class HomeViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void fetchMoviesListApi() async {
-    setMoviesList(ApiResponse.loading());
-
-    _homeRepository.fetchMoviesList().then((data) {
-      print("before completed im here!");
-      setMoviesList(ApiResponse.completed(data));
-    }).onError((error, stackTrace) {
-      setMoviesList(ApiResponse.error(error.toString()));
-    });
-  }
 }
