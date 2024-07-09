@@ -42,7 +42,7 @@ class _ProductReviewsState extends State<ProductReviews> {
       scrollDirection: Axis.vertical,
       child: Column(
         children: [
-          ListView.builder(physics: ClampingScrollPhysics(),
+          ListView.builder(physics: const ClampingScrollPhysics(),
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             itemCount: subscribeModel.length,
