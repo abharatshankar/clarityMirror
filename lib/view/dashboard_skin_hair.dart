@@ -622,15 +622,13 @@ late TabController _tabController;
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Expanded(
-              child: Text(
-                '$title',
-                // tagData?.tagName ?? '',
-                overflow: TextOverflow.ellipsis,
-                maxLines: 3,
-                style:
-                AppFonts().sego14normal.copyWith(color: AppConstColors.appThemeCayan),
-              ),
+            child: Text(
+              '$title',
+              // tagData?.tagName ?? '',
+              overflow: TextOverflow.ellipsis,
+              maxLines: 3,
+              style:
+              AppFonts().sego14normal.copyWith(color: AppConstColors.appThemeCayan),
             ),
           ),
           // CircularPercentIndicator(

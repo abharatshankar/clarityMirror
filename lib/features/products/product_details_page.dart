@@ -137,9 +137,21 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
                   physics: const ClampingScrollPhysics(),
                   controller: _tabController,
                   children: [
-                    getContentWidget(content: widget.product?.description),
-                    getContentWidget(content: widget.product?.ingredients),
-                    getContentWidget(content: widget.product?.usageInfo),
+                    GestureDetector(
+                      onTap: () {
+               Navigator.push(context, MaterialPageRoute(builder: (context)=>CartList()));
+            },
+                      child: getContentWidget(content: widget.product?.description)),
+                    GestureDetector(
+                      onTap: () {
+               Navigator.push(context, MaterialPageRoute(builder: (context)=>CartList()));
+            },
+                      child: getContentWidget(content: widget.product?.ingredients)),
+                    GestureDetector(
+                      onTap: () {
+               Navigator.push(context, MaterialPageRoute(builder: (context)=>CartList()));
+            },
+                      child: getContentWidget(content: widget.product?.usageInfo)),
                     //certifications
                     ProductCertifications(),
                     //reviews

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../view/cart_page.dart';
+
 class ProductCertifications extends StatelessWidget {
   const ProductCertifications({super.key});
 
@@ -36,17 +38,22 @@ class ProductCertifications extends StatelessWidget {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0,vertical: 5),
-            child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10), color: Colors.cyan),
-              height: 50,
-              width: MediaQuery.of(context).size.width,
-              child: const Center(
-                child: Text(
-                  "Add to Cart",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+          GestureDetector(
+            onTap: () {
+               Navigator.push(context, MaterialPageRoute(builder: (context)=>CartList()));
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0,vertical: 5),
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10), color: Colors.cyan),
+                height: 50,
+                width: MediaQuery.of(context).size.width,
+                child: const Center(
+                  child: Text(
+                    "Add to Cart",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+                  ),
                 ),
               ),
             ),

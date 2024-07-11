@@ -2,7 +2,6 @@
 import 'package:clarity_mirror/utils/app_colors.dart';
 import 'package:clarity_mirror/utils/app_fonts.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 import '../viewModel/cart_view_model.dart';
