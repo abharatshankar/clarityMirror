@@ -146,7 +146,7 @@ class _DashboardMirrorState extends State<DashboardMirror>
       children: [
         SizedBox(
           width: MediaQuery.of(context).size.width,
-          height: (MediaQuery.of(context).size.height - (MediaQuery.of(context).size.height * 0.335) ).h,
+          height: (MediaQuery.of(context).size.height - (MediaQuery.of(context).size.height * 0.4) ).h,
           // child: Image.asset(
           //   "assets/images/Dermatolgist6.png",
           //   fit: BoxFit.cover,
@@ -166,7 +166,7 @@ class _DashboardMirrorState extends State<DashboardMirror>
                     "uv index ${dashboardViewModel.uvIndexTxt}")
             : const SizedBox(),
         humidityStatus(humidityStr: "Humidity low"),
-        gradientContainer(),
+        // gradientContainer(),
         dashboardViewModel.pollutionLevelStr != null
             ? pollutionStatus(
                 pollutionStr: dashboardViewModel.pollutionLevelStr ?? '')
@@ -209,7 +209,7 @@ class _DashboardMirrorState extends State<DashboardMirror>
         bottom: 0,
         child: Container(
           width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height * 0.4,
+          height: MediaQuery.of(context).size.height * 0.3,
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment(0.0, -1.0),

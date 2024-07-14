@@ -26,12 +26,10 @@ class CustomViewController: NSObject, FlutterPlatformView {
         self.viewId = viewId
         super.init()
         createView(viewId: self.viewId )
-   
     }
     
     
     func view() -> UIView {
-
         return ViewController.shared.view ?? UIView()
     }
     
