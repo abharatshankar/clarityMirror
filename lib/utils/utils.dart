@@ -1,10 +1,11 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:another_flushbar/flushbar_route.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter/services.dart';
 
 class Utils {
 // ! It contains all the utilities which help you in your project
+  static const platform = MethodChannel('camera_ai_channel');
 
   static void changeNodeFocus(BuildContext context,
       {FocusNode? current, FocusNode? next}) {
@@ -12,13 +13,42 @@ class Utils {
     FocusScope.of(context).requestFocus(next);
   }
 
-  static toastMessage(String message) {
-    Fluttertoast.showToast(
-      msg: message,
-      backgroundColor: Colors.black,
-      textColor: Colors.white,
-    );
+
+  /// Get tag title based on the tag name
+  String getTagName(String? tagName) {
+    // logger.d('Tag Title Name: $tagName');
+    switch (tagName) {
+      case "ACNE_SEVERITY_SCORE_FAST":
+        return 'Acne';
+      case "SPOTS_SEVERITY_SCORE_FAST":
+        return 'Pigmentation';
+      case "REDNESS_SEVERITY_SCORE_FAST":
+        return 'Redness';
+      case "WRINKLES_SEVERITY_SCORE_FAST":
+        return 'Wrinkles';
+      case "DEHYDRATION_SEVERITY_SCORE_FAST":
+        return 'Dehydration';
+      case "DARK_CIRCLES_SEVERITY_SCORE_FAST":
+        return 'Dark Circles';
+      case "UNEVEN_SKINTONE_SEVERITY_SCORE_FAST":
+        return 'Uneven Skintone';
+      case "PORES_SEVERITY_SCORE_FAST":
+        return 'Pores';
+      case "SHININESS_SEVERITY_SCORE_FAST":
+        return 'Oiliness';
+      case "LIP_ROUGHNESS_SEVERITY_SCORE_FAST":
+        return 'Lip Health';
+      case "ELASTICITY":
+        return 'Elasticity';
+      case "FIRMNESS":
+        return 'Firmness';
+      case "TEXTURE_SEVERITY_SCORE_FAST":
+        return 'Texture';
+      default:
+        return 'N/A';
+    }
   }
+  
 
   static void flushBarErrorMessage(String message, BuildContext context) {
     showFlushbar(
@@ -59,4 +89,13 @@ class Utils {
 
     return avg;
   }
+
+  static void getNewActivity() async {
+    try {
+      await platform.invokeMethod('startNewActivity');
+    } on PlatformException catch (e) {
+      print(e.message);
+    }
+  }
+
 }

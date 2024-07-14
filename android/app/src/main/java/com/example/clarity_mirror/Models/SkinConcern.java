@@ -1,4 +1,4 @@
-package com.example.btbp_projects.Models;
+package com.example.clarity_mirror.Models;
 
 public class SkinConcern {
     private String name;

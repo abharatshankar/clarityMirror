@@ -1,122 +1,107 @@
 package com.example.clarity_mirror;
 
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.multidex.MultiDex;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import org.btbp.btbplibrary.AppConfig;
 import org.btbp.btbplibrary.AutoCaptureFragment;
-import org.btbp.btbplibrary.BTBP;
-import org.btbp.btbplibrary.BTBPCaptureResult;
-import org.btbp.btbplibrary.BTBPConfig;
 import org.btbp.btbplibrary.Utilities.StaticVars;
 
-import io.github.inflationx.calligraphy3.CalligraphyConfig;
-import io.github.inflationx.calligraphy3.CalligraphyInterceptor;
-import io.github.inflationx.viewpump.ViewPump;
-import io.github.inflationx.viewpump.ViewPumpContextWrapper;
-
-public class AutoCaptureActivity extends AppCompatActivity {
-    Context context;
+public class AutoCaptureActivity extends Fragment implements SurfaceHolder.Callback {
+    View root;
+    private SurfaceHolder holder;
+    private SurfaceView surfaceView;
     AutoCaptureFragment autoCaptureFragment;
-    private ResultFragment resultFragment;
-    BTBP.MirrorCallback mirrorCallback = new BTBP.MirrorCallback() {
-        @Override
-        public void onSuccess(BTBPCaptureResult btbpCaptureResult, String iqcStatusMessage) {
-            if (resultFragment != null) {
-                resultFragment.getView().setVisibility(View.VISIBLE);
-                resultFragment.getView().bringToFront();
-
-                DisplayMetrics displaymetrics = new DisplayMetrics();
-                getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-                int displayWidth = displaymetrics.widthPixels;
-                int displayHeight = displaymetrics.heightPixels;
-                autoCaptureFragment.releaseCamera();
-                resultFragment.showImage(btbpCaptureResult.getImagePath(), displayWidth, displayHeight, btbpCaptureResult.getCameraFacing(), iqcStatusMessage, btbpCaptureResult.getIsFromGallery());
-            }
-        }
-
-        @Override
-        public void onError(int errorCode) {
-
-        }
-
-        @Override
-        public void onIQCRejected(String IQCMessage) {
-
-        }
-    };
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull String name, @NonNull Context context, @NonNull AttributeSet attrs) {
-        return super.onCreateView(name, context, attrs);
-    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
+        setRetainInstance(true);
         super.onCreate(savedInstanceState);
-        context = this;
-        Intent requestIntent = getIntent();
-        StaticVars.btbpConfig = (BTBPConfig) requestIntent.getSerializableExtra("btbpCameraConfig");
-        StaticVars.appConfig = (AppConfig) requestIntent.getSerializableExtra("appConfig");
-        BTBP.mirrorCallbacks = mirrorCallback;
-
-        ViewPump.init(ViewPump.builder()
-                .addInterceptor(new CalligraphyInterceptor(
-                        new CalligraphyConfig.Builder()
-                                .setDefaultFontPath("font/roboto_regular.ttf")
-                                .setFontAttrId(R.attr.fontPath)
-                                .build()))
-                .build());
-        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
-        setContentView(R.layout.activity_auto_capture);
-        init();
     }
 
-    private void init() {
-        autoCaptureFragment = (AutoCaptureFragment) getFragmentManager().findFragmentById(R.id.auto_capture_fragment);
-        resultFragment = (ResultFragment) getFragmentManager().findFragmentById(R.id.result_fragment);
-        resultFragment.getView().setVisibility(View.GONE);
-        Button sampleToggleBtn = (Button) findViewById(R.id.toggleButton_Sample);
-        sampleToggleBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                autoCaptureFragment.onAutoCaptureClicked(v);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        root = inflater.inflate(R.layout.activity_auto_capture, container, false);
+
+        if (root != null) {
+            ViewGroup parent = (ViewGroup) root.getParent();
+            if (parent != null)
+                parent.removeView(root);
+        }
+
+        try {
+            if (root == null) {
+                // Find the SurfaceView and other UI elements
+                surfaceView = root.findViewById(R.id.surface_view);
+                holder = surfaceView.getHolder();
+                holder.addCallback(this);
+
+                root = inflater.inflate(R.layout.activity_auto_capture, container, false);
             }
-        });
-    }
 
-    public void showAutoCaptureFragment() {
-        resultFragment.getView().setVisibility(View.GONE);
-        autoCaptureFragment.retakeImage();
-        autoCaptureFragment.getView().setVisibility(View.VISIBLE);
-        autoCaptureFragment.getView().bringToFront();
-    }
+            autoCaptureFragment = (AutoCaptureFragment) getFragmentManager().findFragmentById(R.id.auto_capture_fragment);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase));
-        MultiDex.install(this);
+        return root;
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        mirrorCallback.onError(BTBP.ERROR_BACK_BUTTON_PRESSED);
+    public void surfaceCreated(SurfaceHolder holder) {
+        // Initialize and start the camera capture here
+        Log.d("AutoCaptureView", "Surface created");
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+        // Handle surface changes if needed
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+        // Release camera resources here
+        if (autoCaptureFragment != null) {
+            autoCaptureFragment.releaseCamera();
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        try {
+            autoCaptureFragment = (AutoCaptureFragment) getActivity().getFragmentManager().findFragmentById(
+                    R.id.auto_capture_fragment);
+            if (autoCaptureFragment != null)
+                getFragmentManager().beginTransaction().remove(autoCaptureFragment).commit();
+        } catch (IllegalStateException e) {
+            Log.d("Fragment destroy-", e.getMessage());
+        }
+    }
+
+    public void releaseReopenCamera() {
+        try {
+            if (autoCaptureFragment != null) {
+                AppConfig appConfig = new AppConfig();
+                appConfig.setAutoCapture(false);
+                StaticVars.appConfig = appConfig;
+                
+                autoCaptureFragment.releaseCamera();
+                autoCaptureFragment.reOpenCamera();
+            }
+        } catch (IllegalStateException e) {
+            Log.d("Fragment destroy-", e.getMessage());
+        }
     }
 }

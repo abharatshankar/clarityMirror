@@ -12,7 +12,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.example.btbp_projects.Models.SkinConcern;
+
+import com.example.clarity_mirror.Models.SkinConcern;
 import com.example.clarity_mirror.R;
 
 import org.btbp.btbplibrary.Utilities.StaticVars;
