@@ -1,12 +1,11 @@
 import 'package:clarity_mirror/features/products/model/products_model.dart';
 import 'package:clarity_mirror/utils/app_colors.dart';
 import 'package:clarity_mirror/utils/app_fonts.dart';
-import 'package:clarity_mirror/view/cart_page.dart';
+import 'package:clarity_mirror/features/cart/cart_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../view/custom_appbar.dart';
 import 'product_certifications.dart';
 import 'product_reviews.dart';
 
@@ -54,12 +53,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
             ),
           ],
         ),
-        // floatingActionButton: GestureDetector(
-        //   onTap: () {
-        //     Navigator.push(context, MaterialPageRoute(builder: (context)=>CartList()));
-        //   },
-        //   child: addToCartButtonWidget()),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         body: Column(
           children: [
             const SizedBox(
@@ -156,7 +150,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
                     ProductCertifications(),
                     //reviews
                     ProductReviews(),
-                    // getContentWidget(content: widget.product?.localizationInfo),
                   ]),
             ),
           ],
@@ -191,10 +184,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
       children: [
         Positioned(top:15,left:15,right:15,child: SizedBox(width: MediaQuery.of(context).size.width,child: Text(content ?? 'N/A'))),
         Positioned(
-          // bottom: 2,
-          // left: 5,
-          // top: 10,
-          // right: 5,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 5),
             child: Container(

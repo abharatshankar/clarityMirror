@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'model/subscriber_model.dart';
+
 class ProductReviews extends StatefulWidget {
   const ProductReviews({super.key});
 
@@ -121,13 +123,4 @@ class _ProductReviewsState extends State<ProductReviews> {
       );
     });
   }
-}
-
-class SubscriberModel {
-  String image;
-  String name;
-  String description;
-  int rating;
-
-  SubscriberModel(this.image, this.name, this.description, this.rating);
 }

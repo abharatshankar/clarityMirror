@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../view/cart_page.dart';
+import '../cart/cart_page.dart';
 
 class ProductCertifications extends StatelessWidget {
   const ProductCertifications({super.key});

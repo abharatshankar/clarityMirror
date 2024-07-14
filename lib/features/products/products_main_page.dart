@@ -1,6 +1,6 @@
 import 'package:clarity_mirror/features/products/model/products_model.dart';
 import 'package:clarity_mirror/features/products/product_details_page.dart';
-import 'package:clarity_mirror/features/products/products_view_model.dart';
+import 'package:clarity_mirror/features/products/view_model/products_view_model.dart';
 import 'package:clarity_mirror/utils/app_fonts.dart';
 import 'package:clarity_mirror/utils/common_widgets/progress_indicator_widget.dart';
 import 'package:flutter/cupertino.dart';

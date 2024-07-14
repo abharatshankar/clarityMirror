@@ -1,20 +1,17 @@
-import 'package:clarity_mirror/features/products/products_view_model.dart';
+import 'package:clarity_mirror/features/products/view_model/products_view_model.dart';
 import 'package:clarity_mirror/utils/navigation_service.dart';
 import 'package:clarity_mirror/utils/routes/routes_names.dart';
-import 'package:clarity_mirror/viewModel/dashboard_viewmodel.dart';
+import 'package:clarity_mirror/features/dashboard/view_model/dashboard_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:clarity_mirror/utils/routes/routes.dart';
-import 'package:clarity_mirror/viewModel/auth_viewmodel.dart';
-import 'package:clarity_mirror/viewModel/home_view_model.dart';
-import 'package:clarity_mirror/viewModel/user_view_model.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import 'utils/app_colors.dart';
-import 'viewModel/cart_view_model.dart';
-import 'viewModel/tab_bar_provider.dart';
-import 'viewModel/theme_provider.dart';
+import 'features/cart/view_model/cart_view_model.dart';
+import 'features/dashboard/view_model/tab_bar_provider.dart';
+import 'core/theme_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -36,9 +33,6 @@ class MyApp extends StatelessWidget {
     ));
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AuthViewModel()),
-        ChangeNotifierProvider(create: (_) => UserViewModel()),
-        ChangeNotifierProvider(create: (_) => HomeViewModel()),
         ChangeNotifierProvider(create: (_) => DashboardViewModel()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (context) => TabControllerProvider()),
