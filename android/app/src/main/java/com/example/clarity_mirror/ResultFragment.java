@@ -29,8 +29,8 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
-import com.example.btbp_projects.Models.SkinConcern;
 import com.example.clarity_mirror.Adapters.ResultListAdapter;
+import com.example.clarity_mirror.Models.SkinConcern;
 
 import org.btbp.btbplibrary.AppConfig;
 import org.btbp.btbplibrary.Models.ServiceResponse;
@@ -225,9 +225,7 @@ public class ResultFragment extends Fragment implements ServiceManager.ServiceCa
             okBtnImage.setVisibility(GONE);
         } else {
             rejectionRl.setVisibility(GONE);
-            //if (appConfig.isImageOkButtonDisplayed()) {
-                okBtnImage.setVisibility(View.VISIBLE);
-            //}
+            okBtnImage.setVisibility(View.VISIBLE);
         }
 
         //okBtnImage.setVisibility(View.VISIBLE);
@@ -625,32 +623,32 @@ public class ResultFragment extends Fragment implements ServiceManager.ServiceCa
         adapter.setDeSelect(getSkinConcernList());
     }
 
-    private void openCamera(){
-        AutoCaptureActivity autoCaptureActivity = (AutoCaptureActivity) getActivity();
-        if (autoCaptureActivity != null) {
-
-            autoCaptureActivity.autoCaptureFragment.reOpenCamera();
-        }
+    private void openCamera() {
+//        AutoCaptureActivity autoCaptureActivity = (AutoCaptureActivity) getActivity();
+//        if (autoCaptureActivity != null) {
+//            autoCaptureActivity.autoCaptureFragment.reOpenCamera();
+//        }
     }
+
     private void resetCamera() {
-        AutoCaptureActivity autoCaptureActivity = (AutoCaptureActivity) getActivity();
-        if (autoCaptureActivity != null) {
+//        AutoCaptureActivity autoCaptureActivity = (AutoCaptureActivity) getActivity();
+//        if (autoCaptureActivity != null) {
+//            autoCaptureActivity.autoCaptureFragment.resetCamera();
+//        }
+    }
 
-            autoCaptureActivity.autoCaptureFragment.resetCamera();
-        }
-    }
     private void releaseCamera() {
-        AutoCaptureActivity autoCaptureActivity = (AutoCaptureActivity) getActivity();
-        if (autoCaptureActivity != null) {
-            autoCaptureActivity.autoCaptureFragment.releaseCamera();
-        }
+//        AutoCaptureActivity autoCaptureActivity = (AutoCaptureActivity) getActivity();
+//        if (autoCaptureActivity != null) {
+//            autoCaptureActivity.autoCaptureFragment.releaseCamera();
+//        }
     }
-    private void showAutoCaptureFragment()
-    {
-        AutoCaptureActivity autoCaptureActivity = (AutoCaptureActivity) getActivity();
-        if (autoCaptureActivity != null) {
-            autoCaptureActivity.showAutoCaptureFragment();
-        }
+
+    private void showAutoCaptureFragment() {
+//        AutoCaptureActivity autoCaptureActivity = (AutoCaptureActivity) getActivity();
+//        if (autoCaptureActivity != null) {
+//            autoCaptureActivity.showAutoCaptureFragment();
+//        }
     }
 
     //service call back methods impelmentation

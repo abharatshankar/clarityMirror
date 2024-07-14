@@ -1,4 +1,4 @@
-package Model;
+package com.example.clarity_mirror.Model;
 
 import android.content.Context;
 import android.util.AttributeSet;
