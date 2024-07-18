@@ -7,15 +7,14 @@ import 'package:clarity_mirror/features/setting_screens/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import '../explore/exp4.dart';
+import '../explore/explore.dart';
+import '../trends/trends_home.dart';
 import 'view_model/dashboard_viewmodel.dart';
 import 'view_model/tab_bar_provider.dart';
 import '../notifications/notification_screen.dart';
 import '../profile/profile_page.dart';
 
-// class DashboardMoreMenu extends StatelessWidget {
-//   const DashboardMoreMenu({super.key});
-
-// }
 
 class DashboardMoreMenu extends StatefulWidget {
   const DashboardMoreMenu({super.key});
@@ -119,6 +118,18 @@ class _DashboardMoreMenuState extends State<DashboardMoreMenu> with  AutomaticKe
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => ProductsMainPage()));
+                                }
+                                else if(index == 5){
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => TrendsHome()));
+                                }
+                                else if(index == 6) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ExploreHome()));
                                 }
                               },
                               child: GridItem(

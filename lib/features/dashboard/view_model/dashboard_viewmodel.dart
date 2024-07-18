@@ -105,7 +105,7 @@ class DashboardViewModel extends ChangeNotifier {
         int? sumOfTags = _skinHealthTags?.fold(
             0,
             (sum, tag) =>
-                (sum ?? 0) +
+                (sum ?? 0) + 
                 int.parse(
                   (tag.tagValues != null && (tag.tagValues ?? []).isNotEmpty) ?
                   tag.tagValues?.firstWhere((combineVal) {

@@ -115,7 +115,7 @@ late TabController _tabController;
   }
 
   Widget getImageCompareWidget(DashboardViewModel dashboardViewModel) {
-    return Container(
+    return SizedBox(
       // color: Colors.green,
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,

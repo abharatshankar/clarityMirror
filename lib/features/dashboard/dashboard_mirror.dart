@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:clarity_mirror/utils/app_colors.dart';
 import 'package:clarity_mirror/utils/app_fonts.dart';
 import 'package:clarity_mirror/features/dashboard/view_model/dashboard_viewmodel.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -142,15 +143,11 @@ class _DashboardMirrorState extends State<DashboardMirror>
   Widget getIosViewWidget(dashboardViewModel,BuildContext context ){
     print("screen size ${MediaQuery.of(context).size.height}");
     return Stack(
-      alignment: AlignmentDirectional.center,
+      alignment: AlignmentDirectional.bottomCenter,
       children: [
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: (MediaQuery.of(context).size.height - (MediaQuery.of(context).size.height * 0.4) ).h,
-          // child: Image.asset(
-          //   "assets/images/Dermatolgist6.png",
-          //   fit: BoxFit.cover,
-          // ),
+        Container(
+          height: MediaQuery.of(context).size.height.h,
+          width: MediaQuery.of(context).size.width.w,
           child: const UiKitView(
             viewType: 'custom_view',
             layoutDirection: TextDirection.ltr,
@@ -175,14 +172,6 @@ class _DashboardMirrorState extends State<DashboardMirror>
                 bottom: MediaQuery.of(context).size.height * 0.05,
                 child: const SizedBox(),
               ),
-        dashboardViewModel.tipsStr != null
-            ? ideaIconAndTxt(dashboardViewModel.tipsStr)
-            : const Positioned(
-                left: 5,
-                bottom: 0,
-                child: SizedBox(),
-              ),
-        excersiceWidget(),
         dashboardViewModel.avgOfTags != null
             ? percentageCircle(dashboardViewModel.avgOfTags.toString())
             : Positioned(
@@ -200,6 +189,14 @@ class _DashboardMirrorState extends State<DashboardMirror>
                 ),
               )
             : Container(),
+          dashboardViewModel.tipsStr != null
+            ? ideaIconAndTxt(dashboardViewModel.tipsStr)
+            : const Positioned(
+                left: 5,
+                bottom: 0,
+                child: SizedBox(),
+              ),
+           excersiceWidget(),
       ],
     );
   }
@@ -346,7 +343,8 @@ class _DashboardMirrorState extends State<DashboardMirror>
     return Positioned(
       left: 0,
       bottom: 0,
-      child: SizedBox(
+      child: Container(
+        color: AppConstColors.themeBackgroundColor,
         width: MediaQuery.of(context).size.width - 40,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

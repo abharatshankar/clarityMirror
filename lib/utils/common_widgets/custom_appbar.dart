@@ -43,7 +43,7 @@ class CustomAppBar extends StatelessWidget {
                           Icons.notifications,
                           size: 40,
                           color: Colors.white,
-                        )) : const SizedBox()
+                        ),) : const SizedBox()
                   ],
                 );
   }
