@@ -20,7 +20,7 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
   var dummyImage3 =
       "https://img.freepik.com/free-photo/makeup-cosmetics-palette-brushes-white-background_1357-247.jpg?w=540&t=st=1718853597~exp=1718854197~hmac=eec34130f2e102de7e55e200f998b168f14a1f937351f44c04fb6c4368245929";
   bool _isExpanded = false;
-
+bool loading = true;
 // List of choices
   final List<String> _choices = [
     'Wrinkles',
@@ -49,6 +49,12 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
   Future<void> getProducts() async {
     await Provider.of<ProductsViewModel>(context, listen: false)
         .getProductRecommendations();
+  }
+
+  _toggle() {
+    setState(() {
+      loading = !loading;
+    });
   }
 
   @override
@@ -83,6 +89,65 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Column(
                   children: [
+                    SizedBox(
+                height: 50, // Set the height for the horizontal ListView
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 4, // Number of items in the horizontal ListView
+                  itemBuilder: (context, index) {
+                    return index == 0 ? Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: const Icon(Icons.format_align_center_rounded,color: Colors.white,size: 40,),
+                    ) : Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: Container(
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),border: Border.all(color: Colors.grey)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [Text('Concerns',style: AppFonts().sego12normal,),Icon(Icons.arrow_drop_down,color: Colors.grey,)],),
+                            ),),
+                    );
+                  },
+                ),
+              ),
+                    // SizedBox(height: 80,
+                    //   child: Row(
+                    //     children: [
+                    //     const Padding(
+                    //       padding: EdgeInsets.only(right: 16),
+                    //       child: Icon(Icons.format_align_center_rounded,color: Colors.white,size: 40,),
+                    //     ),
+                        // ListView.builder(
+                        //   itemCount: 4,
+                        //   physics: BouncingScrollPhysics(),
+                        //   scrollDirection: Axis.horizontal,
+                        //   itemBuilder: (context,index){
+                        //   return Container(
+                        //   decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),border: Border.all(color: Colors.grey)),
+                        //   child: Padding(
+                        //     padding: const EdgeInsets.all(8.0),
+                        //     child: Row(
+                        //       mainAxisAlignment: MainAxisAlignment.center,
+                        //       children: [Text('Concerns',style: AppFonts().sego12normal,),Icon(Icons.arrow_drop_down,color: Colors.grey,)],),
+                        //   ),);
+                        // })
+                        
+                    //   ],),
+                    // ),
+      //               AnimatedSwitcher(
+      //   duration: const Duration(milliseconds: 300),
+      //   child:  Container(
+      //     key: Key("normal"),
+      //     child: Center(
+      //       child: GestureDetector(
+      //         onTap: _toggle,
+      //         child: const Text("WELCOME"),
+      //       ),
+      //     ),
+      //   ),
+      // ),
                     Theme(
                       data: Theme.of(context)
                           .copyWith(dividerColor: Colors.transparent),
