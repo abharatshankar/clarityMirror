@@ -4,11 +4,15 @@ import 'package:clarity_mirror/utils/api_constants.dart';
 import 'package:clarity_mirror/utils/btbp_constants.dart';
 import 'package:clarity_mirror/utils/navigation_service.dart';
 import 'package:clarity_mirror/features/dashboard/view_model/dashboard_viewmodel.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:clarity_mirror/core/app_exceptions.dart';
 import 'package:clarity_mirror/core/network/base_api_services.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
+
+import '../../features/registration/models/registration_entity.dart';
+import '../../utils/common_widgets/custom_alert_dialog.dart';
 
 class NetworkApiServices extends BaseApiServices {
   var logger = Logger();
@@ -160,4 +164,100 @@ class NetworkApiServices extends BaseApiServices {
 
     return responseData;
   }
+
+
+
+  /// Api implementation for user sign up
+  @override
+  Future signUp({required RegistrationEntity registrationEntity,required BuildContext context}) async {
+    dynamic responseData;
+    try {
+      /// show the progress indicator
+      // CustomAlertDialog.showLoadingDialog();
+
+      /// Test object
+      // RegistrationEntity registrationEntity = RegistrationEntity(email: 'test', expertise: 'exp', firstName: 'first name', lastName: 'last name', mobile: '8019977327', password: 'password');
+
+      /// Preparing the URL for sign up
+      var url = ApiConstants.baseUrlPreLogin + ApiConstants.signUp;
+
+      /// data encoding to pass to the post method in body
+      var encodedData = json.encode(registrationEntity.toJson());
+      logger.d('signUp body params: $encodedData');
+
+      /// Making the actual api call for sign up with http client
+      final response = await http.post(
+        Uri.parse(url),
+        body: encodedData,
+        headers: {"Content-type": "application/json", "Accept": "*/*"},
+      );
+      responseData = responseJson(response);
+      /// dismiss the loading indicator
+      // CustomAlertDialog.stopLoadingIndicator();
+
+      return responseData;
+    } on SocketException {
+      /// dismiss the loading indicator
+      // CustomAlertDialog.stopLoadingIndicator();
+      throw InternetException("NO Internet is available right now");
+    } catch (e, s) {
+      /// dismiss the loading indicator
+      // CustomAlertDialog.stopLoadingIndicator();
+      logger.e('Api Error Sign up: $e \n $s');
+      return responseData;
+    }
+  }
+
+  /// Api implementation for user sign in with the user data
+  /// and return the response back to repository
+  ///
+  @override
+  Future signIn({required String? userName, required String? password,required BuildContext context}) async {
+    dynamic responseData;
+    try {
+      /// show the progress indicator
+      CustomAlertDialog.showLoadingDialog(context);
+      /// URL for user sign in
+      var url = ApiConstants.baseUrlPreLogin + ApiConstants.signIn;
+
+      /// Test data
+      /*Map<String, dynamic> signInParams = {
+        "UserName": 'mallikarjunreddy751@gmail.com',
+        "Password": 'Malli@123',
+      };*/
+
+      /// body parameters for user sign
+      Map<String, dynamic> signInParams = {
+        "UserName": userName,
+        "Password": password,
+      };
+
+      /// encoding the user data for sending in body params of the api call
+      var encodedData = json.encode(signInParams);
+      logger.d('signIn body params: $encodedData');
+
+      /// Making the actual api call with the sign in url and body parameters obtained from the user input
+      ///
+      final response = await http.post(
+        Uri.parse(url),
+        body: encodedData,
+        headers: {"Content-type": "application/json", "Accept": "*/*"},
+      );
+      responseData = responseJson(response);
+      logger.i('SignIn Response================>: ${responseData.toString()}');
+      /// dismiss the loading indicator
+      CustomAlertDialog.stopLoadingIndicator(context);
+      return responseData;
+    } on SocketException {
+      /// dismiss the loading indicator
+      CustomAlertDialog.stopLoadingIndicator(context);
+      throw InternetException("NO Internet is available right now");
+    } catch (e, s) {
+      /// dismiss the loading indicator
+      CustomAlertDialog.stopLoadingIndicator(context);
+      logger.e('Api Error Sign In: $e \n $s');
+      return responseData;
+    }
+  }
+
 }

@@ -125,5 +125,22 @@ TextStyle sego70normal  = const TextStyle(
                 height: 0.1,wordSpacing: 0.0
               );
 
+
+
+TextStyle sego16normal  = const TextStyle(
+                fontFamily: 'segoe',
+                fontSize: 16.0,
+                color: Colors.white,
+                fontWeight: FontWeight.normal,
+              );
+
+TextStyle sego16bold  = const TextStyle(
+                fontFamily: 'segoe',
+                fontSize: 16.0,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              );
+
+
   
 }

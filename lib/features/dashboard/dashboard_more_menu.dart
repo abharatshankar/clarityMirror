@@ -1,4 +1,5 @@
 import 'package:clarity_mirror/features/products/products_main_page.dart';
+import 'package:clarity_mirror/features/signin/signin_screen.dart';
 import 'package:clarity_mirror/utils/app_fonts.dart';
 import 'package:clarity_mirror/utils/app_strings.dart';
 import 'package:clarity_mirror/utils/utils.dart';
@@ -175,9 +176,9 @@ class _DashboardMoreMenuState extends State<DashboardMoreMenu> with  AutomaticKe
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const ProfilePage()));
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => const SignInScreen()));
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,

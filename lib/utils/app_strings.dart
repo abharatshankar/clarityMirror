@@ -11,4 +11,5 @@ class AppStrings{
   static String accountSettings = 'ACCOUNT SETTINGS';
   static String backNavIcon = 'assets/images/back_arrow.png';
   static String notifications = "Notifications";
+  static String forgotPassowrd = "Forgot your password?";
 }

@@ -18,7 +18,7 @@ class _TrendsHomeState extends State<TrendsHome> {
       body: SafeArea(
         child: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 50,
               child: CustomAppBar(
                 titleTxt: "Trends",

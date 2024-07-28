@@ -20,7 +20,7 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
   var dummyImage3 =
       "https://img.freepik.com/free-photo/makeup-cosmetics-palette-brushes-white-background_1357-247.jpg?w=540&t=st=1718853597~exp=1718854197~hmac=eec34130f2e102de7e55e200f998b168f14a1f937351f44c04fb6c4368245929";
   bool _isExpanded = false;
-bool loading = true;
+  bool loading = true;
 // List of choices
   final List<String> _choices = [
     'Wrinkles',
@@ -37,8 +37,7 @@ bool loading = true;
     'Oiliness',
     'Lip Health',
     'Firmness',
-    ];
-
+  ];
 
   @override
   void initState() {
@@ -56,6 +55,10 @@ bool loading = true;
       loading = !loading;
     });
   }
+
+  List<String> filtersList = ['', 'Concerns', 'Brand', 'Price', 'Sort By'];
+
+  int filterSelectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -90,64 +93,30 @@ bool loading = true;
                 child: Column(
                   children: [
                     SizedBox(
-                height: 50, // Set the height for the horizontal ListView
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 4, // Number of items in the horizontal ListView
-                  itemBuilder: (context, index) {
-                    return index == 0 ? Padding(
-                      padding: const EdgeInsets.only(right: 12),
-                      child: const Icon(Icons.format_align_center_rounded,color: Colors.white,size: 40,),
-                    ) : Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: Container(
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),border: Border.all(color: Colors.grey)),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [Text('Concerns',style: AppFonts().sego12normal,),Icon(Icons.arrow_drop_down,color: Colors.grey,)],),
-                            ),),
-                    );
-                  },
-                ),
-              ),
-                    // SizedBox(height: 80,
-                    //   child: Row(
-                    //     children: [
-                    //     const Padding(
-                    //       padding: EdgeInsets.only(right: 16),
-                    //       child: Icon(Icons.format_align_center_rounded,color: Colors.white,size: 40,),
-                    //     ),
-                        // ListView.builder(
-                        //   itemCount: 4,
-                        //   physics: BouncingScrollPhysics(),
-                        //   scrollDirection: Axis.horizontal,
-                        //   itemBuilder: (context,index){
-                        //   return Container(
-                        //   decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),border: Border.all(color: Colors.grey)),
-                        //   child: Padding(
-                        //     padding: const EdgeInsets.all(8.0),
-                        //     child: Row(
-                        //       mainAxisAlignment: MainAxisAlignment.center,
-                        //       children: [Text('Concerns',style: AppFonts().sego12normal,),Icon(Icons.arrow_drop_down,color: Colors.grey,)],),
-                        //   ),);
-                        // })
-                        
-                    //   ],),
-                    // ),
-      //               AnimatedSwitcher(
-      //   duration: const Duration(milliseconds: 300),
-      //   child:  Container(
-      //     key: Key("normal"),
-      //     child: Center(
-      //       child: GestureDetector(
-      //         onTap: _toggle,
-      //         child: const Text("WELCOME"),
-      //       ),
-      //     ),
-      //   ),
-      // ),
+                      height: 50, // Set the height for the horizontal ListView
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: filtersList
+                            .length, // Number of items in the horizontal ListView
+                        itemBuilder: (context, index) {
+                          return index == 0
+                              ? GestureDetector(
+                                  onTap: () {
+                                    filterSelectedIndex = index;
+                                    setState(() {});
+                                  },
+                                  child: filterIcon())
+                              : GestureDetector(
+                                  onTap: () {
+                                    filterSelectedIndex = index;
+                                    setState(() {});
+                                  },
+                                  child: filterButtonItem(filtersList[index]),
+                                );
+                        },
+                      ),
+                    ),
+                    filterDropDown(filterSelectedIndex, productsViewModel),
                     Theme(
                       data: Theme.of(context)
                           .copyWith(dividerColor: Colors.transparent),
@@ -156,11 +125,10 @@ bool loading = true;
                         title: Text(
                           'Regimen for you',
                           style: AppFonts().sego18bold.copyWith(
-                              color: AppConstColors.appThemeCayan,
-                          ),
+                                color: AppConstColors.appThemeCayan,
+                              ),
                         ),
                         children: [
-                          getSkinConcernFilterItems(productsViewModel),
                           getGroupedProductsDataWidget(productsViewModel),
                         ],
                       ),
@@ -172,7 +140,8 @@ bool loading = true;
                         dense: true,
                         enabled: true,
                         initiallyExpanded: true,
-                        trailing: (!_isExpanded) ? const SizedBox.shrink() : null,
+                        trailing:
+                            (!_isExpanded) ? const SizedBox.shrink() : null,
                         onExpansionChanged: (value) {
                           _isExpanded = !_isExpanded;
                           setState(() {});
@@ -230,6 +199,65 @@ bool loading = true;
     });
   }
 
+  Widget filterDropDown(
+      int selectedFilterIndex, ProductsViewModel productsViewModel) {
+    return selectedFilterIndex == 1
+        ? AnimatedSwitcher(
+          duration: const Duration(milliseconds: 400),
+          child: getSkinConcernFilterItems(productsViewModel))
+        : AnimatedSwitcher(
+            duration: const Duration(seconds: 1),
+            child:
+                selectedFilterIndex == 0 ? SizedBox() : selectedFilterWidget(),
+          );
+  }
+
+  Widget selectedFilterWidget() {
+    return Container(
+      height: 100,
+      width: double.infinity,
+      color: Colors.grey.withOpacity(0.5),
+    );
+  }
+
+  Widget filterIcon() {
+    return const Padding(
+      padding: EdgeInsets.only(right: 12),
+      child: Icon(
+        Icons.format_align_center_rounded,
+        color: Colors.white,
+        size: 40,
+      ),
+    );
+  }
+
+  Widget filterButtonItem(String filterName) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: Colors.grey)),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                filterName,
+                style: AppFonts().sego12normal,
+              ),
+              Icon(
+                Icons.arrow_drop_down,
+                color: Colors.grey,
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget getGroupedProductsDataWidget(ProductsViewModel productsVM) {
     // Map<String, List<ProductRecommendation?>> groupedProducts = groupBy(
     //     Provider.of<ProductsViewModel>(context, listen: false)
@@ -263,74 +291,47 @@ bool loading = true;
                     _isExpanded = !_isExpanded;
                     setState(() {});
                   },
-                  title: Container(
-                    // color: Colors.amber,
-                    child: Row(children: [
+                  title: Row(
+                    children: [
                       Expanded(
                         flex: 3,
                         child: Text(
-                              productsVM.groupedProducts?.keys.elementAt(index) ?? '',
-                              style: AppFonts().sego18bold.copyWith(
-                                    color: Colors.grey,
-                                  ),),
+                          productsVM.groupedProducts?.keys.elementAt(index) ??
+                              '',
+                          style: AppFonts().sego18bold.copyWith(
+                                color: Colors.grey,
+                              ),
+                        ),
                       ),
-                        Expanded(
-                          flex: 3,
-                          child: Row(
-                            children: [
-                              // SizedBox(width: 10,),
-                              Container(height: 6,width: 6,decoration: BoxDecoration(shape: BoxShape.circle,color: AppConstColors.appThemeCayan),),
-                              Flexible(child: Container(color: AppConstColors.appThemeCayan,height: 1,)),
-                            ],
-                          ),
-                        )
-                        // SizedBox(width: 20,),
-                        // Row(children: [
-                        //   Container(height: 5,width: 5,decoration: BoxDecoration(shape: BoxShape.circle,color: AppConstColors.appThemeCayan),),
-                        //   // Container(height: 2,width: double.infinity,color: AppConstColors.appThemeCayan,)
-                        // ],)
-                    ],),
+                      Expanded(
+                        flex: 3,
+                        child: Row(
+                          children: [
+                            // SizedBox(width: 10,),
+                            Container(
+                              height: 6,
+                              width: 6,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppConstColors.appThemeCayan,
+                              ),
+                            ),
+                            Flexible(
+                                child: Container(
+                              color: AppConstColors.appThemeCayan,
+                              height: 1,
+                            )),
+                          ],
+                        ),
+                      )
+                    ],
                   ),
-                  // title: (!_isExpanded)
-                  //     ? Row(
-                  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //         children: [
-                  //           Expanded(
-                  //             flex: 3,
-                  //             child: Text(
-                  //               productsVM.groupedProducts?.keys.elementAt(index) ?? '',
-                  //               style: AppFonts().sego18bold.copyWith(
-                  //                   color: (!_isExpanded)
-                  //                       ? AppConstColors.appThemeCayan
-                  //                       : AppConstColors.editProfileTxtColor),
-                  //             ),
-                  //           ),
-                  //           const Expanded(
-                  //             flex: 2,
-                  //             child: Row(
-                  //               mainAxisAlignment: MainAxisAlignment.end,
-                  //               mainAxisSize: MainAxisSize.max,
-                  //               children: [
-                  //                 Icon(
-                  //                   Icons.more_horiz,
-                  //                   color: Colors.white,
-                  //                 ),
-                  //               ],
-                  //             ),
-                  //           )
-                  //         ],
-                  //       )
-                  //     : Text(
-                  //         productsVM.groupedProducts?.keys.elementAt(index) ?? '',
-                  //         style: AppFonts().sego18bold.copyWith(
-                  //               color: AppConstColors.appThemeCayan,
-                  //             ),
-                  //       ),
                   children: [
                     // getSkinConcernFilterItems(),
                     const SizedBox(height: 10),
                     _getProductsWidget(context,
-                        products: productsVM.groupedProducts?.values.elementAt(index)),
+                        products: productsVM.groupedProducts?.values
+                            .elementAt(index)),
                   ],
                 ),
               ),
@@ -341,72 +342,83 @@ bool loading = true;
 
   Widget getSkinConcernFilterItems(ProductsViewModel productsViewModel) {
     return Container(
+      // margin: EdgeInsets.only(top: 15),
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        border: Border.all(color: AppConstColors.appThemeCayan),
-        borderRadius: BorderRadius.circular(16),
+        color: Colors.grey.withOpacity(0.2),
+        // border: Border.all(color: AppConstColors.appThemeCayan),
+        // borderRadius: BorderRadius.circular(16),
       ),
       child: Wrap(
         spacing: 8.0,
         children: _choices.map((choice) {
           return GestureDetector(
             onTap: () {
-
-             productsViewModel.selectedChoices.contains(choice) ? productsViewModel.removeSelectedChoice(choice) : productsViewModel.addSelectedChoice(choice)  ;
-print(productsViewModel.selectedChoices);
-               
+              productsViewModel.selectedChoices.contains(choice)
+                  ? productsViewModel.removeSelectedChoice(choice)
+                  : productsViewModel.addSelectedChoice(choice);
+              print(productsViewModel.selectedChoices);
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 3),
-              child: Container(decoration: BoxDecoration(
-                color: productsViewModel.selectedChoices.contains(choice) ? AppConstColors.appThemeCayan.withOpacity(0.2) : Colors.transparent,
-                border: Border.all(color:productsViewModel.selectedChoices.contains(choice) ? AppConstColors.appThemeCayan: Colors.white),borderRadius: BorderRadius.circular(10)),child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(choice,style: AppFonts().sego14normal,),
-              ),),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: productsViewModel.selectedChoices.contains(choice)
+                        ? AppConstColors.appThemeCayan.withOpacity(0.2)
+                        : Colors.transparent,
+                    border: Border.all(
+                        color:
+                            productsViewModel.selectedChoices.contains(choice)
+                                ? AppConstColors.appThemeCayan
+                                : Colors.white),
+                    borderRadius: BorderRadius.circular(10)),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    choice,
+                    style: AppFonts().sego14normal,
+                  ),
+                ),
+              ),
             ),
           );
-          // ChoiceChip(
-          //   label: Text(choice,style: AppFonts().sego14normal,),
-          //   padding: EdgeInsets.zero,
-          //   selected: productsViewModel.selectedChoices.contains(choice),
-          // //   onSelected: (bool selected) {
-          //       if (selected) {
-          //         productsViewModel.addSelectedChoice(choice);
-          //       } else {
-          //         productsViewModel.removeSelectedChoice(choice);
-          //       }
-          //   },
-          // );
         }).toList(),
       ),
     );
   }
 
-  Widget sunnyOrMoon(String? precribedTime){
-    if(precribedTime != null && precribedTime == "Day time"){
+  Widget sunnyOrMoon(String? precribedTime) {
+    if (precribedTime != null && precribedTime == "Day time") {
       return Container(
-        decoration: const BoxDecoration(color: Colors.grey,shape: BoxShape.circle),
-        child: const Padding(
-          padding: EdgeInsets.all(2.0),
-          child: Icon(Icons.sunny,color: Colors.black,size: 18,),
-        ));
-    }
-    else if(precribedTime != null && precribedTime == "Night time"){
+          decoration:
+              const BoxDecoration(color: Colors.grey, shape: BoxShape.circle),
+          child: const Padding(
+            padding: EdgeInsets.all(2.0),
+            child: Icon(
+              Icons.sunny,
+              color: Colors.black,
+              size: 18,
+            ),
+          ));
+    } else if (precribedTime != null && precribedTime == "Night time") {
       return Container(
-        decoration: const BoxDecoration(color: Colors.grey,shape: BoxShape.circle),
-        child:  const Padding(
-          padding: EdgeInsets.all(2.0),
-          child: Icon(Icons.nightlight_round_outlined,size: 18,color: Colors.black),
-        ));
-    }else if(precribedTime != null && precribedTime == "Day time & Night time"){
+          decoration:
+              const BoxDecoration(color: Colors.grey, shape: BoxShape.circle),
+          child: const Padding(
+            padding: EdgeInsets.all(2.0),
+            child: Icon(Icons.nightlight_round_outlined,
+                size: 18, color: Colors.black),
+          ));
+    } else if (precribedTime != null &&
+        precribedTime == "Day time & Night time") {
       return Container(
-        decoration: const BoxDecoration(color: Colors.grey,shape: BoxShape.circle),
-        child: const Padding(
-          padding: EdgeInsets.all(2.0),
-          child: Icon(Icons.sunny_snowing,size: 18,color: Colors.black),
-        ));
+          decoration:
+              const BoxDecoration(color: Colors.grey, shape: BoxShape.circle),
+          child: const Padding(
+            padding: EdgeInsets.all(2.0),
+            child: Icon(Icons.sunny_snowing, size: 18, color: Colors.black),
+          ));
     }
     return const SizedBox();
   }
@@ -459,9 +471,10 @@ print(productsViewModel.selectedChoices);
                 ),
               ),
               Positioned(
-                right: 0,
-                top:0 ,
-                child: sunnyOrMoon(productRecommendation?.prescribedTimeToUse)),
+                  right: 0,
+                  top: 0,
+                  child:
+                      sunnyOrMoon(productRecommendation?.prescribedTimeToUse)),
               Positioned(
                 top: 110,
                 child: SizedBox(

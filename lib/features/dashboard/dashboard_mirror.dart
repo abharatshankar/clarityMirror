@@ -163,7 +163,7 @@ class _DashboardMirrorState extends State<DashboardMirror>
                     "uv index ${dashboardViewModel.uvIndexTxt}")
             : const SizedBox(),
         humidityStatus(humidityStr: "Humidity low"),
-        // gradientContainer(),
+        gradientContainer(),
         dashboardViewModel.pollutionLevelStr != null
             ? pollutionStatus(
                 pollutionStr: dashboardViewModel.pollutionLevelStr ?? '')
@@ -344,7 +344,7 @@ class _DashboardMirrorState extends State<DashboardMirror>
       left: 0,
       bottom: 0,
       child: Container(
-        color: AppConstColors.themeBackgroundColor,
+        // color: AppConstColors.themeBackgroundColor,
         width: MediaQuery.of(context).size.width - 40,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

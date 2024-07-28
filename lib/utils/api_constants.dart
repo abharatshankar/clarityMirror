@@ -10,6 +10,16 @@ class ApiConstants {
   /// Api base url
   static String baseUrl = 'https://gserver1.btbp.org/deeptag/AppService.svc/';
 
+  /// Api base url pre login flow
+  static String baseUrlPreLogin = 'https://gserver1.btbp.org/BTBPClarityMirrorService/Api/User/';
+
+  /// Api end point user sign up
+  static String signUp = 'SignUp';
+
+
+  /// Api end point for user sign in
+  static String signIn = 'SignIn';
+
   /// Api end point to get the tags results
   static String getTagsAsync = 'getTagsAsync';
 
